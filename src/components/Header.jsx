@@ -29,13 +29,17 @@ export default function Header() {
 
   useEffect(() => {
     if (!isHome) { setActiveSection(""); return; }
-    const sections = ["about", "programs", "impact", "contact"];
+    const sections = ["about", "impact", "programs", "contact"];
     const handler = () => {
       const scrollY = window.scrollY + 100;
       let current = "";
+      let currentTop = -Infinity;
       for (const id of sections) {
         const el = document.getElementById(id);
-        if (el && el.offsetTop <= scrollY) current = id;
+        if (el && el.offsetTop <= scrollY && el.offsetTop > currentTop) {
+          current = id;
+          currentTop = el.offsetTop;
+        }
       }
       setActiveSection(current);
     };
