@@ -13,6 +13,7 @@ import AboutPage from "./Pages/AboutUs";
 import CredentialsPage from "./Pages/Credentials";
 import DonatePage from "./Pages/DonatePage";
 import SocialPage from "./Pages/Social";
+import PartnerPage from "./Pages/Partner";
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
         <Route path="/credentials"            element={<CredentialsPage />} />
         <Route path="/social"                 element={<SocialPage />} />
         <Route path="/donate"                 element={<DonatePage />} />
+        <Route path="/partner-with-us"        element={<PartnerPage />} />
         <Route path="*"                       element={<SwasthgramHome />} />
       </Routes>
     </BrowserRouter>
