@@ -29,7 +29,7 @@ export default function Header() {
 
   useEffect(() => {
     if (!isHome) { setActiveSection(""); return; }
-    const sections = ["about", "programs", "impact", "app", "contact"];
+    const sections = ["about", "programs", "impact", "contact"];
     const handler = () => {
       const scrollY = window.scrollY + 100;
       let current = "";
@@ -64,10 +64,10 @@ export default function Header() {
   };
 
   const navLinks = [
+    { label: "Home",     href: "/" },
     { label: "About",    href: "/about" },
     { label: "Programs", section: "programs" },
     { label: "Impact",   section: "impact" },
-    { label: "App",      section: "app" },
     { label: "Contact",  section: "contact" },
   ];
 
@@ -237,7 +237,17 @@ export default function Header() {
           {/* Desktop Nav */}
           <div className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: 24, overflow: "visible" }}>
             {navLinks.map((link) =>
-              link.label === "Programs" ? (
+              link.label === "Home" ? (
+                <a
+                  key={link.label}
+                  href="/"
+                  onClick={handleLogoClick}
+                  className={`nav-link${isActive(link) ? " nav-link-active" : ""}`}
+                  style={{ color: isActive(link) ? COLORS.forest : COLORS.text }}
+                >
+                  {link.label}
+                </a>
+              ) : link.label === "Programs" ? (
                 <div key={link.label} className="programs-wrapper"
                   onMouseEnter={() => setProgramsOpen(true)}
                   onMouseLeave={() => setProgramsOpen(false)}
@@ -308,7 +318,17 @@ export default function Header() {
             alignItems: "center", borderTop: `1px solid ${COLORS.border}`
           }}>
             {navLinks.map((link) =>
-              link.label === "Programs" ? (
+              link.label === "Home" ? (
+                <a
+                  key={link.label}
+                  href="/"
+                  onClick={(e) => { handleLogoClick(e); setMobileMenu(false); }}
+                  className={`nav-link${isActive(link) ? " nav-link-active" : ""}`}
+                  style={{ color: isActive(link) ? COLORS.forest : COLORS.text }}
+                >
+                  {link.label}
+                </a>
+              ) : link.label === "Programs" ? (
                 <div key={link.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, width: "100%" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 4, cursor: "pointer" }}
                     onClick={() => setMobilePrograms(!mobilePrograms)}>
