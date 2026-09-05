@@ -5,6 +5,8 @@ import logoColor from "../assets/SwasthgramLogo.png";
 const COLORS = {
   forest: "#1B6B3A",
   forestDark: "#145A2F",
+  gold: "#C8963E",
+  goldDark: "#B07F2E",
   text: "#1F2937",
   border: "#E8E4DC",
 };
@@ -171,6 +173,30 @@ export default function Header() {
           background: ${COLORS.forestDark};
           transform: translateY(-1px);
         }
+        .btn-partner {
+          font-family: 'Inter', sans-serif;
+          font-weight: 600;
+          font-size: 12px;
+          background: transparent;
+          color: ${COLORS.forest};
+          border: 1.5px solid ${COLORS.forest};
+          padding: 8px 18px;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.25s;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .btn-partner:hover {
+          background: ${COLORS.gold};
+          border-color: ${COLORS.gold};
+          color: #fff;
+        }
+        .btn-partner:active {
+          background: ${COLORS.goldDark};
+          border-color: ${COLORS.goldDark};
+        }
         @media (max-width: 900px) {
           .desktop-nav { display: none !important; }
           .mobile-toggle { display: flex !important; }
@@ -254,6 +280,9 @@ export default function Header() {
                 </button>
               )
             )}
+            <a href="/partner-with-us" style={{ textDecoration: "none" }}>
+              <button className="btn-partner">Partner With Us</button>
+            </a>
             <a href="https://donate.swasthgram.org" style={{ textDecoration: "none" }}>
               <button className="btn-donate">Donate Now</button>
             </a>
@@ -314,6 +343,11 @@ export default function Header() {
                 </button>
               )
             )}
+            <a href="/partner-with-us" style={{ textDecoration: "none", width: "100%" }} onClick={() => setMobileMenu(false)}>
+              <button className="btn-partner" style={{ width: "100%", justifyContent: "center", padding: "12px 20px", fontSize: 13 }}>
+                Partner With Us
+              </button>
+            </a>
             <a href="https://donate.swasthgram.org" style={{ textDecoration: "none", width: "100%" }}>
               <button className="btn-donate" style={{ width: "100%", justifyContent: "center", padding: "13px 20px", fontSize: 13 }}>
                 Donate Now

@@ -1,6 +1,6 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { ReceiptRefundIcon, Mail, Phone, MapPin, ChevronRight } from "lucide-react";
+import { Mail, Phone, MapPin, ChevronRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
 const COLORS = {
