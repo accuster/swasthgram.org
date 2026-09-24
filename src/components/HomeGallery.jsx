@@ -8,24 +8,24 @@ const COLORS = {
 
 // All 16 gallery images — split into two rows
 const ROW1 = [
-  "home (1).png",
+  "home (1).webp",
   "home (2).jpeg",
   "home (3).jpeg",
   "home (4).jfif",
-  "home (5).png",
+  "home (5).webp",
   "home (6).jpeg",
   "home (7).jpeg",
-  "home (8).png",
+  "home (8).webp",
 ];
 
 const ROW2 = [
-  "home (9).png",
-  "home (10).png",
+  "home (9).webp",
+  "home (10).webp",
   "home (11).webp",
   "home (12).webp",
   "home (13).webp",
   "home (14).jpeg",
-  "home (15).png",
+  "home (15).webp",
   "home (16).webp",
 ];
 
