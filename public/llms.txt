@@ -1,0 +1,25 @@
+# Swasthgram
+
+> Swasthgram Global Foundation is a 12A/80G-registered Charitable Trust in India and a 501(c)(3) non-profit in the US, bringing free community health camps and wellness programs to underserved rural communities across India.
+
+Swasthgram runs community wellness programs across rural India, including free health camps, preventive health education, and outreach targeted at underserved populations. Donations are tax-deductible in both India and the US.
+
+## Docs
+
+- [About Swasthgram](https://swasthgram.org/about): Organization background, mission, and team.
+- [SwasthManthan](https://swasthgram.org/programs/swasthmanthan): Community wellness and health camp program.
+- [Shudhvayu](https://swasthgram.org/programs/shudhvayu): Preventive health and outreach program.
+- [Saksham](https://swasthgram.org/programs/saksham): Women's health and community empowerment program.
+- [Credentials](https://swasthgram.org/credentials): Registration and tax-exemption documentation (12A, 80G, 501(c)(3)).
+- [FAQs](https://swasthgram.org/faqs): Frequently asked questions.
+
+## Support
+
+- [Donate](https://donate.swasthgram.org): Support free health camps and wellness programs.
+- [Partner With Us](https://swasthgram.org/partner-with-us): Corporate and organizational partnership opportunities.
+
+## Optional
+
+- [Privacy Policy](https://swasthgram.org/privacy-policy)
+- [Terms of Service](https://swasthgram.org/terms-of-service)
+- [Refund Policy](https://swasthgram.org/refund-policy)

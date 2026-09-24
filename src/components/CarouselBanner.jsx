@@ -168,6 +168,7 @@ export default function CarouselBanner() {
         <div style={{ position: "relative", zIndex: 2, display: "flex", justifyContent: "center", alignItems: "center", gap: 8, paddingBottom: 32 }}>
           {SLIDES.map((s, i) => (
             <button key={i} className="hero-dot-btn" onClick={() => goTo(i)}
+              aria-label={`Go to slide ${i + 1}`} aria-current={i === active ? "true" : undefined}
               style={{ width: i === active ? 32 : 8, height: 4, borderRadius: 2, border: "none", cursor: "pointer", padding: 0, background: i === active ? s.accent : "#E5E7EB", transition: "all 0.35s cubic-bezier(.22,1,.36,1)", position: "relative", overflow: "hidden" }}>
               {i === active && <div style={{ position: "absolute", top: 0, left: 0, height: "100%", width: `${progress}%`, background: "rgba(255,255,255,0.5)", borderRadius: 2, transition: "width 0.05s linear" }} />}
             </button>
