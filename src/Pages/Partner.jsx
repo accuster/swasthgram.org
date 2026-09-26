@@ -56,8 +56,8 @@ const COUNTRIES = [
   ...REST_OF_WORLD,
 ];
 
-const INR_AMOUNTS = ["100", "500", "1000"];
-const USD_AMOUNTS = ["5", "10", "20", "50"];
+const INR_AMOUNTS = ["500"];
+const USD_AMOUNTS = ["10", "20", "50", "100"];
 
 const API_BASE = "/api";
 let stripePromise = null;
