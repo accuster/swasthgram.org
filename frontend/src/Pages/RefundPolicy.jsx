@@ -1,5 +1,6 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Breadcrumb from "../components/Breadcrumb";
 import { Mail, Phone, MapPin, ChevronRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
@@ -194,8 +195,9 @@ export default function RefundPolicy() {
       {/* HERO */}
       <section style={{
         background: `linear-gradient(160deg, ${cc.forestDeep} 0%, ${cc.forest} 100%)`,
-        padding: "80px 24px 56px", paddingTop: 100,
+        padding: "80px 24px 56px", paddingTop: 72, position: "relative",
       }}>
+        <Breadcrumb items={[{ label: "Refund Policy" }]} />
         <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
             <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>

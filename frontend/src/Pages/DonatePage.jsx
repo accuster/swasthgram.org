@@ -1,5 +1,6 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Breadcrumb from "../components/Breadcrumb";
 import { useState, useEffect, useRef } from "react";
 import { Heart, Lock, CheckCircle, AlertCircle, Loader, HeartHandshake, Shield, Users, Tent, Microscope } from "lucide-react";
 
@@ -274,7 +275,8 @@ export default function DonatePage() {
       <Header />
 
       {/* Hero strip */}
-      <div style={{ background: `linear-gradient(135deg, ${C.forestDeep} 0%, ${C.forest} 100%)`, padding: "100px 24px 48px" }}>
+      <div style={{ background: `linear-gradient(135deg, ${C.forestDeep} 0%, ${C.forest} 100%)`, padding: "104px 24px 48px", position: "relative" }}>
+        <Breadcrumb items={[{ label: "Donate" }]} />
         <div style={{ maxWidth: 1000, margin: "0 auto" }}>
           <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 2, color: "rgba(255,255,255,0.5)", textTransform: "uppercase", marginBottom: 12 }}>Support the Mission</div>
           <h1 style={{ fontSize: "clamp(28px,4vw,44px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, marginBottom: 14 }}>
@@ -335,6 +337,25 @@ export default function DonatePage() {
               </svg>
               Donate via Stripe
               <span style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.6)", background: "rgba(255,255,255,0.1)", padding: "2px 8px", borderRadius: 6, border: "1px solid rgba(255,255,255,0.2)" }}>Global · Card</span>
+            </a>
+            <a
+              href="https://donate.swasthgram.org/"
+              target="_blank" rel="noopener noreferrer"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 10,
+                background: "rgba(255,255,255,0.12)", color: "#fff",
+                border: "1.5px solid rgba(255,255,255,0.3)",
+                fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15,
+                padding: "16px 32px", borderRadius: 12, textDecoration: "none",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.2)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.5)"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.12)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)"; }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 20l-5.447-2.724A1 1 0 0 1 3 16.382V5.618a1 1 0 0 1 1.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0 0 21 18.382V7.618a1 1 0 0 0-.553-.894L15 4m0 13V4m0 0L9 7" />
+              </svg>
+              Donate on MAP
             </a>
           </div>
         </div>

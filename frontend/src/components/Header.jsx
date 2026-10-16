@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { ChevronDown, Heart } from "lucide-react";
 import logoColor from "../assets/SwasthgramLogo.png";
 
 const COLORS = {
@@ -21,32 +22,10 @@ export default function Header() {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [programsOpen, setProgramsOpen] = useState(false);
   const [mobilePrograms, setMobilePrograms] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
   const isHome = location.pathname === "/";
-
-  useEffect(() => {
-    if (!isHome) { setActiveSection(""); return; }
-    const sections = ["about", "impact", "programs", "contact"];
-    const handler = () => {
-      const scrollY = window.scrollY + 100;
-      let current = "";
-      let currentTop = -Infinity;
-      for (const id of sections) {
-        const el = document.getElementById(id);
-        if (el && el.offsetTop <= scrollY && el.offsetTop > currentTop) {
-          current = id;
-          currentTop = el.offsetTop;
-        }
-      }
-      setActiveSection(current);
-    };
-    window.addEventListener("scroll", handler, { passive: true });
-    handler();
-    return () => window.removeEventListener("scroll", handler);
-  }, [isHome]);
 
   const handleNavClick = (e, section) => {
     e.preventDefault();
@@ -70,14 +49,13 @@ export default function Header() {
   const navLinks = [
     { label: "Home",     href: "/" },
     { label: "About",    href: "/about" },
-    { label: "Programs", section: "programs" },
-    { label: "Impact",   section: "impact" },
-    { label: "Contact",  section: "contact" },
+    { label: "Programs", dropdown: programSubLinks },
+    { label: "Events",   href: "/events" },
   ];
 
   const isActive = (link) => {
     if (link.href) return location.pathname === link.href;
-    if (link.section) return isHome && activeSection === link.section;
+    if (link.dropdown) return link.dropdown.some((sub) => location.pathname.startsWith(sub.href));
     return false;
   };
 
@@ -92,31 +70,31 @@ export default function Header() {
           font-family: 'Inter', sans-serif;
           font-size: 13px;
           font-weight: 500;
-          transition: color 0.2s;
-          padding: 4px 0;
+          transition: color 0.2s, background 0.2s;
+          padding: 0 16px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
           cursor: pointer;
           background: none;
           border: none;
           position: relative;
         }
-        .nav-link:hover { color: ${COLORS.forest}; }
         .nav-link-active {
-          color: ${COLORS.forest} !important;
+          color: ${COLORS.text} !important;
+          background: ${COLORS.gold};
+          border-radius: 0;
+          font-weight: 600;
         }
-        .nav-link-active::after {
-          content: '';
-          position: absolute;
-          bottom: -2px;
-          left: 0;
-          right: 0;
-          height: 2px;
-          background: ${COLORS.forest};
-          border-radius: 2px;
+        .nav-link-active:hover {
+          background: ${COLORS.goldDark};
         }
         .programs-wrapper {
           position: relative;
           display: flex;
-          align-items: center;
+          align-items: stretch;
         }
         .programs-wrapper::after {
           content: '';
@@ -124,19 +102,20 @@ export default function Header() {
           top: 100%;
           left: -10px;
           right: -10px;
-          height: 20px;
+          height: 6px;
         }
         .programs-dropdown {
           position: absolute;
-          top: calc(100% + 20px);
+          top: calc(100% + 6px);
           left: 50%;
           transform: translateX(-50%);
+          display: flex;
+          align-items: stretch;
           background: #fff;
           border: 1px solid ${COLORS.border};
           border-radius: 10px;
           box-shadow: 0 8px 24px rgba(0,0,0,0.10);
-          min-width: 168px;
-          padding: 6px 0;
+          padding: 4px;
           z-index: 1000;
           animation: fadeDown 0.15s ease;
         }
@@ -144,17 +123,19 @@ export default function Header() {
           from { opacity: 0; transform: translateX(-50%) translateY(-4px); }
           to   { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
-        .programs-dropdown a {
+        .programs-dropdown-col {
           display: block;
-          padding: 9px 18px;
+          padding: 10px 20px;
+          border-radius: 7px;
           font-family: 'Inter', sans-serif;
           font-size: 13px;
-          font-weight: 500;
+          font-weight: 600;
           color: ${COLORS.text};
+          text-align: center;
           transition: background 0.15s, color 0.15s;
           white-space: nowrap;
         }
-        .programs-dropdown a:hover {
+        .programs-dropdown-col:hover {
           background: #f5f3ef;
           color: ${COLORS.forest};
         }
@@ -165,8 +146,8 @@ export default function Header() {
           background: ${COLORS.forest};
           color: #fff;
           border: none;
-          padding: 9px 20px;
-          border-radius: 8px;
+          padding: 14px 14px;
+          border-radius: 6px;
           cursor: pointer;
           transition: all 0.25s;
           display: inline-flex;
@@ -184,8 +165,8 @@ export default function Header() {
           background: transparent;
           color: ${COLORS.forest};
           border: 1.5px solid ${COLORS.forest};
-          padding: 8px 18px;
-          border-radius: 8px;
+          padding: 13px 12px;
+          border-radius: 6px;
           cursor: pointer;
           transition: all 0.25s;
           display: inline-flex;
@@ -203,6 +184,7 @@ export default function Header() {
         }
         @media (max-width: 900px) {
           .desktop-nav { display: none !important; }
+          .desktop-actions { display: none !important; }
           .mobile-toggle { display: flex !important; }
         }
         @media (min-width: 901px) {
@@ -219,15 +201,17 @@ export default function Header() {
         background: "rgba(253, 251, 247, 0.97)",
         backdropFilter: "blur(10px)",
         borderBottom: `1px solid ${COLORS.border}`,
-        padding: "8px 0",
+        height: 64,
       }}>
         <div style={{
+          position: "relative",
           maxWidth: 1080, margin: "0 auto", padding: "0 24px",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
+          height: "100%",
+          display: "flex", alignItems: "stretch", justifyContent: "space-between",
           overflow: "visible",
         }}>
           {/* Logo */}
-          <a href="/" onClick={handleLogoClick} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+          <a href="/" onClick={handleLogoClick} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", alignSelf: "center" }}>
             <img src={logoColor} alt="Swasthgram" style={{ height: 36, width: "auto", display: "block" }} />
             <span style={{
               fontFamily: "'Libre Baskerville', Georgia, serif",
@@ -238,8 +222,13 @@ export default function Header() {
             </span>
           </a>
 
-          {/* Desktop Nav */}
-          <div className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: 24, overflow: "visible" }}>
+          {/* Desktop Nav — centered within the header regardless of logo/button widths */}
+          <div className="desktop-nav" style={{
+            position: "absolute", left: "50%", top: 0,
+            transform: "translateX(-50%)",
+            height: "100%",
+            display: "flex", alignItems: "stretch", gap: 6, overflow: "visible",
+          }}>
             {navLinks.map((link) =>
               link.label === "Home" ? (
                 <a
@@ -251,23 +240,22 @@ export default function Header() {
                 >
                   {link.label}
                 </a>
-              ) : link.label === "Programs" ? (
-                <div key={link.label} className="programs-wrapper"
+              ) : link.dropdown ? (
+                <div key={link.label} className="programs-wrapper" style={{ alignSelf: "stretch" }}
                   onMouseEnter={() => setProgramsOpen(true)}
                   onMouseLeave={() => setProgramsOpen(false)}
                 >
-                  <button
+                  <span
                     className={`nav-link${isActive(link) ? " nav-link-active" : ""}`}
-                    onClick={(e) => handleNavClick(e, link.section)}
                     style={{ color: isActive(link) ? COLORS.forest : COLORS.text, display: "flex", alignItems: "center", gap: 4 }}
                   >
                     {link.label}
-                    <span style={{ fontSize: 13, opacity: 0.7, marginTop: 1 }}>▾</span>
-                  </button>
+                    <ChevronDown size={14} style={{ transition: "transform 0.2s", transform: programsOpen ? "rotate(180deg)" : "none" }} />
+                  </span>
                   {programsOpen && (
                     <div className="programs-dropdown">
-                      {programSubLinks.map((sub) => (
-                        <a key={sub.label} href={sub.href} onClick={() => setProgramsOpen(false)}>
+                      {link.dropdown.map((sub) => (
+                        <a key={sub.label} href={sub.href} className="programs-dropdown-col" onClick={() => setProgramsOpen(false)}>
                           {sub.label}
                         </a>
                       ))}
@@ -294,11 +282,15 @@ export default function Header() {
                 </button>
               )
             )}
+          </div>
+
+          {/* Partner / Donate buttons — pinned to the right */}
+          <div className="desktop-actions" style={{ display: "flex", alignItems: "center", gap: 8, alignSelf: "center" }}>
             <a href="/partner-with-us" style={{ textDecoration: "none" }}>
               <button className="btn-partner">Partner With Us</button>
             </a>
-            <a href="https://donate.swasthgram.org" style={{ textDecoration: "none" }}>
-              <button className="btn-donate">Donate Now</button>
+            <a href="/donate" style={{ textDecoration: "none" }}>
+              <button className="btn-donate"><Heart size={13} fill="#fff" />Donate Now</button>
             </a>
           </div>
 
@@ -306,7 +298,7 @@ export default function Header() {
           <button
             className="mobile-toggle"
             onClick={() => setMobileMenu(!mobileMenu)}
-            style={{ background: "none", border: "none", cursor: "pointer", padding: 6, display: "flex", flexDirection: "column", gap: 4 }}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 6, display: "flex", flexDirection: "column", gap: 4, alignSelf: "center" }}
           >
             {[0, 1, 2].map((i) => (
               <span key={i} style={{ width: 20, height: 2, background: COLORS.text, borderRadius: 2 }} />
@@ -319,7 +311,7 @@ export default function Header() {
           <div className="mobile-dropdown" style={{
             background: "rgba(253,251,247,0.98)", padding: "16px 24px",
             display: "flex", flexDirection: "column", gap: 14,
-            alignItems: "center", borderTop: `1px solid ${COLORS.border}`
+            alignItems: "flex-start", borderTop: `1px solid ${COLORS.border}`
           }}>
             {navLinks.map((link) =>
               link.label === "Home" ? (
@@ -332,16 +324,16 @@ export default function Header() {
                 >
                   {link.label}
                 </a>
-              ) : link.label === "Programs" ? (
-                <div key={link.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, width: "100%" }}>
+              ) : link.dropdown ? (
+                <div key={link.label} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6, width: "100%" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 4, cursor: "pointer" }}
                     onClick={() => setMobilePrograms(!mobilePrograms)}>
-                    <span className="nav-link" style={{ color: COLORS.text }}>Programs</span>
-                    <span style={{ fontSize: 13, color: COLORS.text, opacity: 0.6, display: "inline-block", transition: "transform 0.2s", transform: mobilePrograms ? "rotate(180deg)" : "none" }}>▾</span>
+                    <span className={`nav-link${isActive(link) ? " nav-link-active" : ""}`} style={{ color: isActive(link) ? COLORS.forest : COLORS.text }}>{link.label}</span>
+                    <ChevronDown size={15} color={COLORS.text} style={{ opacity: 0.6, transition: "transform 0.2s", transform: mobilePrograms ? "rotate(180deg)" : "none" }} />
                   </div>
                   {mobilePrograms && (
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-                      {programSubLinks.map((sub) => (
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+                      {link.dropdown.map((sub) => (
                         <a key={sub.label} href={sub.href} className="nav-link"
                           style={{ color: COLORS.forest, fontSize: 12 }}
                           onClick={() => { setMobileMenu(false); setMobilePrograms(false); }}>
@@ -367,16 +359,18 @@ export default function Header() {
                 </button>
               )
             )}
-            <a href="/partner-with-us" style={{ textDecoration: "none", width: "100%" }} onClick={() => setMobileMenu(false)}>
-              <button className="btn-partner" style={{ width: "100%", justifyContent: "center", padding: "12px 20px", fontSize: 13 }}>
-                Partner With Us
-              </button>
-            </a>
-            <a href="https://donate.swasthgram.org" style={{ textDecoration: "none", width: "100%" }}>
-              <button className="btn-donate" style={{ width: "100%", justifyContent: "center", padding: "13px 20px", fontSize: 13 }}>
-                Donate Now
-              </button>
-            </a>
+            <div style={{ display: "flex", gap: 8 }}>
+              <a href="/partner-with-us" style={{ textDecoration: "none" }} onClick={() => setMobileMenu(false)}>
+                <button className="btn-partner" style={{ justifyContent: "center", padding: "12px 16px", fontSize: 13 }}>
+                  Partner With Us
+                </button>
+              </a>
+              <a href="/donate" style={{ textDecoration: "none" }}>
+                <button className="btn-donate" style={{ justifyContent: "center", padding: "13px 16px", fontSize: 13 }}>
+                  <Heart size={14} fill="#fff" />Donate Now
+                </button>
+              </a>
+            </div>
           </div>
         )}
       </nav>

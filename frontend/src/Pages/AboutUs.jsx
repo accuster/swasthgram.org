@@ -1,5 +1,6 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Breadcrumb from "../components/Breadcrumb";
 import {
   Heart, Bike, Package, GraduationCap, Sprout, Wind, Microscope,
   MapPin, Mail, Phone, Shield, FileText, Users, Building2,
@@ -9,7 +10,6 @@ import { useRef, useState, useEffect } from "react";
 import imgSwasthmanthan from "../assets/programs/Swasthmanthan.webp";
 import imgSaksham       from "../assets/programs/saksham.webp";
 import imgShudhvayu     from "../assets/programs/Shudhvayu.webp";
-import swasthgramLogo   from "../assets/SwasthgramLogo.png";
 
 const COLORS = {
   forest: "#1B6B3A", forestDark: "#145A2F", forestDeep: "#0E4422",
@@ -44,9 +44,9 @@ function FadeIn({ children, delay = 0 }) {
   );
 }
 
-function Section({ children, bg = cc.warmBg, id }) {
+function Section({ children, bg = cc.warmBg, id, padTop = 64 }) {
   return (
-    <section id={id} style={{ background: bg, padding: "64px 24px" }}>
+    <section id={id} style={{ background: bg, padding: `${padTop}px 24px 64px`, position: "relative" }}>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         {children}
       </div>
@@ -63,14 +63,14 @@ function SectionHeading({ tag, title, center = false }) {
   );
 }
 
-function InfoCard({ icon, label, value, highlight = false }) {
+function InfoRow({ icon, label, value }) {
   return (
-    <div style={{ background: cc.white, borderRadius: 12, padding: "18px 20px", border: `1px solid ${cc.border}`, borderLeft: highlight ? `4px solid ${cc.forest}` : `1px solid ${cc.border}` }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-        <div style={{ width: 32, height: 32, borderRadius: 8, background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{icon}</div>
-        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: cc.textLight, textTransform: "uppercase", letterSpacing: 1 }}>{label}</span>
+    <div style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "14px 16px", border: `1px solid ${cc.border}`, borderRadius: 10 }}>
+      <div style={{ width: 28, height: 28, borderRadius: 8, background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{icon}</div>
+      <div style={{ display: "flex", flexDirection: "column", flex: 1, minWidth: 0 }}>
+        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: cc.textLight, textTransform: "uppercase", letterSpacing: 1, marginBottom: 2 }}>{label}</span>
+        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: cc.text, lineHeight: 1.4 }}>{value}</span>
       </div>
-      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, fontWeight: 600, color: cc.text, lineHeight: 1.5 }}>{value}</div>
     </div>
   );
 }
@@ -93,85 +93,55 @@ export default function AboutNGOPage() {
 
       <Header />
 
-      {/* HERO */}
-      <section style={{ background: `linear-gradient(160deg, ${cc.forestDeep} 0%, ${cc.forest} 60%, ${cc.leaf} 100%)`, padding: "140px 24px 72px", marginTop: 0 }}>
-        <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", alignItems: "center", gap: 40, flexWrap: "wrap" }}>
-          <div style={{ width: 80, height: 80, borderRadius: 20, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 8px 32px rgba(0,0,0,0.2)", overflow: "hidden" }}>
-            <img src={swasthgramLogo} alt="Swasthgram Logo" style={{ width: 60, height: 60, objectFit: "contain" }} />
-          </div>
-          <div>
-            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 2, color: "rgba(255,255,255,0.6)", textTransform: "uppercase", marginBottom: 10 }}>About Our Organisation</div>
-            <h1 style={{ fontSize: "clamp(26px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, marginBottom: 10 }}>
+      {/* ── WHO WE ARE ── */}
+      <FadeIn>
+        <Section id="who-we-are" bg={cc.white} padTop={110}>
+          <Breadcrumb items={[{ label: "About Us" }]} theme="light" />
+          <div style={{ marginBottom: 36 }}>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: 1.5, textTransform: "uppercase", color: cc.gold, marginBottom: 8 }}>Who We Are</div>
+            <h1 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(26px,4vw,36px)", fontWeight: 700, color: cc.text, lineHeight: 1.2, marginBottom: 8 }}>
               Swasthgram Global Foundation
             </h1>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,0.7)", lineHeight: 1.7, maxWidth: 600 }}>
-              "A registered non-profit organisation empowering underserved communities through community wellness programs, scientific skilling, and environmental solutions — since 2011.
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: cc.textMid, lineHeight: 1.7 }}>
+              <span style={{ fontWeight: 600, color: cc.text }}>Swasthgram Global Foundation is a registered non-profit NGO</span> — a Public Charitable Trust registered under the Income Tax Act with 12A and 80G certification in India, and affiliated with a 501(c)(3) organisation in the USA for tax-deductible donations. Since 2011, we have empowered underserved communities through community wellness programs, scientific skilling, and environmental solutions. Every rupee we receive goes directly toward our field programs, health camps, and community outreach — we are not a commercial organisation of any kind.
             </p>
           </div>
-        </div>
-      </section>
 
-      {/* ── LEGAL REGISTRATION ── */}
-      <FadeIn>
-        <Section id="registration" bg={cc.white}>
-          <SectionHeading tag="Legal Identity" title="Registration & Compliance Details" />
-
-          {/* IMPORTANT DISCLAIMER */}
-          <div style={{ background: "#f0fdf4", border: `2px solid ${cc.forest}`, borderRadius: 14, padding: "18px 22px", marginBottom: 32, display: "flex", alignItems: "flex-start", gap: 14 }}>
-            <Shield size={22} color={cc.forest} style={{ flexShrink: 0, marginTop: 2 }} />
-            <div>
-              <div style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: cc.forest, marginBottom: 4 }}>
-                "We are a registered non-profit NGO.
-              </div>
-              <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: cc.textMid, lineHeight: 1.6 }}>
-                Swasthgram Global Global Foundation is entirely focused on community wellness, youth skilling, and environmental solutions. Every rupee we receive goes directly toward our field programs, health camps, and community outreach. We are not a commercial organisation of any kind.
-              </div>
-            </div>
-          </div>
-
-          <div className="grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
-            <InfoCard
+          <div className="grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+            <InfoRow
               icon={<FileText size={16} color={cc.forest} />}
               label="Legal Name"
               value="Swasthgram Global Foundation"
-              highlight
             />
-            <InfoCard
+            <InfoRow
               icon={<Building2 size={16} color={cc.forest} />}
               label="Type of Organisation"
               value="Public Charitable Trust / Non-Profit Organisation"
-              highlight
             />
-            <InfoCard
+            <InfoRow
               icon={<Award size={16} color={cc.forest} />}
               label="12A Certificate"
               value="Registered under Section 12A of the Income Tax Act, 1961 — Exemption for charitable organisations"
-              highlight
             />
-            <InfoCard
+            <InfoRow
               icon={<Award size={16} color={cc.forest} />}
               label="80G Certificate"
               value="Registered under Section 80G of the Income Tax Act — Donations eligible for tax deduction for Indian donors"
-              highlight
             />
-            <InfoCard
+            <InfoRow
               icon={<Globe size={16} color={cc.forest} />}
               label="501(c)(3) Certified-USA"
               value="Donations from US donors may be tax-deductible through an IRS 501(c)(3) affiliated organisation"
-              highlight
             />
-            <InfoCard
+            <InfoRow
               icon={<MapPin size={16} color={cc.forest} />}
               label="Registered Address"
               value="Ground Floor, 424-CMR Building, Ghitorni, New Delhi — 110030, India"
-              highlight
             />
           </div>
 
-          <div style={{ background: cc.cream, borderRadius: 12, padding: "16px 20px", border: `1px solid ${cc.border}` }}>
-            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: cc.textMid, lineHeight: 1.7 }}>
-              <strong style={{ color: cc.text }}>Note for donors:</strong> Upon donation, an official receipt will be emailed to you. Indian donors will receive their 12A/80G certificate within 7 working days to claim domestic income tax deductions. US donors will receive 501(c)(3) compliant documentation suitable for IRS tax-deductible records.
-            </div>
+          <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: cc.textLight, lineHeight: 1.7, paddingTop: 16, borderTop: `1px solid ${cc.border}` }}>
+            <span style={{ fontWeight: 600, color: cc.textMid }}>Note for donors:</span> Upon donation, an official receipt will be emailed to you. Indian donors will receive their 12A/80G certificate within 7 working days to claim domestic income tax deductions. US donors will receive 501(c)(3) compliant documentation suitable for IRS tax-deductible records.
           </div>
         </Section>
       </FadeIn>
@@ -273,24 +243,26 @@ export default function AboutNGOPage() {
 
       {/* ── IMPACT NUMBERS ── */}
       <FadeIn>
-        <Section bg={cc.forest}>
-          <SectionHeading tag="Our Footprint" title="Impact at scale — verified and tracked" center />
-          <div className="grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }}>
-            {[
-              { n: "57 Lakh+",  l: "Beneficiaries Served" },
-              { n: "67,660+",   l: "Health Camps Conducted" },
-              { n: "21,750+",   l: "Diseases Awareness & Screenings" },
-              { n: "5,000+",    l: "Community Health Kits Deployed" },
-              { n: "5,050+",    l: "Youth Skilled & Empowered" },
-              { n: "9,000+",    l: "Pregnant Women Screened" },
-              { n: "18",        l: "Countries Presented To (Washington D.C.)" },
-              { n: "Since 2011", l: "Years of Community Impact" },
-            ].map((s, i) => (
-              <div key={i} style={{ background: "rgba(255,255,255,0.08)", borderRadius: 12, padding: "18px 14px", textAlign: "center", border: "1px solid rgba(255,255,255,0.1)" }}>
-                <div style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(18px,2vw,22px)", fontWeight: 800, color: cc.goldLight, marginBottom: 6 }}>{s.n}</div>
-                <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,0.55)", lineHeight: 1.4 }}>{s.l}</div>
-              </div>
-            ))}
+        <Section bg={cc.white}>
+          <div style={{ background: cc.cream, border: `1px solid ${cc.border}`, borderRadius: 16, padding: "40px 32px" }}>
+            <SectionHeading tag="Our Footprint" title="Impact at scale — verified and tracked" center />
+            <div className="grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }}>
+              {[
+                { n: "57 Lakh+",  l: "Beneficiaries Served" },
+                { n: "67,660+",   l: "Health Camps Conducted" },
+                { n: "21,750+",   l: "Diseases Awareness & Screenings" },
+                { n: "5,000+",    l: "Community Health Kits Deployed" },
+                { n: "5,050+",    l: "Youth Skilled & Empowered" },
+                { n: "9,000+",    l: "Pregnant Women Screened" },
+                { n: "18",        l: "Countries Presented To (Washington D.C.)" },
+                { n: "Since 2011", l: "Years of Community Impact" },
+              ].map((s, i) => (
+                <div key={i} style={{ textAlign: "center", padding: "4px 14px", borderLeft: i % 4 !== 0 ? `1px solid ${cc.border}` : "none" }}>
+                  <div style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(18px,2vw,22px)", fontWeight: 800, color: cc.forest, marginBottom: 6 }}>{s.n}</div>
+                  <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: cc.textLight, lineHeight: 1.4 }}>{s.l}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </Section>
       </FadeIn>

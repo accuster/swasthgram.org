@@ -1,5 +1,6 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Breadcrumb from "../components/Breadcrumb";
 import {
   CheckCircle, Heart, Share2, Loader, AlertCircle,
   Copy, ArrowRight, ExternalLink, MessageCircle,
@@ -182,7 +183,8 @@ export default function ThankYouPage() {
       <Header />
 
       {/* HERO */}
-      <section style={{ background:`linear-gradient(160deg, ${cc.forestDeep} 0%, ${accentColor} 100%)`, padding:"140px 24px 60px 24px", marginTop:0 }}>
+      <section style={{ background:`linear-gradient(160deg, ${cc.forestDeep} 0%, ${accentColor} 100%)`, padding:"110px 24px 60px 24px", marginTop:0, position: "relative" }}>
+        <Breadcrumb items={[{ label: "Thank You" }]} />
         <div style={{ maxWidth:640, margin:"0 auto", textAlign:"center" }}>
           <div className="fu0" style={{ display:"inline-flex", alignItems:"center", justifyContent:"center", width:84, height:84, borderRadius:"50%", background:"rgba(255,255,255,0.15)", marginBottom:24, animation:"pulse-ring 2.2s ease-in-out infinite" }}>
             <CheckCircle size={46} color="#fff" />

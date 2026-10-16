@@ -1,5 +1,6 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Breadcrumb from "../components/Breadcrumb";
 import { HelpCircle, Mail, Phone, Bike, GraduationCap, Leaf, Heart, Users, Globe } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
@@ -219,8 +220,9 @@ export default function FAQs() {
       {/* HERO */}
       <section style={{
         background: `linear-gradient(160deg, ${cc.forestDeep} 0%, ${cc.forest} 100%)`,
-        padding: "80px 24px 56px", paddingTop: 100,
+        padding: "80px 24px 56px", paddingTop: 72, position: "relative",
       }}>
+        <Breadcrumb items={[{ label: "FAQs" }]} />
         <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
           <div style={{ width: 56, height: 56, borderRadius: 14, background: "rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
             <HelpCircle size={26} color={cc.goldLight} />
