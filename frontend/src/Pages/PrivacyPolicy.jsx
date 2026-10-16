@@ -1,6 +1,7 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { ScrollText, Mail, Phone, MapPin, ChevronRight } from "lucide-react";
+import Breadcrumb from "../components/Breadcrumb";
+import { Shield, Mail, Phone, MapPin, ChevronRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
 const COLORS = {
@@ -42,142 +43,134 @@ function FadeIn({ children, delay = 0 }) {
 
 const sections = [
   {
-    id: "acceptance",
-    title: "Acceptance of Terms",
+    id: "information-we-collect",
+    title: "Information We Collect",
     content: [
       {
-        subtitle: "Agreement",
-        text: "By accessing or using Swasthgram's website, mobile application, or any of our services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services."
+        subtitle: "Personal Information",
+        text: "When you donate, register, or contact us, we collect information such as your name, email address, phone number, and payment details. This information is necessary to process donations and provide receipts."
       },
       {
-        subtitle: "Eligibility",
-        text: "You must be at least 18 years of age to use our services or make donations independently. Minors may use the platform only with parental or guardian consent and supervision."
+        subtitle: "Usage Data",
+        text: "We automatically collect information about how you interact with our website and app, including IP address, browser type, pages visited, and time spent. This helps us improve our services."
+      },
+      {
+        subtitle: "Health Camp Data",
+        text: "For beneficiaries of our health camps, we collect anonymised diagnostic data for programme monitoring and impact reporting. No personally identifiable health data is stored without explicit consent."
       },
     ]
   },
   {
-    id: "our-services",
-    title: "Our Services",
-    content: [
-      {
-        subtitle: "What Swasthgram Provides",
-        text: "Swasthgram is a registered non-profit organisation providing public health services, youth skilling, and environmental initiatives. Our digital platforms facilitate donation processing, impact tracking, and programme information."
-      },
-      {
-        subtitle: "No Medical Advice",
-        text: "Content on our website and app is for informational purposes only and does not constitute medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for medical concerns."
-      },
-      {
-        subtitle: "Service Availability",
-        text: "We strive to maintain continuous service availability but do not guarantee uninterrupted access. We reserve the right to modify, suspend, or discontinue any service at any time with reasonable notice."
-      },
-    ]
-  },
-  {
-    id: "donations",
-    title: "Donations & Payments",
+    id: "how-we-use",
+    title: "How We Use Your Information",
     content: [
       {
         subtitle: "Donation Processing",
-        text: "All donations are processed securely through Razorpay (India) and Stripe (USA). By making a donation, you authorise the respective payment processor to charge the specified amount to your payment method."
+        text: "Your personal and payment information is used solely to process donations, issue tax receipts (80G, 12A, 501(c)(3)), and communicate donation confirmations."
       },
       {
-        subtitle: "Refund Policy",
-        text: "Donations are generally non-refundable as they are deployed immediately toward programme delivery. In cases of duplicate transactions or technical errors, please contact support@swasthgram.org within 7 days and we will review your request."
+        subtitle: "Programme Delivery",
+        text: "Aggregated and anonymised data helps us track impact, plan health camp locations, and report transparently to donors about fund utilisation."
       },
       {
-        subtitle: "Tax Receipts",
-        text: "Eligible donors will receive tax receipts automatically: 80G & 12A certificates for Indian donors, and 501(c)(3) receipts for US donors. Receipts are sent to the email address provided at the time of donation."
-      },
-      {
-        subtitle: "Fund Utilisation",
-        text: "Swasthgram commits to using 100% of programme donations for impact delivery. Administrative costs are funded separately. Donors may track fund utilisation through the Swasthgram App."
+        subtitle: "Communications",
+        text: "With your consent, we may send updates about Swasthgram's programmes, impact stories, and fundraising campaigns. You can opt out at any time."
       },
     ]
   },
   {
-    id: "user-conduct",
-    title: "User Conduct",
+    id: "data-sharing",
+    title: "Data Sharing & Disclosure",
     content: [
       {
-        subtitle: "Prohibited Activities",
-        text: "You agree not to use our services for any unlawful purpose, to transmit harmful or fraudulent content, to impersonate Swasthgram or its representatives, or to attempt to gain unauthorised access to our systems."
+        subtitle: "Payment Processors",
+        text: "We share necessary payment information with Razorpay (India) and Stripe (USA) solely for donation processing. These processors maintain their own privacy policies and security standards."
       },
       {
-        subtitle: "Accurate Information",
-        text: "You agree to provide accurate, current, and complete information when registering, donating, or interacting with our services. Providing false information may result in termination of your account."
+        subtitle: "No Sale of Data",
+        text: "Swasthgram does not sell, rent, or trade your personal information to third parties for marketing purposes. Your data is never monetised."
       },
       {
-        subtitle: "Respectful Engagement",
-        text: "When participating in any Swasthgram community or communication channel, users must engage respectfully. Harassment, discrimination, or abusive behaviour will not be tolerated."
+        subtitle: "Legal Requirements",
+        text: "We may disclose information if required by law, court order, or government authority, or to protect the rights and safety of Swasthgram, our staff, or the public."
       },
     ]
   },
   {
-    id: "intellectual-property",
-    title: "Intellectual Property",
+    id: "data-security",
+    title: "Data Security",
     content: [
       {
-        subtitle: "Swasthgram Content",
-        text: "All content on our website and app — including text, images, logos, videos, and programme materials — is the intellectual property of Swasthgram Global Foundation and is protected by applicable copyright and trademark laws."
+        subtitle: "Security Measures",
+        text: "We implement industry-standard security measures including SSL encryption, secure servers, and access controls to protect your personal information from unauthorised access or disclosure."
       },
       {
-        subtitle: "Limited Licence",
-        text: "We grant you a limited, non-exclusive, non-transferable licence to access and use our content for personal, non-commercial purposes. Any other use requires prior written permission from Swasthgram."
+        subtitle: "Payment Security",
+        text: "All payment transactions are encrypted and processed through PCI-DSS compliant payment gateways. Swasthgram does not store credit card or banking details on our servers."
       },
       {
-        subtitle: "Innovations & Patents",
-        text: "Swasthgram's technological innovations, including the Lab-on-Bike, Lab-in-a-Box, and Shudhvayu air purification system, are proprietary inventions. Reproduction, reverse engineering, or commercial use without authorisation is strictly prohibited."
+        subtitle: "Data Retention",
+        text: "We retain personal data only as long as necessary for the purposes outlined in this policy, or as required by law. Donor records are retained for a minimum of 7 years for tax compliance."
       },
     ]
   },
   {
-    id: "disclaimers",
-    title: "Disclaimers & Liability",
+    id: "your-rights",
+    title: "Your Rights",
     content: [
       {
-        subtitle: "As-Is Basis",
-        text: "Our services are provided on an 'as is' and 'as available' basis without warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability or fitness for a particular purpose."
+        subtitle: "Access & Correction",
+        text: "You have the right to access the personal information we hold about you and to request corrections if it is inaccurate or incomplete. Contact support@swasthgram.org to make such requests."
       },
       {
-        subtitle: "Limitation of Liability",
-        text: "To the fullest extent permitted by law, Swasthgram shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our services, even if we have been advised of the possibility of such damages."
+        subtitle: "Deletion",
+        text: "You may request deletion of your personal data, subject to our legal obligations to retain certain records. We will respond to deletion requests within 30 days."
       },
       {
-        subtitle: "Third-Party Links",
-        text: "Our website may contain links to third-party websites. Swasthgram is not responsible for the content, privacy practices, or terms of those sites. Accessing third-party links is at your own risk."
+        subtitle: "Opt-Out",
+        text: "You can opt out of marketing communications at any time by clicking 'unsubscribe' in any email or by contacting us directly. Transactional communications such as donation receipts cannot be opted out of."
       },
     ]
   },
   {
-    id: "governing-law",
-    title: "Governing Law",
+    id: "cookies",
+    title: "Cookies & Tracking",
     content: [
       {
-        subtitle: "Jurisdiction",
-        text: "These Terms shall be governed by and construed in accordance with the laws of India. For donors and users in the United States, applicable US federal and state laws shall also apply where relevant."
+        subtitle: "Cookie Usage",
+        text: "Our website uses cookies to enhance your browsing experience, remember preferences, and analyse site traffic. Essential cookies are necessary for the site to function; analytics cookies are optional."
       },
       {
-        subtitle: "Dispute Resolution",
-        text: "Any disputes arising from these Terms shall first be attempted to be resolved through good-faith negotiation. If unresolved, disputes shall be subject to arbitration in New Delhi, India, in accordance with applicable arbitration rules."
+        subtitle: "Managing Cookies",
+        text: "You can control cookie settings through your browser preferences. Disabling certain cookies may affect the functionality of our website."
       },
     ]
   },
   {
-    id: "modifications",
-    title: "Modifications to Terms",
+    id: "children",
+    title: "Children's Privacy",
     content: [
       {
-        subtitle: "Right to Modify",
-        text: "Swasthgram reserves the right to modify these Terms at any time. We will provide notice of significant changes through our website or by email to registered users. Your continued use of our services after changes constitutes acceptance of the revised Terms."
+        subtitle: "Age Restriction",
+        text: "Our services are not directed to children under 13. We do not knowingly collect personal information from children under 13 without parental consent. If you believe we have collected such data, please contact us immediately."
+      },
+    ]
+  },
+  {
+    id: "changes",
+    title: "Changes to This Policy",
+    content: [
+      {
+        subtitle: "Policy Updates",
+        text: "We may update this Privacy Policy from time to time. We will notify you of significant changes via email or a prominent notice on our website. Your continued use of our services after changes constitutes acceptance of the revised policy."
       },
     ]
   },
 ];
 
-export default function TermsOfService() {
-  useEffect(() => { document.title = "Terms of Service | Swasthgram"; }, []);
-  const [activeSection, setActiveSection] = useState("acceptance");
+export default function PrivacyPolicy() {
+  useEffect(() => { document.title = "Privacy Policy | Swasthgram"; }, []);
+  const [activeSection, setActiveSection] = useState("information-we-collect");
 
   return (
     <div style={{ fontFamily: "'Libre Baskerville', Georgia, serif", background: cc.warmBg, color: cc.text }}>
@@ -200,18 +193,19 @@ export default function TermsOfService() {
       {/* HERO */}
       <section style={{
         background: `linear-gradient(160deg, ${cc.forestDeep} 0%, ${cc.forest} 100%)`,
-        padding: "80px 24px 56px", paddingTop: 100,
+        padding: "80px 24px 56px", paddingTop: 72, position: "relative",
       }}>
+        <Breadcrumb items={[{ label: "Privacy Policy" }]} />
         <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
             <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <ScrollText size={24} color={cc.goldLight} />
+              <Shield size={24} color={cc.goldLight} />
             </div>
             <div className="tag" style={{ color: cc.goldSoft }}>Legal</div>
           </div>
-          <h1 style={{ fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 700, color: "#fff", lineHeight: 1.2, marginBottom: 12 }}>Terms of Service</h1>
+          <h1 style={{ fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 700, color: "#fff", lineHeight: 1.2, marginBottom: 12 }}>Privacy Policy</h1>
           <p className="sans" style={{ fontSize: 15, color: "rgba(255,255,255,0.65)", maxWidth: 560, lineHeight: 1.7 }}>
-            Please read these terms carefully before using Swasthgram's website, app, or services. By using our platform, you agree to these terms.
+            Your privacy matters to us. This policy explains how Swasthgram collects, uses, and protects your personal information.
           </p>
           <div className="sans" style={{ marginTop: 20, fontSize: 12, color: "rgba(255,255,255,0.4)" }}>Last updated: March 2026 · Swasthgram Global Foundation</div>
         </div>
@@ -248,7 +242,7 @@ export default function TermsOfService() {
             {sections.map((section, i) => (
               <FadeIn key={section.id} delay={i * 0.05}>
                 <div id={section.id} style={{ marginBottom: 48, scrollMarginTop: 100 }}>
-                  <h2 style={{ fontSize: "clamp(18px, 2.5vw, 22px)", fontWeight: 700, marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${cc.border}` }}>
+                  <h2 style={{ fontSize: "clamp(18px, 2.5vw, 22px)", fontWeight: 700, marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${cc.border}`, color: cc.text }}>
                     {section.title}
                   </h2>
                   {section.content.map((item, j) => (
@@ -266,8 +260,8 @@ export default function TermsOfService() {
             {/* Contact */}
             <FadeIn>
               <div style={{ background: `linear-gradient(135deg, ${cc.forestDeep}, ${cc.forest})`, borderRadius: 16, padding: "32px 28px", marginTop: 16 }}>
-                <h3 style={{ fontSize: 18, fontWeight: 700, color: "#fff", marginBottom: 8 }}>Have questions about our Terms?</h3>
-                <p className="sans" style={{ fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>Our team is happy to clarify any aspect of these terms.</p>
+                <h3 style={{ fontSize: 18, fontWeight: 700, color: "#fff", marginBottom: 8 }}>Questions about this policy?</h3>
+                <p className="sans" style={{ fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 20 }}>Reach out to our team and we'll respond within 48 hours.</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   {[
                     { icon: <Mail size={15} color={cc.goldLight} />, text: "support@swasthgram.org" },

@@ -34,6 +34,7 @@ import sm32 from "../assets/swasthmanthan/Swasthmanthan (32).jpeg";
 import sm34 from "../assets/swasthmanthan/Swasthmanthan (34).jpeg";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Breadcrumb from "../components/Breadcrumb";
 import { Users, Microscope, Tent, Baby, Megaphone, Droplets, Ribbon, HeartPulse, FlaskConical, Star, Bike, BarChart3, Pill, ClipboardList, Sun, Thermometer, Mountain, Leaf, Globe, HeartHandshake, Lock, Building2, Zap, Dna, CheckCircle, AlertCircle, Loader } from "lucide-react";
 import partnerGoogle from "../assets/partners/google.jpg";
 import partnerPwC from "../assets/partners/pwc.png";
@@ -626,7 +627,8 @@ export default function SwasthManthanPage() {
       <Header />
 
       {/* HERO */}
-      <section style={{ minHeight: "85vh", display: "flex", alignItems: "center", background: `linear-gradient(170deg, #080c0a 0%, ${C.forestDeep} 60%, ${C.forestDark} 100%)`, paddingTop: 80, position: "relative", overflow: "hidden" }}>
+      <section style={{ minHeight: "85vh", display: "flex", alignItems: "center", background: `linear-gradient(170deg, #080c0a 0%, ${C.forestDeep} 60%, ${C.forestDark} 100%)`, paddingTop: 72, position: "relative", overflow: "hidden" }}>
+        <Breadcrumb items={[{ label: "Programs" }, { label: "SwasthManthan" }]} />
         <div style={{ position: "absolute", inset: 0, opacity: 0.04, backgroundImage: "radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
         <div style={{ maxWidth: 1080, margin: "0 auto", padding: "48px 24px", width: "100%", position: "relative", zIndex: 2 }}>
           <div className="hero-flex" style={{ display: "flex", alignItems: "center", gap: 48 }}>

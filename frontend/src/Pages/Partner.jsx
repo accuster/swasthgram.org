@@ -1,5 +1,6 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Breadcrumb from "../components/Breadcrumb";
 import { useState, useEffect, useRef } from "react";
 import { HeartHandshake, CheckCircle, AlertCircle, Loader, Lock, Wallet } from "lucide-react";
 
@@ -212,7 +213,6 @@ export default function PartnerPage() {
     if (!phone.trim())     e.phone = true;
     if (!country)          e.country = true;
     if (!email.trim())     e.email = true;
-    if (!org.trim())       e.org = true;
     if (!notes.trim())     e.notes = true;
     if (!amount)           e.amount = true;
     setErrors(e);
@@ -228,7 +228,7 @@ export default function PartnerPage() {
   }
 
   const inp = (hasErr) => ({
-    width: "100%", padding: "12px 14px",
+    width: "100%", padding: "9px 14px",
     border: `1.5px solid ${hasErr ? "#dc2626" : C.border}`,
     borderRadius: 10, fontFamily: "'Inter', sans-serif", fontSize: 14,
     background: "#fff", color: C.text, outline: "none",
@@ -237,7 +237,7 @@ export default function PartnerPage() {
 
   const label = {
     fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: C.textLight,
-    display: "block", marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.5,
+    display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: 0.5,
   };
 
   const Req = () => <span style={{ color: "#dc2626" }}> *</span>;
@@ -284,7 +284,8 @@ export default function PartnerPage() {
       <Header />
 
       {/* Hero */}
-      <div style={{ background: `linear-gradient(135deg, ${C.forestDeep}, ${C.forest})`, padding: "150px 24px 64px" }}>
+      <div style={{ background: `linear-gradient(135deg, ${C.forestDeep}, ${C.forest})`, padding: "120px 24px 64px", position: "relative" }}>
+        <Breadcrumb items={[{ label: "Partner With Us" }]} />
         <div style={{ maxWidth: 640, margin: "0 auto", textAlign: "center" }}>
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.12)",
@@ -331,12 +332,12 @@ export default function PartnerPage() {
             </div>
           </div>
         ) : (
-        <form onSubmit={handleSubmit} noValidate style={{
-          background: C.white, borderRadius: 16, padding: "32px", border: `1px solid ${C.border}`,
+        <form onSubmit={handleSubmit} noValidate className="partner-form" style={{
+          background: C.white, borderRadius: 16, padding: "26px 28px", border: `1px solid ${C.border}`,
         }}>
 
           {/* Partner type */}
-          <div style={{ marginBottom: 24 }}>
+          <div style={{ marginBottom: 18 }}>
             <label style={label}>Partner Type<Req /></label>
             <select
               value={partnerType}
@@ -351,7 +352,7 @@ export default function PartnerPage() {
           </div>
 
           {/* Name / Phone */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 18 }}>
             <div>
               <label style={label}>Your Name<Req /></label>
               <input style={inp(errors.name)} value={name} onChange={(e) => setName(e.target.value)} placeholder="Jane Doe" />
@@ -363,7 +364,7 @@ export default function PartnerPage() {
           </div>
 
           {/* Country / Email */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 18 }}>
             <div>
               <label style={label}>Country<Req /></label>
               <select
@@ -383,27 +384,27 @@ export default function PartnerPage() {
             </div>
           </div>
 
-          {/* Organization name */}
-          <div style={{ marginBottom: 24 }}>
-            <label style={label}>Organization Name<Req /></label>
-            <input style={inp(errors.org)} value={org} onChange={(e) => setOrg(e.target.value)} placeholder="Organization / Company / Agency" />
-          </div>
-
-          {/* Website */}
-          <div style={{ marginBottom: 24 }}>
-            <label style={label}>Website or Profile (optional)</label>
-            <input style={inp(false)} value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://" />
+          {/* Organization name / Website */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 18 }}>
+            <div>
+              <label style={label}>Organization Name</label>
+              <input style={inp(errors.org)} value={org} onChange={(e) => setOrg(e.target.value)} placeholder="Organization / Company / Agency" />
+            </div>
+            <div>
+              <label style={label}>Website</label>
+              <input style={inp(false)} value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://" />
+            </div>
           </div>
 
           {/* Notes */}
-          <div style={{ marginBottom: 24 }}>
+          <div style={{ marginBottom: 18 }}>
             <label style={label}>Tell Us More / Where Did You Learn About Us<Req /></label>
-            <textarea rows={4} style={{ ...inp(errors.notes), resize: "vertical", fontFamily: "'Inter',sans-serif" }}
+            <textarea rows={3} style={{ ...inp(errors.notes), resize: "vertical", fontFamily: "'Inter',sans-serif" }}
               value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Anything that helps us understand the partnership you have in mind…" />
           </div>
 
           {/* Contribution amount */}
-          <div style={{ marginBottom: 28 }}>
+          <div style={{ marginBottom: 20 }}>
             <label style={label}>Contribution Amount<Req /></label>
             <select
               value={amount}
@@ -450,6 +451,10 @@ export default function PartnerPage() {
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
         .spin { animation: spin 0.8s linear infinite; }
+        .partner-form input::placeholder, .partner-form textarea::placeholder {
+          color: ${C.text};
+          opacity: 0.6;
+        }
       `}</style>
 
       <Footer />

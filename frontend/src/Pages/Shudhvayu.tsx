@@ -15,6 +15,7 @@ import sv13 from "../assets/shudhvayu/shudhvayu (13).jpg";
 import sv14 from "../assets/shudhvayu/shudhvayu (14).jpg";
 import sv15 from "../assets/shudhvayu/shudhvayu (15).jpeg";
 import Header from "../components/Header";
+import Breadcrumb from "../components/Breadcrumb";
 import Footer from "../components/Footer";
 import { Wind, Car, Wrench, Leaf, Sun, VolumeX, RefreshCw, FileCheck, MapPin, Zap, Gift, Globe, Lock, Mail, Phone, HeartHandshake, CheckCircle, AlertCircle, Loader } from "lucide-react";
 
@@ -573,7 +574,8 @@ export default function ShudhvayuPage() {
       <Header />
 
       {/* HERO */}
-      <section style={{ minHeight: "85vh", display: "flex", alignItems: "center", background: "linear-gradient(170deg, #0a1520 0%, #0C4A6E 55%, #0369A1 100%)", paddingTop: 80, position: "relative", overflow: "hidden" }}>
+      <section style={{ minHeight: "85vh", display: "flex", alignItems: "center", background: "linear-gradient(170deg, #0a1520 0%, #0C4A6E 55%, #0369A1 100%)", paddingTop: 72, position: "relative", overflow: "hidden" }}>
+        <Breadcrumb items={[{ label: "Programs" }, { label: "Shudhvayu" }]} />
         <div style={{ position: "absolute", top: "20%", left: "10%", width: 300, height: 300, borderRadius: "50%", background: "rgba(56,189,248,0.06)", animation: "breathe 6s ease-in-out infinite" }} />
         <div style={{ position: "absolute", bottom: "10%", right: "5%", width: 200, height: 200, borderRadius: "50%", background: "rgba(56,189,248,0.04)", animation: "breathe 8s ease-in-out infinite 2s" }} />
         <div style={{ position: "absolute", inset: 0, opacity: 0.03, backgroundImage: "radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />

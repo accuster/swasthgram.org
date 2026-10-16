@@ -14,6 +14,7 @@ import sk7  from "../assets/saksham/saksham (7).jpg";
 import sk8  from "../assets/saksham/saksham (8).jpg";
 import sk9  from "../assets/saksham/saksham (9).jpg";
 import Header from "../components/Header";
+import Breadcrumb from "../components/Breadcrumb";
 import Footer from "../components/Footer";
 import { GraduationCap, Handshake, Briefcase, Hospital, Globe, Microscope, Lock, HeartHandshake, CheckCircle, AlertCircle, Loader } from "lucide-react";
 
@@ -558,7 +559,8 @@ export default function SakshamPage() {
       <Header />
 
       {/* HERO */}
-      <section style={{ background: `linear-gradient(160deg, ${C.forestDeep} 0%, ${C.forest} 60%, ${C.leaf} 100%)`, padding: "96px 24px 72px", textAlign: "center" }}>
+      <section style={{ background: `linear-gradient(160deg, ${C.forestDeep} 0%, ${C.forest} 60%, ${C.leaf} 100%)`, padding: "88px 24px 72px", textAlign: "center", position: "relative" }}>
+        <Breadcrumb items={[{ label: "Programs" }, { label: "Saksham" }]} />
         <FadeIn>
           <div className="tag" style={{ color: C.goldSoft, marginBottom: 14 }}>Swasthgram Programme</div>
           <h1 style={{ fontSize: "clamp(32px, 5vw, 58px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, marginBottom: 20 }}>

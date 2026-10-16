@@ -1,3 +1,25 @@
+# Swasthgram
+
+A single project containing both the site and its API.
+
+- `frontend/` — React + Vite frontend (static build, served by Nginx in production).
+- `backend/` — Node/Express backend (Stripe, Razorpay, gala ticket booking, partner inquiries, email). Runs as its own process, managed by PM2 in production, reverse-proxied at `/api` (see `backend/nginx-proxy.conf`).
+
+## Local development
+
+```bash
+npm install                 # installs root tooling + backend/'s dependencies (via postinstall)
+npm run frontend:install    # once, installs frontend/'s own dependencies
+cp backend/.env.example backend/.env   # fill in real values
+npm run dev:all             # runs the Vite dev server and the API together
+```
+
+`npm run dev:all` proxies `/api/*` requests from the Vite dev server to the local API (port 3002), matching how Nginx routes them in production.
+
+To run either side on its own: `npm run dev` (frontend only) or `npm run backend` (backend only).
+
+---
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
