@@ -8,6 +8,16 @@ The repo has separate `frontend/` and `backend/` folders, but the **deployed** l
 frontend's build output (`frontend/dist/`) is placed at the deployed root's `dist/`, as a sibling of
 `backend/` — `scripts/deploy-staging.ps1` handles this automatically.
 
+## Deploy from GitHub (push-triggered)
+
+The usual way to deploy now: commit to `main` with `[deploy]` somewhere in the commit message and push.
+`.github/workflows/deploy-sandbox.yml` runs on every push to `main`, builds the frontend, and deploys to
+`sbx.swasthgram.org` over SSH — but only when the commit message contains `[deploy]`; every other push is
+a no-op. Same pattern as `beta.eaccuster`.
+
+Requires the repository secret `SBX_DEPLOY_SSH_KEY` (a private key already authorized on the server for
+the `swasthgram-sbx` user) to be set under the repo's Settings → Secrets and variables → Actions.
+
 ## Quick redeploy (after the one-time setup below)
 
 Once `backend/.env` exists on the server and your local SSH key is authorized there (one-time, see your
