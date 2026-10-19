@@ -3,6 +3,7 @@ const { pool, withTransaction } = require("../db");
 const transactionService = require("../transactionService");
 const AppError = require("./AppError");
 const { releaseSeats } = require("./bookingService");
+const { sendTicketEmail } = require("./ticketEmail");
 
 const SOURCE_TYPE = "gala_booking";
 
@@ -138,6 +139,8 @@ async function handleCheckoutPaid(event) {
   const charge = pi && typeof pi.latest_charge === "object" ? pi.latest_charge : null;
   const card = charge && charge.payment_method_details && charge.payment_method_details.card;
 
+  let justPaidRef = null;
+
   await withTransaction(async (conn) => {
     if (await transactionService.alreadyProcessed(conn, event.id)) return;
     const booking = await bookingFromSession(conn, session);
@@ -165,7 +168,13 @@ async function handleCheckoutPaid(event) {
         WHERE id = ?`,
       [pi ? pi.id : session.payment_intent, booking.id]
     );
+    justPaidRef = booking.booking_ref;
   });
+
+  // Outside the DB transaction: a slow mail server shouldn't hold a row lock.
+  if (justPaidRef) {
+    sendTicketEmail(justPaidRef).catch((err) => console.error("[gala] Failed to send ticket email:", err.message));
+  }
 }
 
 async function handleCheckoutFailedOrExpired(event, status) {
