@@ -65,13 +65,16 @@ const C = {
   seatLine: "#B4C7B9", booked: "#E8E4DC", bookedInk: "#6B7280", danger: "#dc2626", okBg: "#f0fdf4",
 };
 
+const API_BASE = "/api/gala";
+
 export default function GalaPage() {
-  const [seats, setSeats] = useState({});
+  const [taken, setTaken] = useState({}); // { [seatLabel]: "held" | "booked" }
   const [selected, setSelected] = useState(new Set());
-  const [myId] = useState("local");
+  const [mySeats, setMySeats] = useState(new Set());
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState(null); // { ref, ids, amount, paymentStatus }
+  const [checkingReturn, setCheckingReturn] = useState(false);
   const [msg, setMsg] = useState({ text: "", err: false });
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -92,8 +95,67 @@ export default function GalaPage() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  const refreshSeats = () => {
+    fetch(`${API_BASE}/seats`)
+      .then((r) => r.json())
+      .then((data) => {
+        const next = {};
+        (data.taken || []).forEach((t) => { next[t.seat] = t.status; });
+        setTaken(next);
+      })
+      .catch(() => {});
+  };
+
+  useEffect(() => {
+    refreshSeats();
+    const interval = setInterval(refreshSeats, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Returning from Stripe Checkout: success_url and cancel_url both carry ?ref=.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get("ref");
+    if (!ref) return;
+    const cancelled = params.get("cancelled") === "1";
+    setCheckingReturn(true);
+
+    const settle = () => {
+      fetch(`${API_BASE}/bookings/${ref}`)
+        .then((r) => { if (!r.ok) throw new Error("not found"); return r.json(); })
+        .then((booking) => {
+          setResult({
+            ref: booking.bookingRef,
+            ids: booking.seats,
+            amount: booking.totalAmount,
+            paymentStatus: cancelled && booking.paymentStatus === "pending" ? "abandoned" : booking.paymentStatus,
+          });
+          setDone(true);
+          setCheckingReturn(false);
+          refreshSeats();
+          window.history.replaceState({}, "", window.location.pathname);
+        })
+        .catch(() => setCheckingReturn(false));
+    };
+
+    // Webhook may lag a few seconds behind the redirect, so poll briefly.
+    const poll = (attemptsLeft) => {
+      if (cancelled || attemptsLeft <= 0) { settle(); return; }
+      fetch(`${API_BASE}/bookings/${ref}/payment-status`)
+        .then((r) => { if (!r.ok) throw new Error("not found"); return r.json(); })
+        .then((status) => {
+          if (status.paymentStatus === "pending") setTimeout(() => poll(attemptsLeft - 1), 2500);
+          else settle();
+        })
+        .catch(() => setCheckingReturn(false));
+    };
+    poll(6);
+  }, []);
+
   const status = (id) => {
-    if (seats[id] && seats[id].by) return seats[id].by === myId ? "mine" : "booked";
+    const lbl = short(id);
+    if (mySeats.has(lbl)) return "mine";
+    if (taken[lbl]) return "booked";
     return selected.has(id) ? "sel" : "free";
   };
 
@@ -126,7 +188,7 @@ export default function GalaPage() {
   };
 
   const { W, H, pos } = useMemo(() => layout(width), [width]);
-  const bookedCount = Object.values(seats).filter((v) => v && v.by).length;
+  const bookedCount = Object.keys(taken).length;
   const idsSorted = [...selected].sort((a, b) => { const x = parseId(a), y = parseId(b); return x.t - y.t || x.s - y.s; });
   const total = idsSorted.length * EVENT.seatPrice;
   const currentStep = done ? 2 : idsSorted.length ? 1 : 0;
@@ -147,28 +209,55 @@ export default function GalaPage() {
     const nd = num.replace(/\D/g, "").length;
     if (nd < 6 || nd > 14) { setMsg({ text: "Enter a valid phone number without the country code.", err: true }); phoneRef.current?.focus(); return; }
 
-    const ids = idsSorted;
-    const ref = makeRef();
-    const amount = ids.length * EVENT.seatPrice;
+    const seatLabels = idsSorted.map(short);
     setBusy(true);
     setMsg({ text: "", err: false });
 
-    setSeats((prev) => {
-      const next = { ...prev };
-      ids.forEach((id) => { next[id] = { by: myId, ref }; });
-      return next;
-    });
-    setSelected(new Set());
-    setResult({ ref, ids, amount });
-    setDone(true);
-    setName(""); setEmail(""); setPhone("");
-    setBusy(false);
+    fetch(`${API_BASE}/bookings`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fullName: trimmedName, email: trimmedEmail, phoneCode: code, phoneNumber: num, seats: seatLabels }),
+    })
+      .then(async (r) => {
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data.error || "Could not create the booking.");
+        return data;
+      })
+      .then((booking) => {
+        setMySeats(new Set(booking.seats));
+        return fetch(`${API_BASE}/bookings/${booking.bookingRef}/checkout`, { method: "POST" })
+          .then(async (r) => {
+            const data = await r.json().catch(() => ({}));
+            if (!r.ok || !data.url) throw new Error(data.error || "Could not start checkout.");
+            window.location.href = data.url; // leaves the page
+          });
+      })
+      .catch((err) => {
+        setBusy(false);
+        setMsg({ text: err.message || "Something went wrong. Please try again.", err: true });
+        refreshSeats();
+      });
   };
 
   const bookMore = () => {
     setDone(false);
     setResult(null);
+    setSelected(new Set());
     planRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const resumePayment = () => {
+    if (!result?.ref) return;
+    setBusy(true);
+    fetch(`${API_BASE}/bookings/${result.ref}/checkout`, { method: "POST" })
+      .then(async (r) => {
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok || !data.url) throw new Error(data.error || "Could not resume checkout.");
+        window.location.href = data.url;
+      })
+      .catch((err) => {
+        setBusy(false);
+        setMsg({ text: err.message || "Could not resume checkout.", err: true });
+      });
   };
 
   return (
@@ -320,7 +409,10 @@ export default function GalaPage() {
                 <text x={W / 2} y={184} textAnchor="middle" style={{ font: "500 13px Inter,sans-serif", fill: C.muted }}>Guest speakers&rsquo; row</text>
                 {pos.map((p) => {
                   let free = 0;
-                  for (let s = 1; s <= EVENT.seatsPerTable; s++) if (!(seats[seatId(p.t, s)] || {}).by) free++;
+                  for (let s = 1; s <= EVENT.seatsPerTable; s++) {
+                    const st = status(seatId(p.t, s));
+                    if (st !== "booked" && st !== "mine") free++;
+                  }
                   return (
                     <g key={p.t}>
                       <g
@@ -419,38 +511,44 @@ export default function GalaPage() {
                     <input ref={phoneRef} id="fPhone" type="tel" inputMode="tel" placeholder="Phone number" autoComplete="tel-national" value={phone} onChange={(e) => setPhone(e.target.value)} style={{ ...inputStyle, margin: 0, flex: 1, minWidth: 0 }} />
                   </div>
                   <button className="gala-btn" type="submit" disabled={idsSorted.length === 0 || busy} style={{ width: "100%", border: 0, borderRadius: 8, background: (idsSorted.length === 0 || busy) ? "#e4eaf1" : C.green, color: (idsSorted.length === 0 || busy) ? "#64748b" : "#fff", fontSize: 12, fontWeight: 600, lineHeight: 1.5, padding: "13px 12px", cursor: (idsSorted.length === 0 || busy) ? "not-allowed" : "pointer", transition: "background .2s" }}>
-                    {busy ? "Booking…" : idsSorted.length === 0 ? "Pick seats to book" : `Reserve ${idsSorted.length} seat${idsSorted.length > 1 ? "s" : ""} and pay ${fmt(total)}`}
+                    {busy ? "Redirecting to payment…" : idsSorted.length === 0 ? "Pick seats to book" : `Reserve ${idsSorted.length} seat${idsSorted.length > 1 ? "s" : ""} and pay ${fmt(total)}`}
                   </button>
                   <p style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, color: C.muted, fontSize: 10, lineHeight: 1.5, margin: "12px 0" }}>
                     <Lock size={14} aria-hidden="true" />
-                    Payment availability shown after reservation
+                    You'll be redirected to Stripe to pay securely
                   </p>
                   {msg.text && <p style={{ fontSize: 12, margin: "10px 0 0", color: msg.err ? C.danger : C.ink }} role="status">{msg.text}</p>}
                 </form>
-                <p style={{ fontSize: 10, color: C.muted, lineHeight: 1.65, margin: "17px 0 0", paddingTop: 13, borderTop: `1px solid ${C.line}` }}>
-                  Demo mode: you can try the full booking flow, but bookings in this copy are not saved.
-                </p>
+              </div>
+            ) : checkingReturn ? (
+              <div style={{ textAlign: "center", padding: "48px 0" }}>
+                <p style={{ fontSize: 13, color: C.muted }}>Checking your payment status…</p>
               </div>
             ) : (
               <div>
-                <div style={{ background: C.okBg, border: "1px solid #c6e1d4", borderRadius: 12, padding: 17 }}>
-                  <h3 style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 17, fontWeight: 600, margin: "0 0 14px", color: "#226449" }}>
+                <div style={{ background: result?.paymentStatus === "paid" ? C.okBg : "#fff8ec", border: `1px solid ${result?.paymentStatus === "paid" ? "#c6e1d4" : "#eddcab"}`, borderRadius: 12, padding: 17 }}>
+                  <h3 style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 17, fontWeight: 600, margin: "0 0 14px", color: result?.paymentStatus === "paid" ? "#226449" : "#92650f" }}>
                     <CheckCircle2 size={20} strokeWidth={1.7} aria-hidden="true" />
-                    Demo reservation
+                    {result?.paymentStatus === "paid" ? "Payment received"
+                      : result?.paymentStatus === "pending" ? "Payment processing"
+                      : result?.paymentStatus === "abandoned" ? "Payment not completed"
+                      : "Booking not active"}
                   </h3>
                   <p style={{ fontSize: 12, margin: "0 0 7px" }}>Booking reference</p>
                   <p style={{ fontSize: 23, fontWeight: 600, letterSpacing: ".03em" }}>{result?.ref}</p>
-                  <p style={{ fontSize: 12, margin: "0 0 7px" }}>{result?.ids.map(short).join(", ")}</p>
-                  <p style={{ fontSize: 12, margin: 0 }}>Amount due: {fmt(result?.amount || 0)} USD</p>
+                  <p style={{ fontSize: 12, margin: "0 0 7px" }}>{(result?.ids || []).join(", ")}</p>
+                  <p style={{ fontSize: 12, margin: 0 }}>{result?.paymentStatus === "paid" ? "Amount paid" : "Amount due"}: {fmt(result?.amount || 0)} USD</p>
                 </div>
-                <button type="button" disabled style={{ display: "block", width: "100%", textAlign: "center", textDecoration: "none", marginTop: 10, background: C.line, color: C.muted, cursor: "not-allowed", border: 0, borderRadius: 8, padding: "13px 12px", fontSize: 12, fontWeight: 600 }}>
-                  Online payment opens soon
-                </button>
+                {(result?.paymentStatus === "pending" || result?.paymentStatus === "abandoned") && (
+                  <button type="button" onClick={resumePayment} disabled={busy} className="gala-btn" style={{ display: "block", width: "100%", textAlign: "center", marginTop: 10, background: busy ? "#e4eaf1" : C.green, color: busy ? "#64748b" : "#fff", border: 0, borderRadius: 8, padding: "13px 12px", fontSize: 12, fontWeight: 600, cursor: busy ? "not-allowed" : "pointer" }}>
+                    {busy ? "Redirecting…" : "Complete payment"}
+                  </button>
+                )}
                 <p style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, color: C.muted, fontSize: 10, lineHeight: 1.5, margin: "12px 0" }}>
                   <Lock size={14} aria-hidden="true" />
                   Card payment is handled by Stripe. Your card details never reach this page.
                 </p>
-                <p style={{ fontSize: 10, color: C.muted, lineHeight: 1.65, margin: "0 0 17px" }}>This is a preview only. Your selection is not saved and no payment has been collected.</p>
+                {msg.text && <p style={{ fontSize: 12, margin: "0 0 12px", color: msg.err ? C.danger : C.ink }} role="status">{msg.text}</p>}
                 <button type="button" onClick={bookMore} style={{ width: "100%", color: C.green, background: "#fff", border: `1px solid ${C.line}`, marginTop: 10, borderRadius: 8, padding: "13px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
                   Book more seats
                 </button>
