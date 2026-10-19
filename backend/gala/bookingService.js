@@ -178,8 +178,8 @@ async function releaseExpiredHolds() {
       if (b && b.payment_status === "pending") {
         await releaseSeats(conn, id, "cancelled");
         await conn.query(
-          `UPDATE gala_transactions SET status = 'cancelled', processed_at = NOW()
-            WHERE booking_id = ? AND type = 'payment' AND status = 'initiated'`,
+          `UPDATE transactions SET status = 'cancelled', processed_at = NOW()
+            WHERE source_type = 'gala_booking' AND source_id = ? AND type = 'payment' AND status = 'initiated'`,
           [id]
         );
       }
