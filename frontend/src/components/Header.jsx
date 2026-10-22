@@ -213,13 +213,23 @@ export default function Header() {
           {/* Logo */}
           <a href="/" onClick={handleLogoClick} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", alignSelf: "center" }}>
             <img src={logoColor} alt="Swasthgram" style={{ height: 36, width: "auto", display: "block" }} />
-            <span style={{
-              fontFamily: "'Libre Baskerville', Georgia, serif",
-              fontSize: 20, fontWeight: 700, letterSpacing: -0.5,
-              color: COLORS.text,
-            }}>
-              Swasth<span style={{ color: COLORS.forest }}>gram</span>
-            </span>
+            <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
+              <span style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 20, fontWeight: 700, letterSpacing: -0.5,
+                color: COLORS.text,
+              }}>
+                Swasth<span style={{ color: COLORS.forest }}>gram</span>
+              </span>
+              <span style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 11, fontWeight: 600, letterSpacing: 0.6,
+                textTransform: "uppercase",
+                color: "#6B7280",
+              }}>
+                Global Foundation
+              </span>
+            </div>
           </a>
 
           {/* Desktop Nav — centered within the header regardless of logo/button widths */}

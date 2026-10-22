@@ -1,4 +1,4 @@
-import { Home, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 export default function Breadcrumb({ items = [], theme = "dark" }) {
   const muted = theme === "light" ? "#6B7280" : "rgba(255,255,255,0.55)";
@@ -18,7 +18,7 @@ export default function Breadcrumb({ items = [], theme = "dark" }) {
         fontFamily: "'Inter', sans-serif", fontSize: 13,
       }}>
         <a href="/" style={{ display: "flex", alignItems: "center", color: muted }}>
-          <Home size={14} />
+          Home
         </a>
         {items.map((item, i) => {
           const isLast = i === items.length - 1;
