@@ -93,7 +93,7 @@ export default function Header() {
           position: absolute;
           left: 16px;
           top: calc(50% + 13px);
-          width: 45%;
+          width: 20px;
           height: 2px;
           background: ${COLORS.forest};
         }
