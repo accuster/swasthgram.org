@@ -191,7 +191,7 @@ export default function AboutNGOPage() {
           <div className="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }}>
             {[
               {
-                name: "SwasthManthan",
+                name: "Swasthmanthan",
                 color: cc.forest,
                 img: imgSwasthmanthan,
                 tagline: "Early Detection. Saved Lives.",

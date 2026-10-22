@@ -14,7 +14,7 @@ const SLIDES = [
     tag: "SWASTHMANTHAN · PUBLIC HEALTH",
     headline: "Cancer found early.\nLives saved completely.",
     sub: "The world's only Health Unit on Bike — solar-powered, jungle-ready — brings cancer screening, diabetes & maternal health tests directly to villages that hospitals never reach.",
-    cta: { label: "Support SwasthManthan", href: "#donate" },
+    cta: { label: "Support Swasthmanthan", href: "#donate" },
     stats: [{ n: "1,11,392", l: "People Reached" }, { n: "21,750+", l: "Cancer Tests" }, { n: "9,360+", l: "Health Camps" }],
     img: imgSwasthmanthan,
     accent: "#1B6B3A",

@@ -109,8 +109,8 @@ const categories = [
     color: cc.leaf,
     faqs: [
       {
-        q: "What is SwasthManthan?",
-        a: "SwasthManthan is our public health programme delivering free cancer screening, diabetes testing, liver and kidney diagnostics, and maternal health checks via Lab-on-Bike to remote communities. To date, we have reached over 1,11,392 beneficiaries, conducted 21,750+ cancer tests, and operated 9,360+ health camps."
+        q: "What is Swasthmanthan?",
+        a: "Swasthmanthan is our public health programme delivering free cancer screening, diabetes testing, liver and kidney diagnostics, and maternal health checks via Lab-on-Bike to remote communities. To date, we have reached over 1,11,392 beneficiaries, conducted 21,750+ cancer tests, and operated 9,360+ health camps."
       },
       {
         q: "What is the Lab-on-Bike?",

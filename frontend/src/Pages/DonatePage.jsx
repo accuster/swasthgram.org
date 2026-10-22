@@ -2,7 +2,11 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import { useState, useEffect, useRef } from "react";
-import { Heart, Lock, CheckCircle, AlertCircle, Loader, HeartHandshake, Shield, ShieldCheck, Users, Tent, Microscope } from "lucide-react";
+import { Lock, CheckCircle, AlertCircle, Loader, HeartHandshake, Shield, ShieldCheck, Globe, MapPinned, Users, Tent, Microscope } from "lucide-react";
+import flagIndia from "../assets/flags/in.svg";
+import flagUSA from "../assets/flags/us.svg";
+import everyOrgLogo from "../assets/gateways/every-org-logo.png";
+import stripeLogo from "../assets/gateways/stripe-logo.png";
 
 const C = {
   forest: "#1B6B3A", forestDark: "#145A2F", forestDeep: "#0E4422",
@@ -27,12 +31,12 @@ const DONATION_FAQS = [
   { q: "What payment methods do you accept?", a: "Razorpay for donations from India, and Stripe (card) for international donations. Both are PCI-compliant — your card details never reach Swasthgram's servers." },
   { q: "Can I set up a recurring donation?", a: "Yes — choose Monthly, Quarterly or Yearly instead of One-time when donating. You can cancel a recurring donation anytime by contacting support@swasthgram.org." },
   { q: "Will I get a receipt?", a: "Yes, an email receipt is sent immediately after a successful donation, including your donation ID and, for India, details for claiming your 80G tax deduction." },
-  { q: "Can I choose which program my donation supports?", a: "Yes — pick SwasthManthan, Saksham, Shudhvayu, or leave it as \"Where needed most\" to let Swasthgram allocate it to the area of greatest need." },
+  { q: "Can I choose which program my donation supports?", a: "Yes — pick Swasthmanthan, Saksham, Shudhvayu, or leave it as \"Where needed most\" to let Swasthgram allocate it to the area of greatest need." },
   { q: "Is my payment information secure?", a: "Yes. All payments are processed directly by Razorpay or Stripe over an encrypted connection — Swasthgram never sees or stores your card or bank details." },
 ];
 
 const PROGRAMS = [
-  { value: "SwasthManthan", label: "SwasthManthan", sub: "Last-mile health screening" },
+  { value: "Swasthmanthan", label: "Swasthmanthan", sub: "Last-mile health screening" },
   { value: "Saksham",       label: "Saksham",       sub: "Youth skilling & empowerment" },
   { value: "Shudhvayu",     label: "Shudhvayu",     sub: "Clean air initiative" },
   { value: "General",       label: "Where needed most", sub: "Allocated by Swasthgram" },
@@ -273,8 +277,7 @@ export default function DonatePage() {
         a { text-decoration: none; color: inherit; }
         .sans { font-family: 'Inter', sans-serif; }
         @media (max-width: 900px) {
-          .donate-layout { flex-direction: column !important; height: auto !important; align-items: stretch !important; }
-          .donate-form-col, .donate-sidebar { max-height: none !important; overflow: visible !important; }
+          .donate-layout { flex-direction: column !important; align-items: stretch !important; }
           .donate-sidebar { display: none !important; }
           .form-row { grid-template-columns: 1fr !important; }
         }
@@ -322,45 +325,39 @@ export default function DonatePage() {
               onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,0.25)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.2)"; }}
             >
-              <Heart size={18} color="#1B6B3A" fill="#1B6B3A" />
-              Donate via Every.org
+              Donate via <img src={everyOrgLogo} alt="every.org" height={20} style={{ display: "block" }} />
             </a>
             <a
               href="https://donate.stripe.com/cNi7sL95i3YV3Yl97Aew800"
               target="_blank" rel="noopener noreferrer"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 10,
-                background: "rgba(255,255,255,0.12)", color: "#fff",
-                border: "1.5px solid rgba(255,255,255,0.3)",
+                background: "#fff", color: "#1B6B3A",
                 fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15,
                 padding: "16px 32px", borderRadius: 12, textDecoration: "none",
-                transition: "all 0.2s",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+                transition: "transform 0.2s, box-shadow 0.2s",
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.2)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.5)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.12)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)"; }}
+              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,0.25)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.2)"; }}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
-              </svg>
-              Donate via Stripe
+              Donate via <img src={stripeLogo} alt="Stripe" height={16} style={{ display: "block" }} />
             </a>
             <a
               href="https://donate.swasthgram.org/"
               target="_blank" rel="noopener noreferrer"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 10,
-                background: "rgba(255,255,255,0.12)", color: "#fff",
-                border: "1.5px solid rgba(255,255,255,0.3)",
+                background: "#fff", color: "#1B6B3A",
                 fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15,
                 padding: "16px 32px", borderRadius: 12, textDecoration: "none",
-                transition: "all 0.2s",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+                transition: "transform 0.2s, box-shadow 0.2s",
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.2)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.5)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.12)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)"; }}
+              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,0.25)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.2)"; }}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 20l-5.447-2.724A1 1 0 0 1 3 16.382V5.618a1 1 0 0 1 1.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0 0 21 18.382V7.618a1 1 0 0 0-.553-.894L15 4m0 13V4m0 0L9 7" />
-              </svg>
+              <MapPinned size={18} color="#1B6B3A" />
               Donate on MAP
             </a>
           </div>
@@ -372,7 +369,7 @@ export default function DonatePage() {
         <div className="donate-layout" style={{ display: "flex", gap: 40, alignItems: "flex-start" }}>
 
           {/* ── FORM (scrolls independently of the impact sidebar) ── */}
-          <div className="donate-form-col" style={{ flex: "1 1 600px", maxHeight: "80vh", overflowY: "auto", paddingRight: 8 }}>
+          <div className="donate-form-col" style={{ flex: "1 1 600px" }}>
 
             {step === "stripe-card" ? (
               <div style={{ background: C.white, borderRadius: 16, padding: 32, border: `1px solid ${C.border}` }}>
@@ -404,11 +401,14 @@ export default function DonatePage() {
               <div style={{ background: C.white, borderRadius: 16, padding: "20px 24px", border: `1px solid ${C.border}`, marginBottom: 16 }}>
                 <div style={{ ...label, marginBottom: 12 }}>I am donating from</div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
-                  {[{ key: "domestic", flag: "🇮🇳", label: "India" }, { key: "us", flag: "🇺🇸", label: "USA" }, { key: "intl", flag: "🌍", label: "Rest of World" }].map(opt => (
+                  {[{ key: "domestic", flag: flagIndia, label: "India" }, { key: "us", flag: flagUSA, label: "USA" }, { key: "intl", flag: null, label: "Rest of World" }].map(opt => (
                     <button key={opt.key} type="button"
                       onClick={() => { setRegion(opt.key); setCustomAmt(""); setErrors({}); }}
                       style={{ padding: "12px 10px", borderRadius: 10, border: `2px solid ${region === opt.key ? C.forest : C.border}`, background: region === opt.key ? "#f0fdf4" : "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: region === opt.key ? C.forest : C.text, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, transition: "all 0.2s" }}>
-                      <span style={{ fontSize: 18 }}>{opt.flag}</span> {opt.label}
+                      {opt.flag
+                        ? <img src={opt.flag} alt="" width={20} height={14} style={{ objectFit: "cover", borderRadius: 2, flexShrink: 0 }} />
+                        : <Globe size={16} color={region === opt.key ? C.forest : C.textLight} style={{ flexShrink: 0 }} />}
+                      {opt.label}
                     </button>
                   ))}
                 </div>
@@ -421,83 +421,77 @@ export default function DonatePage() {
                 </div>
               </div>
 
-              {/* ── Program + Frequency ── */}
-              <div style={{ background: C.white, borderRadius: 16, padding: "20px 24px", border: `1px solid ${C.border}`, marginBottom: 16 }}>
-                <div className="form-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-                  <div>
-                    <div style={{ ...label, marginBottom: 12 }}>Choose a program</div>
-                    <select value={program} onChange={e => setProgram(e.target.value)} style={{ ...inp(false), cursor: "pointer" }}>
-                      {PROGRAMS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
-                    </select>
-                    <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: C.textLight, marginTop: 8 }}>
-                      {PROGRAMS.find(p => p.value === program)?.sub}
+              {/* ── Program, Frequency, Amount, Details, Agree — one card ── */}
+              <div style={{ background: C.white, borderRadius: 16, border: `1px solid ${C.border}`, marginBottom: 16, overflow: "hidden" }}>
+
+                <div style={{ padding: "20px 24px 4px" }}>
+                  <div className="form-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                    <div>
+                      <div style={{ ...label, marginBottom: 12 }}>Choose a program</div>
+                      <select value={program} onChange={e => setProgram(e.target.value)} style={{ ...inp(false), cursor: "pointer" }}>
+                        {PROGRAMS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+                      </select>
                     </div>
-                  </div>
-                  <div>
-                    <div style={{ ...label, marginBottom: 12 }}>Frequency</div>
-                    <select value={frequency} onChange={e => setFrequency(e.target.value)} style={{ ...inp(false), cursor: "pointer" }}>
-                      {[{ v: "once", l: "One-time" }, { v: "monthly", l: "Monthly" }, { v: "quarterly", l: "Quarterly" }, { v: "yearly", l: "Yearly" }].map(f => (
-                        <option key={f.v} value={f.v}>{f.l}</option>
-                      ))}
-                    </select>
-                    <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: C.textLight, marginTop: 8 }}>
-                      {frequency === "once" ? "One-time contribution" : `Billed ${frequency}`}
+                    <div>
+                      <div style={{ ...label, marginBottom: 12 }}>Frequency</div>
+                      <select value={frequency} onChange={e => setFrequency(e.target.value)} style={{ ...inp(false), cursor: "pointer" }}>
+                        {[{ v: "once", l: "One-time" }, { v: "monthly", l: "Monthly" }, { v: "quarterly", l: "Quarterly" }, { v: "yearly", l: "Yearly" }].map(f => (
+                          <option key={f.v} value={f.v}>{f.l}</option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* ── Amount ── */}
-              <div style={{ background: C.white, borderRadius: 16, padding: "20px 24px", border: `1px solid ${errors.amount ? "#dc2626" : C.border}`, marginBottom: 16 }}>
-                <div style={{ ...label, marginBottom: 12 }}>Donation amount <span style={{ color: "#dc2626" }}>*</span></div>
-                <div style={{ display: "flex", alignItems: "stretch", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden" }}>
-                  <div style={{ background: "#f9fafb", padding: "0 16px", display: "flex", alignItems: "center", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 18, color: C.forest, borderRight: `1.5px solid ${C.border}` }}>
-                    {isDomestic ? "₹" : "$"}
+                <div style={{ padding: "16px 24px 4px" }}>
+                  <div style={{ ...label, marginBottom: 12 }}>Donation amount <span style={{ color: "#dc2626" }}>*</span></div>
+                  <div style={{ display: "flex", alignItems: "stretch", border: `1.5px solid ${errors.amount ? "#dc2626" : C.border}`, borderRadius: 10, overflow: "hidden" }}>
+                    <div style={{ background: "#f9fafb", padding: "0 16px", display: "flex", alignItems: "center", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 18, color: C.forest, borderRight: `1.5px solid ${errors.amount ? "#dc2626" : C.border}` }}>
+                      {isDomestic ? "₹" : "$"}
+                    </div>
+                    <input type="number" min="1" value={customAmt}
+                      onChange={e => { setCustomAmt(e.target.value); setErrors(er => ({ ...er, amount: false })); }}
+                      placeholder="Enter amount"
+                      style={{ flex: 1, border: "none", padding: "14px", fontFamily: "'Inter',sans-serif", fontSize: 18, fontWeight: 600, color: C.text, outline: "none", background: "transparent" }} />
                   </div>
-                  <input type="number" min="1" value={customAmt}
-                    onChange={e => { setCustomAmt(e.target.value); setErrors(er => ({ ...er, amount: false })); }}
-                    placeholder="Enter amount"
-                    style={{ flex: 1, border: "none", padding: "14px", fontFamily: "'Inter',sans-serif", fontSize: 18, fontWeight: 600, color: C.text, outline: "none", background: "transparent" }} />
                 </div>
-              </div>
 
-              {/* ── Personal details ── */}
-              <div style={{ background: C.white, borderRadius: 16, padding: "20px 24px", border: `1px solid ${C.border}`, marginBottom: 16 }}>
-                <div style={{ ...label, marginBottom: 16 }}>Your details</div>
-                <div className="form-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
-                  <div>
+                <div style={{ padding: "20px 24px", borderBottom: `1px solid ${C.border}` }}>
+                  <div style={{ ...label, marginBottom: 16 }}>Your details</div>
+                  <div style={{ marginBottom: 14 }}>
                     <div style={label}>Full Name <span style={{ color: "#dc2626" }}>*</span></div>
                     <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" style={inp(errors.name)}
                       onFocus={e => { e.target.style.borderColor = C.forest; e.target.style.boxShadow = "0 0 0 3px rgba(27,107,58,0.1)"; }}
                       onBlur={e => { e.target.style.borderColor = errors.name ? "#dc2626" : C.border; e.target.style.boxShadow = "none"; }} />
                   </div>
-                  <div>
-                    <div style={label}>Email <span style={{ color: "#dc2626" }}>*</span></div>
-                    <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="name@example.com" style={inp(errors.email)}
-                      onFocus={e => { e.target.style.borderColor = C.forest; e.target.style.boxShadow = "0 0 0 3px rgba(27,107,58,0.1)"; }}
-                      onBlur={e => { e.target.style.borderColor = errors.email ? "#dc2626" : C.border; e.target.style.boxShadow = "none"; }} />
+                  <div className="form-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                    <div>
+                      <div style={label}>Email <span style={{ color: "#dc2626" }}>*</span></div>
+                      <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="name@example.com" style={inp(errors.email)}
+                        onFocus={e => { e.target.style.borderColor = C.forest; e.target.style.boxShadow = "0 0 0 3px rgba(27,107,58,0.1)"; }}
+                        onBlur={e => { e.target.style.borderColor = errors.email ? "#dc2626" : C.border; e.target.style.boxShadow = "none"; }} />
+                    </div>
+                    <div>
+                      <div style={label}>Phone <span style={{ color: "#dc2626" }}>*</span></div>
+                      <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="Mobile number" style={inp(errors.phone)}
+                        onFocus={e => { e.target.style.borderColor = C.forest; e.target.style.boxShadow = "0 0 0 3px rgba(27,107,58,0.1)"; }}
+                        onBlur={e => { e.target.style.borderColor = errors.phone ? "#dc2626" : C.border; e.target.style.boxShadow = "none"; }} />
+                    </div>
                   </div>
                 </div>
-                <div>
-                    <div style={label}>Phone <span style={{ color: "#dc2626" }}>*</span></div>
-                    <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="Mobile number" style={inp(errors.phone)}
-                      onFocus={e => { e.target.style.borderColor = C.forest; e.target.style.boxShadow = "0 0 0 3px rgba(27,107,58,0.1)"; }}
-                      onBlur={e => { e.target.style.borderColor = errors.phone ? "#dc2626" : C.border; e.target.style.boxShadow = "none"; }} />
-                  </div>
-              </div>
 
-              {/* ── Agree ── */}
-              <div style={{ background: C.white, borderRadius: 16, padding: "18px 24px", border: `1px solid ${errors.agreed ? "#dc2626" : C.border}`, marginBottom: 20 }}>
-                <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
-                  <input type="checkbox" checked={agreed} onChange={e => { setAgreed(e.target.checked); setErrors(er => ({ ...er, agreed: false })); }}
-                    style={{ marginTop: 2, width: 17, height: 17, accentColor: C.forest, flexShrink: 0 }} />
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, lineHeight: 1.6, color: errors.agreed ? "#dc2626" : C.textMid }}>
-                    By donating, I agree to the{" "}
-                    <a href="/terms-of-service" target="_blank" style={{ color: C.forest, textDecoration: "underline" }}>Terms of Service</a>
-                    {" "}and{" "}
-                    <a href="/privacy-policy" target="_blank" style={{ color: C.forest, textDecoration: "underline" }}>Privacy Policy</a>.
-                  </span>
-                </label>
+                <div style={{ padding: "18px 24px", background: errors.agreed ? "rgba(220,38,38,0.04)" : "transparent" }}>
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
+                    <input type="checkbox" checked={agreed} onChange={e => { setAgreed(e.target.checked); setErrors(er => ({ ...er, agreed: false })); }}
+                      style={{ marginTop: 2, width: 17, height: 17, accentColor: C.forest, flexShrink: 0 }} />
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, lineHeight: 1.6, color: errors.agreed ? "#dc2626" : C.textMid }}>
+                      By donating, I agree to the{" "}
+                      <a href="/terms-of-service" target="_blank" style={{ color: C.forest, textDecoration: "underline" }}>Terms of Service</a>
+                      {" "}and{" "}
+                      <a href="/privacy-policy" target="_blank" style={{ color: C.forest, textDecoration: "underline" }}>Privacy Policy</a>.
+                    </span>
+                  </label>
+                </div>
               </div>
 
               {errMsg && (
@@ -506,17 +500,17 @@ export default function DonatePage() {
                 </div>
               )}
 
-              {/* ── Summary + Submit ── */}
-              <div style={{ background: C.forest, borderRadius: 16, padding: "20px 24px" }}>
+              {/* ── Submit ── */}
+              <div>
                 <button type="submit"
-                  style={{ width: "100%", padding: "16px", border: "none", borderRadius: 12, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 16, background: "#fff", color: C.forest, cursor: "pointer", transition: "opacity 0.2s" }}
+                  style={{ width: "100%", padding: "16px", border: "none", borderRadius: 12, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 16, background: C.forest, color: "#fff", cursor: "pointer", transition: "opacity 0.2s" }}
                   onMouseEnter={e => e.currentTarget.style.opacity = "0.9"}
                   onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
                   {finalAmount && Number(finalAmount) > 0
                     ? `Donate ${isDomestic ? "₹" : "$"}${Number(finalAmount).toLocaleString()}`
                     : "Donate"}
                 </button>
-                <div style={{ marginTop: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 5, fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
+                <div style={{ marginTop: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 5, fontFamily: "'Inter',sans-serif", fontSize: 11, color: C.textLight }}>
                   <ShieldCheck size={13} /> Your donation is secured with {isDomestic ? "Razorpay" : "Stripe"}
                 </div>
               </div>
@@ -526,7 +520,7 @@ export default function DonatePage() {
           </div>
 
           {/* ── Sidebar ── */}
-          <div className="donate-sidebar" style={{ flex: "0 0 280px", maxHeight: "80vh", overflowY: "auto", paddingRight: 4 }}>
+          <div className="donate-sidebar" style={{ flex: "0 0 280px", position: "sticky", top: 100 }}>
 
             {/* Impact preview */}
             <div style={{ background: C.white, borderRadius: 16, padding: 24, border: `1px solid ${C.border}`, marginBottom: 16 }}>
@@ -553,9 +547,8 @@ export default function DonatePage() {
                 { label: "12A Certified", color: C.forest, bg: "#f0fdf4" },
                 { label: "80G Certified", color: C.forest, bg: "#f0fdf4" },
                 { label: "501(c)(3) USA",  color: "#1d4ed8", bg: "#eff6ff" },
-                { label: "PwC Validated",  color: "#7c3aed", bg: "#f5f3ff" },
               ].map((c, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: i < 3 ? 10 : 0 }}>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: i < 2 ? 10 : 0 }}>
                   <div style={{ width: 8, height: 8, borderRadius: "50%", background: c.color, flexShrink: 0 }} />
                   <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: C.text }}>{c.label}</span>
                 </div>

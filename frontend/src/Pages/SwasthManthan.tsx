@@ -105,7 +105,7 @@ function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 
 // ─── Stripe + Razorpay helpers ────────────────────────────────────────────────
 const API_BASE = "/api";
-const LOCKED_PROGRAM = "SwasthManthan";
+const LOCKED_PROGRAM = "Swasthmanthan";
 
 let stripePromise: Promise<any> | null = null;
 async function getStripe() {
@@ -131,7 +131,7 @@ function loadRazorpay(): Promise<boolean> {
   });
 }
 
-// ─── Donation Form (SwasthManthan locked) ────────────────────────────────────
+// ─── Donation Form (Swasthmanthan locked) ────────────────────────────────────
 function DonationForm() {
   const [region, setRegion]       = useState("domestic");
   const [amount, setAmount]       = useState("");
@@ -264,7 +264,7 @@ function DonationForm() {
       <CheckCircle size={64} color={C.goldSoft} style={{ marginBottom: 20 }} />
       <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 12 }}>Thank you, {name}!</h2>
       <p className="sans" style={{ fontSize: 15, color: "rgba(255,255,255,0.7)", maxWidth: 400, margin: "0 auto 24px", lineHeight: 1.6 }}>
-        Your donation to <strong style={{ color: C.goldLight }}>SwasthManthan</strong> has been received. A receipt will be sent to {email}.
+        Your donation to <strong style={{ color: C.goldLight }}>Swasthmanthan</strong> has been received. A receipt will be sent to {email}.
       </p>
       <button onClick={() => { setStep("form"); setAmount(""); setName(""); setEmail(""); setPhone(""); setState(""); setAgreed(false); }}
         style={{ fontFamily: "Inter,sans-serif", background: C.gold, color: "#1a1a1a", fontWeight: 700, border: "none", padding: "12px 28px", borderRadius: 8, cursor: "pointer", fontSize: 15 }}>
@@ -300,7 +300,7 @@ function DonationForm() {
         Complete your donation — ${Number(amount).toLocaleString()}
       </h3>
       <p className="sans" style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", textAlign: "center", marginBottom: 22 }}>
-        SwasthManthan · {frequency === "once" ? "One-time" : frequency}
+        Swasthmanthan · {frequency === "once" ? "One-time" : frequency}
       </p>
       <div id="stripe-payment-element-swasthmanthan" style={{ background: "#fff", borderRadius: 10, padding: 16, marginBottom: 18, minHeight: 180 }} />
       {!stripeReady && <div className="sans" style={{ textAlign: "center", fontSize: 13, color: "rgba(255,255,255,0.5)", marginBottom: 12 }}>Loading payment form…</div>}
@@ -368,9 +368,9 @@ function DonationForm() {
           </div>
           <div>
             <label style={labelStyle}>Donate to Program</label>
-            {/* LOCKED — SwasthManthan */}
+            {/* LOCKED — Swasthmanthan */}
             <div style={{ width: "100%", height: 47, padding: "0 14px", border: `2px solid ${C.forest}`, borderRadius: 10, background: "#f0fdf4", fontFamily: "'Inter',sans-serif", fontSize: 14, fontWeight: 600, color: C.forest, display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "not-allowed" }}>
-              <span>SwasthManthan</span>
+              <span>Swasthmanthan</span>
               <Lock size={14} color={C.forest} />
             </div>
           </div>
@@ -514,13 +514,13 @@ function DonationForm() {
 }
 
 // ─── Impact card ──────────────────────────────────────────────────────────────
-function SwasthManthanImpactCard() {
+function SwasthmanthanImpactCard() {
   return (
     <div style={{ background: "rgba(255,255,255,0.09)", backdropFilter: "blur(12px)", borderRadius: 16, padding: 20, border: "1px solid rgba(255,255,255,0.14)" }}>
       <div style={{ height: 110, borderRadius: 10, background: `linear-gradient(135deg, ${C.forestDeep}, ${C.leaf})`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
         <div style={{ textAlign: "center" }}>
           <Bike size={36} color="rgba(255,255,255,0.45)" />
-          <div className="sans" style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", marginTop: 6, letterSpacing: 1, textTransform: "uppercase" }}>SwasthManthan — Lab on Bike</div>
+          <div className="sans" style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", marginTop: 6, letterSpacing: 1, textTransform: "uppercase" }}>Swasthmanthan — Lab on Bike</div>
         </div>
       </div>
       <h3 style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 7 }}>Your donation deploys a health camp</h3>
@@ -540,8 +540,8 @@ function SwasthManthanImpactCard() {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 const VIDEO_ID = "Qs3J7Ui5j5g";
 
-export default function SwasthManthanPage() {
-  useEffect(() => { document.title = "SwasthManthan - Last Mile Care | Swasthgram"; }, []);
+export default function SwasthmanthanPage() {
+  useEffect(() => { document.title = "Swasthmanthan - Last Mile Care | Swasthgram"; }, []);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const partners = [
@@ -580,7 +580,7 @@ export default function SwasthManthanPage() {
   ];
 
   const faqs = [
-    { q: "What diseases does SwasthManthan screen for?", a: "Cancer (oral, cervical, breast), diabetes, kidney disease, liver disease, heart conditions via ECG, blood disorders, pregnancy complications, and more — over 100 diagnostic parameters covered." },
+    { q: "What diseases does Swasthmanthan screen for?", a: "Cancer (oral, cervical, breast), diabetes, kidney disease, liver disease, heart conditions via ECG, blood disorders, pregnancy complications, and more — over 100 diagnostic parameters covered." },
     { q: "How does the Health Unit on Bike actually work?", a: "A complete health screening unitis retrofitted onto a motorbike — solar-powered, with a digital microscope, biochemistry analyzer, urine analyzer, ECG machine, and bio-waste management. It rides into terrain no ambulance or mobile van can reach." },
     { q: "Is the screening completely free?", a: "Yes, 100% free for all beneficiaries. Health camps are funded by donors and CSR partners. No one is ever charged." },
     { q: "What happens if a  health concern is identified?", a: "Critical community members are immediately referred to partner hospitals like Medanta for subsidized or free care. All data is digitally recorded for follow-up. Community health workers ensure continuity of care." },
@@ -628,13 +628,13 @@ export default function SwasthManthanPage() {
 
       {/* HERO */}
       <section style={{ minHeight: "85vh", display: "flex", alignItems: "center", background: `linear-gradient(170deg, #080c0a 0%, ${C.forestDeep} 60%, ${C.forestDark} 100%)`, paddingTop: 72, position: "relative", overflow: "hidden" }}>
-        <Breadcrumb items={[{ label: "Programs" }, { label: "SwasthManthan" }]} />
+        <Breadcrumb items={[{ label: "Programs" }, { label: "Swasthmanthan" }]} />
         <div style={{ position: "absolute", inset: 0, opacity: 0.04, backgroundImage: "radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
         <div style={{ maxWidth: 1080, margin: "0 auto", padding: "48px 24px", width: "100%", position: "relative", zIndex: 2 }}>
           <div className="hero-flex" style={{ display: "flex", alignItems: "center", gap: 48 }}>
             <div style={{ flex: "1 1 50%", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16 }}>
               <div className="tag" style={{ color: C.goldSoft, background: "rgba(200,150,62,0.2)", padding: "5px 12px", borderRadius: 16, fontSize: 10, display: "flex", alignItems: "center", gap: 6 }}>
-                <Bike size={12} color={C.goldSoft} /> SwasthManthan · Flagship Program
+                <Bike size={12} color={C.goldSoft} /> Swasthmanthan · Flagship Program
               </div>
               <h1 style={{ fontSize: "clamp(28px, 4.5vw, 46px)", fontWeight: 700, lineHeight: 1.12, color: "#fff" }}>
                 We've screened<br /><span style={{ color: C.goldLight }}>1,11,392 people</span><br />no hospital could reach.
@@ -681,7 +681,7 @@ export default function SwasthManthanPage() {
 
       {/* PARTNER LOGOS */}
       <section style={{ background: C.white, borderBottom: `1px solid ${C.border}`, padding: "36px 0", overflow: "hidden" }}>
-        <p className="sans" style={{ fontSize: 10, color: C.textLight, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 24, textAlign: "center" }}>SwasthManthan is Trusted &amp; Validated By</p>
+        <p className="sans" style={{ fontSize: 10, color: C.textLight, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 24, textAlign: "center" }}>Swasthmanthan is Trusted &amp; Validated By</p>
         <div style={{ position: "relative", overflow: "hidden" }}>
           <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 100, background: "linear-gradient(to right, #fff, transparent)", zIndex: 2, pointerEvents: "none" }} />
           <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: 100, background: "linear-gradient(to left, #fff, transparent)", zIndex: 2, pointerEvents: "none" }} />
@@ -752,7 +752,7 @@ export default function SwasthManthanPage() {
         <section id="how" style={{ background: C.cream, padding: "80px 24px" }}>
           <div style={{ maxWidth: 1000, margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: 48 }}>
-              <div className="tag" style={{ color: C.forest, marginBottom: 8 }}>How SwasthManthan Works</div>
+              <div className="tag" style={{ color: C.forest, marginBottom: 8 }}>How Swasthmanthan Works</div>
               <h2 style={{ fontSize: "clamp(24px, 3.2vw, 34px)", fontWeight: 700 }}>A health screening unit that rides to you </h2>
               <p className="sans" style={{ fontSize: 15, color: C.textMid, marginTop: 10, maxWidth: 560, margin: "10px auto 0" }}>Past efforts — mobile vans, outreach camps — failed because they couldn't navigate India's terrain. The Health Unit on Bike solves every one of these challenges.</p>
             </div>
@@ -806,7 +806,7 @@ export default function SwasthManthanPage() {
       {/* PHOTO GALLERY */}
       <section style={{ background: C.warmBg, padding: "64px 0", overflow: "hidden" }}>
         <div style={{ textAlign: "center", marginBottom: 32, padding: "0 24px" }}>
-          <div className="tag" style={{ color: C.forest, marginBottom: 8 }}>SwasthManthan in Action</div>
+          <div className="tag" style={{ color: C.forest, marginBottom: 8 }}>Swasthmanthan in Action</div>
           <h2 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(22px,3vw,30px)", fontWeight: 700 }}>From villages to lives saved.</h2>
         </div>
         <style>{`
@@ -909,7 +909,7 @@ export default function SwasthManthanPage() {
       <section id="donate" style={{ background: `linear-gradient(160deg, ${C.forestDeep} 0%, ${C.forest} 50%, ${C.leaf} 100%)`, padding: "80px 24px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 36 }}>
-            <div className="tag" style={{ color: C.goldSoft, marginBottom: 12 }}>Fund SwasthManthan</div>
+            <div className="tag" style={{ color: C.goldSoft, marginBottom: 12 }}>Fund Swasthmanthan</div>
             <h2 style={{ fontSize: "clamp(26px, 4vw, 38px)", fontWeight: 700, color: "#fff", lineHeight: 1.2, marginBottom: 14 }}>
               Your donation = one health camp.<br />Real  health checks Real lives saved.
             </h2>
@@ -917,7 +917,7 @@ export default function SwasthManthanPage() {
           <div style={{ display: "grid", gridTemplateColumns: "1.3fr 0.7fr", gap: 28, alignItems: "flex-start" }} className="donate-grid">
             <div><DonationForm /></div>
             <div className="donate-impact-card" style={{ paddingTop: 112 }}>
-              <SwasthManthanImpactCard />
+              <SwasthmanthanImpactCard />
             </div>
           </div>
           <div className="sans" style={{ marginTop: 24, fontSize: 11, color: "rgba(255,255,255,0.3)", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
@@ -931,7 +931,7 @@ export default function SwasthManthanPage() {
         <section style={{ maxWidth: 720, margin: "0 auto", padding: "80px 24px" }}>
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <div className="tag" style={{ color: C.gold, marginBottom: 8 }}>Frequently Asked Questions</div>
-            <h2 style={{ fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 700 }}>About SwasthManthan</h2>
+            <h2 style={{ fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 700 }}>About Swasthmanthan</h2>
           </div>
           {faqs.map((faq, i) => (
             <div key={i} style={{ borderBottom: `1px solid ${C.border}`, padding: "18px 0", cursor: "pointer" }} onClick={() => setOpenFaq(openFaq === i ? null : i)}>

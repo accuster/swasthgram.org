@@ -13,7 +13,7 @@ const COLORS = {
 };
 
 const programSubLinks = [
-  { label: "SwasthManthan", href: "/programs/swasthmanthan" },
+  { label: "Swasthmanthan", href: "/programs/swasthmanthan" },
   { label: "Saksham", href: "/programs/saksham" },
   { label: "Shudhvayu", href: "/programs/shudhvayu" },
 ];

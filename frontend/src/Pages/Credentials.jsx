@@ -17,7 +17,7 @@ import cert80G   from "../assets/swasthgram80G.jpg";
 /* ── Brand logo ───────────────────────────────────────────────────────── */
 import logoColor from "../assets/SwasthgramWhite.png";
 
-/* ── SwasthManthan — all 34 images ───────────────────────────────────── */
+/* ── Swasthmanthan — all 34 images ───────────────────────────────────── */
 import sm1  from "../assets/swasthmanthan/Swasthmanthan (1).webp";
 import sm2  from "../assets/swasthmanthan/Swasthmanthan (2).webp";
 import sm3  from "../assets/swasthmanthan/Swasthmanthan (3).webp";
@@ -294,7 +294,7 @@ function AboutSection() {
             </p>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: cc.muted, lineHeight: 1.8, marginBottom: 14 }}>
               Our flagship <strong style={{ color: cc.text }}>LaBike</strong> — a motorcycle-mounted mobile lab —
-              performs 76 blood screening in the most remote villages. Through <strong style={{ color: cc.text }}>SwasthManthan</strong>,{" "}
+              performs 76 blood screening in the most remote villages. Through <strong style={{ color: cc.text }}>Swasthmanthan</strong>,{" "}
               <strong style={{ color: cc.text }}>Saksham</strong>, and <strong style={{ color: cc.text }}>Shudhvayu</strong>,
               we have conducted 67,660+ camps, saved 9,000+ high-risk pregnancies, and created 5,050+ livelihoods.
             </p>
@@ -467,7 +467,7 @@ const SK_IMGS = [sk1,sk2,sk3,sk4,sk5,sk6,sk7,sk8,sk9];
 const SV_IMGS = [sv1,sv2,sv3,sv4,sv5,sv6,sv7,sv8,sv9,sv10,sv11,sv12,sv13,sv14,sv15];
 
 const PROG_TABS = [
-  { id:"swasthmanthan", label:"SwasthManthan", color:"#1B6B3A", imgs: SM_IMGS, desc:"Preventive community care & Health check-ups via mobile health unit on bike across rural India.", link:"/programs/swasthmanthan" },
+  { id:"swasthmanthan", label:"Swasthmanthan", color:"#1B6B3A", imgs: SM_IMGS, desc:"Preventive community care & Health check-ups via mobile health unit on bike across rural India.", link:"/programs/swasthmanthan" },
   { id:"saksham",       label:"Saksham",       color:"#B45309", imgs: SK_IMGS, desc:"Livelihood generation — training Community Health Workers from marginalised communities.", link:"/programs/saksham" },
   { id:"shudhvayu",     label:"Shudhvayu",     color:"#1D4ED8", imgs: SV_IMGS, desc:"Air quality monitoring, pollution control, and environmental health advocacy.", link:"/programs/shudhvayu" },
 ];

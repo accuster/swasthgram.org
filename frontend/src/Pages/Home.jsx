@@ -153,7 +153,7 @@ function DonationForm() {
   const isDomestic = region === "domestic";
   const presets    = { us: [200, 500, 1000], domestic: [10000, 50000, 100000] };
   const programs   = [
-    { value: "SwasthManthan", label: "SwasthManthan", sub: "Rural Healthcare" },
+    { value: "Swasthmanthan", label: "Swasthmanthan", sub: "Rural Healthcare" },
     { value: "Shudhvayu",     label: "Shudhvayu",     sub: "Clean Air & Environment" },
     { value: "Saksham",       label: "Saksham",        sub: "Education & Skills" },
   ];
@@ -616,7 +616,7 @@ export default function SwasthgramHome() {
     { end: 9000,   suffix: "+", label: "Pregnant Women Screened", icon: <Baby size={24} color="#D4A854" /> },
   ];
   const programs = [
-    { name: "SwasthManthan", tagline: "Early Detection. Saved Lives.",      img: imgSwasthmanthan, color: cc.forest,   desc: "Cancer screening, diabetes, liver & kidney screening — deployed through Health Unit on Bike to remote communities.", stats: [{ n: "57 Lakh+", l: "Reached" }, { n: "6,000", l: "Cancer Tests" }, { n: "67,660", l: "Camps" }] },
+    { name: "Swasthmanthan", tagline: "Early Detection. Saved Lives.",      img: imgSwasthmanthan, color: cc.forest,   desc: "Cancer screening, diabetes, liver & kidney screening — deployed through Health Unit on Bike to remote communities.", stats: [{ n: "57 Lakh+", l: "Reached" }, { n: "6,000", l: "Cancer Tests" }, { n: "67,660", l: "Camps" }] },
     { name: "Saksham",       tagline: "Scientific Skilling. Real Careers.", img: imgSaksham,       color: cc.leaf,     desc: "8 years of deep research compressed 4-year medical programmes into 4 intensive months. Graduates at Medanta.", stats: [{ n: "8 Years", l: "R&D" }, { n: "4 Months", l: "vs 4 Yr" }, { n: "5,050+", l: "Placed" }] },
     { name: "Shudhvayu",     tagline: "Clean Air. Right to Life.",          img: imgShudhvayu,     color: cc.goldSoft, desc: "Patented vehicle-mounted air filter. Cleans air as cars drive. No electricity. The most democratic solution.", stats: [{ n: "Since 2018", l: "On Roads" }, { n: "Patented", l: "Innovation" }, { n: "Delhi NCR", l: "& Beyond" }] },
   ];

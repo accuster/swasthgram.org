@@ -19,7 +19,7 @@ const COLORS = {
 };
 
 const PROGRAM_IMPACT = {
-  SwasthManthan: {
+  Swasthmanthan: {
     color:   "#1B6B3A",
     icon:    <Stethoscope size={20} color="#fff" />,
     title:   "Your donation is already at work in the field.",
@@ -318,7 +318,7 @@ export default function ThankYouPage() {
                 Explore other ways to make an impact.
               </p>
               {[
-                { label:"SwasthManthan", sub:"Rural Healthcare", href:"/programs/swasthmanthan#donate" },
+                { label:"Swasthmanthan", sub:"Rural Healthcare", href:"/programs/swasthmanthan#donate" },
                 { label:"Saksham",       sub:"Youth Skilling",   href:"/programs/saksham#donate" },
                 { label:"Shudhvayu",     sub:"Clean Air",        href:"/programs/shudhvayu#donate" },
                 { label:"General Fund",  sub:"Where needed most", href:"/#donate" },

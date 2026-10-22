@@ -124,7 +124,7 @@ export default function Footer() {
               Programs
             </h4>
             {[
-              { name: "SwasthManthan", href: "/programs/swasthmanthan" },
+              { name: "Swasthmanthan", href: "/programs/swasthmanthan" },
               { name: "Saksham", href: "/programs/saksham" },
               { name: "Shudhvayu", href: "/programs/shudhvayu" },
             ].map((item) => (
