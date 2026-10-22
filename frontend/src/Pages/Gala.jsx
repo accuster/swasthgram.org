@@ -508,7 +508,7 @@ export default function GalaPage() {
                     <input ref={phoneRef} id="fPhone" type="tel" inputMode="tel" placeholder="Phone number" autoComplete="tel-national" value={phone} onChange={(e) => setPhone(e.target.value)} style={{ ...inputStyle, margin: 0, flex: 1, minWidth: 0 }} />
                   </div>
                   <button className="gala-btn" type="submit" disabled={idsSorted.length === 0 || busy} style={{ width: "100%", border: 0, borderRadius: 8, background: (idsSorted.length === 0 || busy) ? "#e4eaf1" : C.green, color: (idsSorted.length === 0 || busy) ? "#64748b" : "#fff", fontSize: 12, fontWeight: 600, lineHeight: 1.5, padding: "13px 12px", cursor: (idsSorted.length === 0 || busy) ? "not-allowed" : "pointer", transition: "background .2s" }}>
-                    {busy ? "Redirecting to payment…" : idsSorted.length === 0 ? "Pick seats to book" : `Reserve ${idsSorted.length} seat${idsSorted.length > 1 ? "s" : ""} and pay ${fmt(total)}`}
+                    {busy ? "Redirecting to payment…" : idsSorted.length === 0 ? "Pick seats to book" : `Pay ${fmt(total)}`}
                   </button>
                   <p style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, color: C.muted, fontSize: 10, lineHeight: 1.5, margin: "12px 0" }}>
                     <Lock size={14} aria-hidden="true" />
