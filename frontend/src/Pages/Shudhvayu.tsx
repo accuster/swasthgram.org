@@ -52,7 +52,7 @@ function useReveal(threshold = 0.12) {
   return [ref, visible] as const;
 }
 
-function AnimatedCounter({ end, suffix = "" }: { end: number; suffix?: string }) {
+function AnimatedCounter({ end, suffix = "", noGroup = false }: { end: number; suffix?: string; noGroup?: boolean }) {
   const [value, setValue] = useState(0);
   const [ref, visible] = useReveal(0.3);
   useEffect(() => {
@@ -61,7 +61,7 @@ function AnimatedCounter({ end, suffix = "" }: { end: number; suffix?: string })
     const timer = setInterval(() => { current += step; if (current >= end) { setValue(end); clearInterval(timer); } else setValue(current); }, 30);
     return () => clearInterval(timer);
   }, [visible, end]);
-  return <span ref={ref}>{value.toLocaleString("en-IN")}{suffix}</span>;
+  return <span ref={ref}>{noGroup ? value : value.toLocaleString("en-IN")}{suffix}</span>;
 }
 
 function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
@@ -273,10 +273,10 @@ export default function ShudhvayuPage() {
             <h2 style={{ fontSize: "clamp(24px, 3vw, 32px)", fontWeight: 700, color: "#fff" }}>Cleaning Delhi's air, one vehicle at a time</h2>
           </div>
           <div className="grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
-            {[{ end: 2018, suffix: "", label: "Year Programme Started", icon: <FileCheck size={22} color={C.skyPale} /> }, { end: 500, suffix: "+", label: "Vehicles with Shudhvayu", icon: <Car size={22} color={C.skyPale} /> }, { end: 10, suffix: "+", label: "Patents & Certifications", icon: <FileCheck size={22} color={C.skyPale} /> }, { end: 365, suffix: "", label: "Days Active Per Year", icon: <RefreshCw size={22} color={C.skyPale} /> }].map((stat, i) => (
+            {[{ end: 2018, suffix: "", noGroup: true, label: "Year Programme Started", icon: <FileCheck size={22} color={C.skyPale} /> }, { end: 500, suffix: "+", label: "Vehicles with Shudhvayu", icon: <Car size={22} color={C.skyPale} /> }, { end: 10, suffix: "+", label: "Patents & Certifications", icon: <FileCheck size={22} color={C.skyPale} /> }, { end: 365, suffix: "", label: "Days Active Per Year", icon: <RefreshCw size={22} color={C.skyPale} /> }].map((stat, i) => (
               <div key={i} style={{ textAlign: "center", padding: "24px 14px", background: "rgba(255,255,255,0.06)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)" }}>
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: 6 }}>{stat.icon}</div>
-                <div className="sans" style={{ fontSize: "clamp(22px, 2.5vw, 28px)", fontWeight: 700, color: C.skyPale, lineHeight: 1 }}><AnimatedCounter end={stat.end} suffix={stat.suffix} /></div>
+                <div className="sans" style={{ fontSize: "clamp(22px, 2.5vw, 28px)", fontWeight: 700, color: C.skyPale, lineHeight: 1 }}><AnimatedCounter end={stat.end} suffix={stat.suffix} noGroup={stat.noGroup} /></div>
                 <div className="sans" style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginTop: 6 }}>{stat.label}</div>
               </div>
             ))}

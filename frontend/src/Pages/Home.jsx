@@ -144,7 +144,7 @@ export default function SwasthgramHome() {
   const aboutCards = [
     { icon: <Bike size={24} color="#1B6B3A" />,          title: "Health Unit on Bike",         desc: "Solar-powered. 100+ Health screenings. The world's only." },
     { icon: <Package size={24} color="#1B6B3A" />,       title: "Health Unit in a Box",        desc: "5,000+ deployed. Indian Army uses daily." },
-    { icon: <GraduationCap size={24} color="#1B6B3A" />, title: "Scientific Skilling", desc: "8 yrs R&D. 4-yr to 4 months. Medanta." },
+    { icon: <GraduationCap size={24} color="#1B6B3A" />, title: "Scientific Skilling", desc: "8 yrs R&D. 4-yr to 4 months." },
     { icon: <Sprout size={24} color="#1B6B3A" />,        title: "Carbon Net Zero",     desc: "No electricity. No AC. Zero footprint." },
   ];
 

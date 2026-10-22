@@ -153,7 +153,7 @@ export default function AboutNGOPage() {
           <div className="grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" }}>
             <div>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, lineHeight: 1.8, color: cc.textMid, marginBottom: 18 }}>
-                Founded in 2011 by a biomedical engineer who left Hollywood to solve India's deepest community wellness access gap, Swasthgram builds wellness access that goes where hospitals can't — solar-powered, jungle-ready, validated by PwC after screening 150 global solutions.
+                Founded in 2011 by a biomedical engineer who left Hollywood to solve India's deepest community wellness access gap. Swasthgram builds wellness access that goes where hospitals can't — solar-powered, jungle-ready, validated by PwC after screening 150 global solutions.
               </p>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, lineHeight: 1.8, color: cc.textMid, marginBottom: 24 }}>
                 We are not a charity. We are a technology-led, community-driven organisation that creates sustainable, self-sufficient systems for last-mile community care, youth empowerment, and environmental innovation. Our solutions have been presented to 18 countries in Washington D.C. and are used daily by the Indian Army.

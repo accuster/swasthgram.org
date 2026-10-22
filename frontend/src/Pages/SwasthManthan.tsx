@@ -302,7 +302,7 @@ export default function SwasthmanthanPage() {
         <section style={{ maxWidth: 840, margin: "0 auto", padding: "80px 24px", textAlign: "center" }}>
           <div className="tag" style={{ color: C.red, marginBottom: 12, background: "rgba(220,38,38,0.06)", padding: "5px 14px", borderRadius: 16 }}>The Problem</div>
           <h2 style={{ fontSize: "clamp(24px, 3.8vw, 38px)", fontWeight: 700, lineHeight: 1.2, marginBottom: 20 }}>
-            70% of India lives in rural areas.<br /><span style={{ color: C.red }}>Most have never had a single health check.</span>
+            70% of India lives in rural areas.<br /><span style={{ color: C.red }}>Most have never had a single health check-up.</span>
           </h2>
           <p className="sans" style={{ fontSize: 16, lineHeight: 1.8, color: C.textMid, maxWidth: 620, margin: "0 auto 24px" }}>
             No primary care centre. No paved roads. No electricity. The nearest health centre can be a full day's journey away. Cancer, diabetes, kidney failure — all go undetected until it's too late.
@@ -329,9 +329,9 @@ export default function SwasthmanthanPage() {
             </div>
             <div className="grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
               {[
-                { icon: <Bike size={24} color="#fff" />, title: "Health Unit Deploys", desc: "A solar-powered health screening unitrides into remote villages, jungles, and tribal areas — terrain no ambulance can reach. Over 100+ health screenings performed on-site, at the doorstep." },
-                { icon: <ClipboardList size={24} color="#fff" />, title: "Free Screening Begins", desc: "Cancer screening (oral, cervical, breast), blood, kidney & liver function, diabetes, ECG, BMI — all completely free. No one is ever turned away or charged." },
-                { icon: <BarChart3 size={24} color="#fff" />, title: "Digital Records Created", desc: "Every result is digitally recorded with GPS coordinates. Critical community members are immediately flagged and referred to partner hospitals like Medanta for subsidized care." },
+                { icon: <Bike size={24} color="#fff" />, title: "Health Unit Deploys", desc: "A solar-powered health screening unit rides into remote villages, jungles, and tribal areas — terrain no ambulance can reach. Over 100+ health screenings performed on-site, at the doorstep." },
+                { icon: <ClipboardList size={24} color="#fff" />, title: "Free Screening Begins", desc: "Cancer screening (oral, cervical, breast), blood, kidney & liver function, diabetes, ECG, BMI — all completely free. No one is ever turned away." },
+                { icon: <BarChart3 size={24} color="#fff" />, title: "Digital Records Created", desc: "Every result is digitally recorded with GPS coordinates. Critical community members are immediately flagged and referred to partner hospitals for subsidized care." },
                 { icon: <Pill size={24} color="#fff" />, title: "Care Guidance & Follow-up", desc: "Charitable dispensaries provide medicines. Community health workers trained by Saksham ensure ongoing awareness and follow-up care. No one is left behind." },
               ].map((step, i) => (
                 <div key={i} style={{ background: C.white, borderRadius: 14, padding: "28px 24px", border: `1px solid ${C.border}`, display: "flex", gap: 16, alignItems: "flex-start" }}>

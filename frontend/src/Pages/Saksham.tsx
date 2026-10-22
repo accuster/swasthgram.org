@@ -88,7 +88,7 @@ export default function SakshamPage() {
   const pillars = [
     { icon: <GraduationCap size={28} color={C.forest} />, title: "Skill Development", desc: "Comprehensive training in basic health screening, first aid, community care, and basic health outreach — compressed from 4 years to 4 intensive months." },
     { icon: <Handshake size={28} color={C.forest} />, title: "Government Partner", desc: "Recognized by India's Dept. of Biotechnology. Endorsed on national TV. Officially validated as a nationally scalable healthcare skilling model." },
-    { icon: <Briefcase size={28} color={C.forest} />, title: "Employment", desc: "Over 1,050 graduates placed in real medical jobs at hospitals like Medanta. Building a pipeline of SwasthSaathis and SwasthRakshaks across rural India." },
+    { icon: <Briefcase size={28} color={C.forest} />, title: "Employment", desc: "Over 1,050 graduates placed in real medical jobs at partner hospitals. Building a pipeline of SwasthSaathis and SwasthRakshaks across rural India." },
     { icon: <Hospital size={28} color={C.forest} />, title: "Disaster Relief", desc: "Saksham volunteers provided round-the-clock medical aid during natural calamities in Uttarakhand, Nepal, and Kerala." },
     { icon: <Globe size={28} color={C.forest} />, title: "Community-Rooted", desc: "SwasthRakshaks are recruited from within local communities, ensuring solutions are culturally relevant and deeply impactful on the ground." },
     { icon: <Microscope size={28} color={C.forest} />, title: "Community Health Worker", desc: "Addressing the critical shortage of trained healthcare workers in rural India, targeting creation of 5 lakh lab technician jobs over the next 5 years." },

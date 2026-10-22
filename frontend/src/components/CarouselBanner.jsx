@@ -23,7 +23,7 @@ const SLIDES = [
   {
     tag: "SAKSHAM · YOUTH EMPOWERMENT",
     headline: "4 years of skill.\nDelivered in 4 months.",
-    sub: "8 years of R&D compressed rigorous medical training into an intensive 4-month programme. Graduates are placed at Medanta and leading hospitals — breaking the poverty cycle permanently.",
+    sub: "8 years of R&D compressed rigorous medical training into an intensive 4-month programme. Graduates are placed at leading hospitals — breaking the poverty cycle permanently.",
     cta: { label: "Support Saksham", href: "/donate?program=Saksham" },
     stats: [{ n: "8 Years", l: "R&D" }, { n: "4 Months", l: "vs 4 Years" }, { n: "1,050+", l: "Placed" }],
     img: imgSaksham,
@@ -43,7 +43,7 @@ const SLIDES = [
   {
     tag: "OUR IMPACT · PROVEN AT SCALE",
     headline: "6 Lakh+ lives.\nOne motorbike at a time.",
-    sub: "From Kumbh Mela to the Indian Army, from Washington D.C. to the most remote villages of Himachal — our health unit on bike is validated by PwC and trusted by governments worldwide.",
+    sub: "From Kumbh Mela to the Indian Army, from Washington D.C. to the most remote villages of Himachal Pradesh — our health unit on bike is validated by PwC and trusted by governments worldwide.",
     cta: { label: "See Our Impact", href: "#impact" },
     stats: [{ n: "6,00,000+", l: "Beneficiaries" }, { n: "5,000+", l: "Units Deployed" }, { n: "18", l: "Countries Presented" }],
     img: bannerHome3,
