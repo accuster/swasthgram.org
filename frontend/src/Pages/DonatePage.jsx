@@ -22,6 +22,15 @@ const INDIAN_STATES = [
   "Delhi (NCT)","Jammu & Kashmir","Ladakh","Lakshadweep","Puducherry",
 ];
 
+const DONATION_FAQS = [
+  { q: "Is my donation tax-deductible?", a: "Yes. Donations from India qualify for tax benefits under Section 80G & 12A. Donations from the USA are tax-deductible under IRS 501(c)(3)." },
+  { q: "What payment methods do you accept?", a: "Razorpay for donations from India, and Stripe (card) for international donations. Both are PCI-compliant — your card details never reach Swasthgram's servers." },
+  { q: "Can I set up a recurring donation?", a: "Yes — choose Monthly, Quarterly or Yearly instead of One-time when donating. You can cancel a recurring donation anytime by contacting support@swasthgram.org." },
+  { q: "Will I get a receipt?", a: "Yes, an email receipt is sent immediately after a successful donation, including your donation ID and, for India, details for claiming your 80G tax deduction." },
+  { q: "Can I choose which program my donation supports?", a: "Yes — pick SwasthManthan, Saksham, Shudhvayu, or leave it as \"Where needed most\" to let Swasthgram allocate it to the area of greatest need." },
+  { q: "Is my payment information secure?", a: "Yes. All payments are processed directly by Razorpay or Stripe over an encrypted connection — Swasthgram never sees or stores your card or bank details." },
+];
+
 const PROGRAMS = [
   { value: "SwasthManthan", label: "SwasthManthan", sub: "Last-mile health screening" },
   { value: "Saksham",       label: "Saksham",       sub: "Youth skilling & empowerment" },
@@ -58,14 +67,21 @@ function loadRazorpay() {
   });
 }
 
+// A program CTA elsewhere on the site (e.g. "Donate to Saksham") links here
+// with ?program=Saksham so the right program is pre-selected on arrival.
+function initialProgram() {
+  if (typeof window === "undefined") return "General";
+  const requested = new URLSearchParams(window.location.search).get("program");
+  return PROGRAMS.some((p) => p.value === requested) ? requested : "General";
+}
+
 export default function DonatePage() {
   useEffect(() => { document.title = "Donate — Swasthgram"; }, []);
 
   // Form state
   const [region, setRegion]       = useState("domestic");
-  const [program, setProgram]     = useState("General");
+  const [program, setProgram]     = useState(initialProgram);
   const [frequency, setFrequency] = useState("once");
-  const [amount, setAmount]       = useState("");
   const [customAmt, setCustomAmt] = useState("");
   const [name, setName]           = useState("");
   const [email, setEmail]         = useState("");
@@ -78,6 +94,7 @@ export default function DonatePage() {
   const [stripeReady, setStripeReady] = useState(false);
   const [confirming, setConfirming]   = useState(false);
   const [stateOpen, setStateOpen]     = useState(false);
+  const [openFaq, setOpenFaq]         = useState(null);
 
   const stripeRef   = useRef(null);
   const elementsRef = useRef(null);
@@ -85,11 +102,7 @@ export default function DonatePage() {
   const stateRef    = useRef(null);
 
   const isDomestic = region === "domestic";
-  const finalAmount = amount === "custom" ? customAmt : amount;
-
-  const domesticPresets = ["500", "1000", "5000", "10000", "25000"];
-  const usaPresets      = ["25", "50", "100", "250", "500"];
-  const presets = isDomestic ? domesticPresets : usaPresets;
+  const finalAmount = customAmt;
 
   useEffect(() => {
     function handler(e) {
@@ -214,7 +227,7 @@ export default function DonatePage() {
         <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: C.textMid, lineHeight: 1.7, marginBottom: 24 }}>
           Your donation to <strong>{program}</strong> has been received. A receipt will be sent to {email}.
         </p>
-        <button onClick={() => { setStep("form"); setAmount(""); setCustomAmt(""); setName(""); setEmail(""); setPhone(""); setState(""); setAgreed(false); }}
+        <button onClick={() => { setStep("form"); setCustomAmt(""); setName(""); setEmail(""); setPhone(""); setState(""); setAgreed(false); }}
           style={{ fontFamily: "'Inter',sans-serif", background: C.forest, color: "#fff", fontWeight: 700, border: "none", padding: "13px 32px", borderRadius: 10, cursor: "pointer", fontSize: 15 }}>
           Donate Again
         </button>
@@ -259,15 +272,10 @@ export default function DonatePage() {
         html { scroll-behavior: smooth; }
         a { text-decoration: none; color: inherit; }
         .sans { font-family: 'Inter', sans-serif; }
-        .preset-btn { transition: all 0.15s; }
-        .preset-btn:hover { border-color: ${C.forest} !important; }
-        .prog-btn { transition: all 0.2s; cursor: pointer; }
-        .prog-btn:hover { border-color: ${C.forest} !important; }
         @media (max-width: 900px) {
-          .donate-layout { flex-direction: column !important; }
+          .donate-layout { flex-direction: column !important; height: auto !important; align-items: stretch !important; }
+          .donate-form-col, .donate-sidebar { max-height: none !important; overflow: visible !important; }
           .donate-sidebar { display: none !important; }
-          .preset-grid { grid-template-columns: repeat(3,1fr) !important; }
-          .prog-grid { grid-template-columns: 1fr 1fr !important; }
           .form-row { grid-template-columns: 1fr !important; }
         }
       `}</style>
@@ -316,7 +324,6 @@ export default function DonatePage() {
             >
               <Heart size={18} color="#1B6B3A" fill="#1B6B3A" />
               Donate via Every.org
-              <span style={{ fontSize: 11, fontWeight: 500, color: "#2E8B4F", background: "#e8f5ee", padding: "2px 8px", borderRadius: 6 }}>USA · Tax Deductible</span>
             </a>
             <a
               href="https://donate.stripe.com/cNi7sL95i3YV3Yl97Aew800"
@@ -336,7 +343,6 @@ export default function DonatePage() {
                 <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
               </svg>
               Donate via Stripe
-              <span style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.6)", background: "rgba(255,255,255,0.1)", padding: "2px 8px", borderRadius: 6, border: "1px solid rgba(255,255,255,0.2)" }}>Global · Card</span>
             </a>
             <a
               href="https://donate.swasthgram.org/"
@@ -365,8 +371,8 @@ export default function DonatePage() {
       <div id="donate-form" style={{ maxWidth: 1000, margin: "0 auto", padding: "48px 24px 80px" }}>
         <div className="donate-layout" style={{ display: "flex", gap: 40, alignItems: "flex-start" }}>
 
-          {/* ── FORM ── */}
-          <div style={{ flex: "1 1 600px" }}>
+          {/* ── FORM (scrolls independently of the impact sidebar) ── */}
+          <div className="donate-form-col" style={{ flex: "1 1 600px", maxHeight: "80vh", overflowY: "auto", paddingRight: 8 }}>
 
             {step === "stripe-card" ? (
               <div style={{ background: C.white, borderRadius: 16, padding: 32, border: `1px solid ${C.border}` }}>
@@ -400,7 +406,7 @@ export default function DonatePage() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                   {[{ key: "domestic", flag: "🇮🇳", label: "India" }, { key: "us", flag: "🇺🇸", label: "USA" }].map(opt => (
                     <button key={opt.key} type="button"
-                      onClick={() => { setRegion(opt.key); setAmount(""); setCustomAmt(""); setErrors({}); }}
+                      onClick={() => { setRegion(opt.key); setCustomAmt(""); setErrors({}); }}
                       style={{ padding: "12px 16px", borderRadius: 10, border: `2px solid ${region === opt.key ? C.forest : C.border}`, background: region === opt.key ? "#f0fdf4" : "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: region === opt.key ? C.forest : C.text, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all 0.2s" }}>
                       <span style={{ fontSize: 20 }}>{opt.flag}</span> {opt.label}
                     </button>
@@ -416,15 +422,11 @@ export default function DonatePage() {
               {/* ── Program ── */}
               <div style={{ background: C.white, borderRadius: 16, padding: "20px 24px", border: `1px solid ${C.border}`, marginBottom: 16 }}>
                 <div style={{ ...label, marginBottom: 12 }}>Choose a program</div>
-                <div className="prog-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
-                  {PROGRAMS.map(p => (
-                    <div key={p.value} className="prog-btn"
-                      onClick={() => setProgram(p.value)}
-                      style={{ padding: "12px 10px", borderRadius: 10, border: `2px solid ${program === p.value ? C.forest : C.border}`, background: program === p.value ? "#f0fdf4" : "#fff", textAlign: "center" }}>
-                      <div style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 12, color: program === p.value ? C.forest : C.text, marginBottom: 3 }}>{p.label}</div>
-                      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: C.textLight, lineHeight: 1.4 }}>{p.sub}</div>
-                    </div>
-                  ))}
+                <select value={program} onChange={e => setProgram(e.target.value)} style={{ ...inp(false), cursor: "pointer" }}>
+                  {PROGRAMS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+                </select>
+                <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: C.textLight, marginTop: 8 }}>
+                  {PROGRAMS.find(p => p.value === program)?.sub}
                 </div>
               </div>
 
@@ -444,26 +446,14 @@ export default function DonatePage() {
               {/* ── Amount ── */}
               <div style={{ background: C.white, borderRadius: 16, padding: "20px 24px", border: `1px solid ${errors.amount ? "#dc2626" : C.border}`, marginBottom: 16 }}>
                 <div style={{ ...label, marginBottom: 12 }}>Donation amount <span style={{ color: "#dc2626" }}>*</span></div>
-                <div className="preset-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 8, marginBottom: 12 }}>
-                  {presets.map(v => (
-                    <button key={v} type="button" className="preset-btn"
-                      onClick={() => { setAmount(v); setCustomAmt(""); setErrors(er => ({ ...er, amount: false })); }}
-                      style={{ padding: "11px 6px", borderRadius: 10, border: `2px solid ${amount === v ? C.forest : C.border}`, background: amount === v ? "#f0fdf4" : "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: amount === v ? C.forest : C.text, cursor: "pointer" }}>
-                      {isDomestic ? "₹" : "$"}{Number(v).toLocaleString()}
-                    </button>
-                  ))}
-                </div>
-                {/* Custom amount */}
-                <div style={{ display: "flex", alignItems: "stretch", border: `1.5px solid ${amount === "custom" ? C.forest : C.border}`, borderRadius: 10, overflow: "hidden" }}
-                  onFocusCapture={e => { setAmount("custom"); e.currentTarget.style.borderColor = C.forest; }}
-                  onBlurCapture={e => { if (!customAmt) setAmount(""); e.currentTarget.style.borderColor = amount === "custom" ? C.forest : C.border; }}>
-                  <div style={{ background: "#f9fafb", padding: "0 14px", display: "flex", alignItems: "center", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: C.forest, borderRight: `1.5px solid ${C.border}` }}>
+                <div style={{ display: "flex", alignItems: "stretch", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden" }}>
+                  <div style={{ background: "#f9fafb", padding: "0 16px", display: "flex", alignItems: "center", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 18, color: C.forest, borderRight: `1.5px solid ${C.border}` }}>
                     {isDomestic ? "₹" : "$"}
                   </div>
                   <input type="number" min="1" value={customAmt}
-                    onChange={e => { setCustomAmt(e.target.value); setAmount("custom"); setErrors(er => ({ ...er, amount: false })); }}
-                    placeholder="Enter custom amount"
-                    style={{ flex: 1, border: "none", padding: "12px 14px", fontFamily: "'Inter',sans-serif", fontSize: 14, color: C.text, outline: "none", background: "transparent" }} />
+                    onChange={e => { setCustomAmt(e.target.value); setErrors(er => ({ ...er, amount: false })); }}
+                    placeholder="Enter amount"
+                    style={{ flex: 1, border: "none", padding: "14px", fontFamily: "'Inter',sans-serif", fontSize: 18, fontWeight: 600, color: C.text, outline: "none", background: "transparent" }} />
                 </div>
               </div>
 
@@ -514,28 +504,13 @@ export default function DonatePage() {
 
               {/* ── Summary + Submit ── */}
               <div style={{ background: C.forest, borderRadius: 16, padding: "20px 24px" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                  <div>
-                    <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,0.6)", marginBottom: 3 }}>{program} · {frequency === "once" ? "One-time" : frequency}</div>
-                    <div style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: 26, fontWeight: 700, color: "#fff" }}>
-                      {finalAmount && Number(finalAmount) > 0
-                        ? `${isDomestic ? "₹" : "$"}${Number(finalAmount).toLocaleString()}`
-                        : <span style={{ fontSize: 16, fontWeight: 400, color: "rgba(255,255,255,0.4)" }}>Select an amount above</span>}
-                    </div>
-                  </div>
-                  <div style={{ textAlign: "right" }}>
-                    <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 3 }}>via</div>
-                    <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.8)" }}>
-                      {isDomestic ? "Razorpay" : "Stripe"}
-                    </div>
-                  </div>
-                </div>
                 <button type="submit"
-                  style={{ width: "100%", padding: "16px", border: "none", borderRadius: 12, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 16, background: "#fff", color: C.forest, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "opacity 0.2s" }}
+                  style={{ width: "100%", padding: "16px", border: "none", borderRadius: 12, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 16, background: "#fff", color: C.forest, cursor: "pointer", transition: "opacity 0.2s" }}
                   onMouseEnter={e => e.currentTarget.style.opacity = "0.9"}
                   onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-                  <Heart size={18} color={C.forest} />
-                  {isDomestic ? "Donate via Razorpay" : "Continue to Card Payment"}
+                  {finalAmount && Number(finalAmount) > 0
+                    ? `Donate ${isDomestic ? "₹" : "$"}${Number(finalAmount).toLocaleString()}`
+                    : "Donate"}
                 </button>
                 <div style={{ marginTop: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 5, fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
                   <Lock size={11} /> Secure & tax-deductible as per applicable laws
@@ -547,7 +522,7 @@ export default function DonatePage() {
           </div>
 
           {/* ── Sidebar ── */}
-          <div className="donate-sidebar" style={{ flex: "0 0 280px", position: "sticky", top: 100 }}>
+          <div className="donate-sidebar" style={{ flex: "0 0 280px", maxHeight: "80vh", overflowY: "auto", paddingRight: 4 }}>
 
             {/* Impact preview */}
             <div style={{ background: C.white, borderRadius: 16, padding: 24, border: `1px solid ${C.border}`, marginBottom: 16 }}>
@@ -594,6 +569,23 @@ export default function DonatePage() {
 
           </div>
         </div>
+      </div>
+
+      {/* FAQ */}
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "8px 24px 80px" }}>
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
+          <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: C.gold, marginBottom: 8 }}>FAQ</div>
+          <h2 style={{ fontSize: "clamp(22px,3vw,28px)", fontWeight: 700 }}>Common questions</h2>
+        </div>
+        {DONATION_FAQS.map((faq, i) => (
+          <div key={i} style={{ borderBottom: `1px solid ${C.border}`, padding: "16px 0", cursor: "pointer" }} onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 14 }}>
+              <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, fontWeight: 600 }}>{faq.q}</h3>
+              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: C.forest, transition: "transform 0.3s", transform: openFaq === i ? "rotate(45deg)" : "none", flexShrink: 0 }}>+</span>
+            </div>
+            {openFaq === i && <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, lineHeight: 1.65, color: C.textMid, paddingTop: 10 }}>{faq.a}</p>}
+          </div>
+        ))}
       </div>
 
       <Footer />
