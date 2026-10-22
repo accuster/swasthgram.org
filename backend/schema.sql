@@ -20,6 +20,26 @@ CREATE TABLE IF NOT EXISTS donations (
   INDEX idx_donor_email (donor_email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Partnership enquiries (NGO/corporate/government/individual partners). A
+-- partnership contribution is paid through the same flow as a donation (see
+-- `donations`, program = 'Partnership') — donation_id links back to that row.
+-- Not a FK since partner_inquiries can outlive or precede that payment record.
+CREATE TABLE IF NOT EXISTS partner_inquiries (
+  id            INT UNSIGNED  AUTO_INCREMENT PRIMARY KEY,
+  partner_type  VARCHAR(50)   NOT NULL,
+  name          VARCHAR(255)  NOT NULL,
+  email         VARCHAR(255)  NOT NULL,
+  phone         VARCHAR(32)   NOT NULL,
+  country       VARCHAR(100)  NOT NULL,
+  organization  VARCHAR(255)  NOT NULL,
+  website       VARCHAR(500)  NULL,
+  notes         TEXT          NOT NULL,
+  donation_id   INT UNSIGNED  NULL,
+  created_at    TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_partner_inquiries_email (email),
+  INDEX idx_partner_inquiries_donation (donation_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Gala ticket booking (guest checkout — no user account, so no user_id FK).
 -- One row per booking (one checkout by one person).
 CREATE TABLE IF NOT EXISTS gala_bookings (

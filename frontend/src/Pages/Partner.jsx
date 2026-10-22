@@ -140,11 +140,11 @@ export default function PartnerPage() {
     return () => { mountedRef.current = false; };
   }, [step]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  async function submitPartnerInquiry() {
+  async function submitPartnerInquiry(donationId) {
     const res = await fetch(`${API_BASE}/partner-inquiry`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ partnerType, name, phone, country, email, organization: org, website, notes }),
+      body: JSON.stringify({ partnerType, name, phone, country, email, organization: org, website, notes, donationId }),
     });
     const data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.error || "Payment succeeded, but the enquiry could not be submitted.");
@@ -162,11 +162,12 @@ export default function PartnerPage() {
       if (error) { setErrMsg(error.message); setStep("error"); return; }
       if (paymentIntent && (paymentIntent.status === "succeeded" || paymentIntent.status === "processing")) {
         setStep("processing");
-        await fetch(`${API_BASE}/confirm-stripe-payment`, {
+        const confirmRes = await fetch(`${API_BASE}/confirm-stripe-payment`, {
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ paymentIntentId: paymentIntent.id, name, email, phone, amount, program: "Partnership", frequency: "once" }),
         });
-        await submitPartnerInquiry();
+        const confirmData = await confirmRes.json().catch(() => ({}));
+        await submitPartnerInquiry(confirmData.donationId);
         setStep("success");
       } else { setErrMsg("Payment could not be completed."); setStep("error"); }
     } catch (err) { setErrMsg(err.message || "Unexpected error."); setStep("error"); }
@@ -198,7 +199,7 @@ export default function PartnerPage() {
           });
           const vd = await verify.json();
           if (!vd.success) { setErrMsg(vd.error || "Payment verification failed."); setStep("error"); return; }
-          await submitPartnerInquiry();
+          await submitPartnerInquiry(vd.donationId);
           setStep("success");
         } catch (err) { setErrMsg(err.message || "Unexpected error."); setStep("error"); }
       },

@@ -207,6 +207,20 @@ async function sendPartnerNotification({ partnerType, name, organization, email,
   }
 }
 
+// ─── Helper: Save a partnership enquiry (best-effort, never blocks the emails) ─
+async function savePartnerInquiry({ partnerType, name, email, phone, country, organization, website, notes, donationId }) {
+  try {
+    await db.execute(
+      `INSERT INTO partner_inquiries (partner_type, name, email, phone, country, organization, website, notes, donation_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [partnerType, name, email, phone, country, organization, website || null, notes, donationId || null]
+    );
+    console.log(`[DB] Partner inquiry saved for ${email}`);
+  } catch (err) {
+    console.error("[DB] Failed to save partner inquiry:", err.message);
+  }
+}
+
 // ─── Health check ─────────────────────────────────────────────────────────────
 app.get("/api/health", async (_req, res) => {
   try {
@@ -217,16 +231,17 @@ app.get("/api/health", async (_req, res) => {
   }
 });
 
-// ─── Partnership Enquiry — Thank-you + Notification (no DB) ──────────────────
+// ─── Partnership Enquiry — saves to DB, then Thank-you + Notification emails ──
 app.post("/api/partner-inquiry", async (req, res) => {
   try {
-    const { partnerType, name, phone, country, email, organization, website, notes } = req.body;
+    const { partnerType, name, phone, country, email, organization, website, notes, donationId } = req.body;
 
     if (!partnerType || !name || !phone || !country || !email || !organization || !notes) {
       return res.status(400).json({ error: "Missing required fields." });
     }
 
     await Promise.all([
+      savePartnerInquiry({ partnerType, name, email, phone, country, organization, website, notes, donationId }),
       sendPartnerThankYou({ name, email, partnerType, organization }),
       sendPartnerNotification({ partnerType, name, organization, email, phone, country, website, notes }),
     ]);
