@@ -75,16 +75,16 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SBX_DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          # ssh-keyscan occasionally fails on a transient network blip between
-          # the runner and the VPS — retry a few times before giving up.
-          for i in 1 2 3 4 5; do
-            if ssh-keyscan -H "$SERVER_HOST" >> ~/.ssh/known_hosts 2>/dev/null; then
-              break
-            fi
-            echo "ssh-keyscan attempt $i failed, retrying in 5s..."
-            sleep 5
-          done
-          grep -q "$SERVER_HOST" ~/.ssh/known_hosts || { echo "ssh-keyscan failed after 5 attempts"; exit 1; }
+          # Host key pinned here instead of live ssh-keyscan — keyscan kept
+          # failing (3 runs in a row on 2026-10-22) on a connection blip
+          # between the runner and the VPS even with retries, so this avoids
+          # that network round-trip at deploy time altogether. Re-fetch with
+          # `ssh-keyscan -H 147.93.106.176` if the server's host key changes.
+          cat >> ~/.ssh/known_hosts <<'EOF'
+          |1|okBu62iDDPSje7MOGgUO5+uPqI4=|8DauRddPfC4U+BF36ZOdOg1T5ho= ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC+QyV1rbnaVFpA8zVOgcTYsHI4DhdkXjNDd1RNej09T1DLPWWmS46c7ejEtng25Ypq9R5rXWrvu6tmhWBlT4n/pt9yJiHI75VHjOZNvp1fshesqI/KV4nym00eD+BVLeTfl+ry4nd0ufc+klLY7vGkq4HA8uChIzZLTol9OebNHl2aWX7DsUng0IaSfPxMflxFSYtssoYGYT3D7oseqv2WZLijj2GqkbA75kmbxCDf9xT5djLLbUHy41s4gNzKhLLQ1n7wvlj8dIe729hCNZw9jBt7IZ4RC3X9TKdHkum3bFZcWlhelwqz0Mk0NmttntYGZCovK5q+85+4Ayfbyk/pRjBOpMtj/yMQkhwjXFLD3oHnfgc0+D5iWU2ZjlVApxrbTb1wy25n/eGWYvgHRpOJFnQ4aABqbWgDK4TdMQzBnDdaFHwNbchwopUv5dKU31qsPxFJkssNbMn8CR3p5RiGJqSOurq2naVJEyUCq3oUFxA7pPrAs2xE/67wLRjAyxU=
+          |1|mzBjjTta4Hecr1NJAG1FUTgHWVw=|N492/jtTW3cnb3N0Jd7/hN0MQLM= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOC2OBHyEn/eBmS1pOuvnDRQn4GaXcEld00cKI8n7b2sE4tX3iM3Rt28PTx0RPITcecGiEdbwtzjXYuBggGxPRw=
+          |1|88Etru5CHrXBwMG2Hu/jDL1623w=|YKJvSjghCLIRjoLn4vt0J8qZZPg= ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJG6AHC1M0bpWPsoFEFujMAdlXu1WYVIisvUCdR/LgkP
+          EOF
 
       - name: Upload and deploy
         run: |
