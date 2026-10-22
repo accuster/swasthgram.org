@@ -3,8 +3,6 @@ const { pool: db, withTransaction } = require("../db");
 const mailer = require("../mailer");
 const transactionService = require("../transactionService");
 
-const SOURCE_TYPE = "donation";
-
 const APP_URL = process.env.APP_URL || "https://swasthgram.org";
 
 // ─── One-Time Thank-You Token Store ──────────────────────────────────────────
@@ -36,9 +34,17 @@ function consumeThankYouToken(token) {
 }
 
 // ─── Save donation + its payment transaction to MySQL ────────────────────────
-async function saveDonation({ name, email, phone, state, amount, currency, program, frequency, gateway, paymentId, orderId }) {
+// A partnership contribution goes through this exact same flow (program ===
+// "Partnership") — it still gets a `donations` row (amount/donor facts live
+// there same as any gift), but its transaction is tagged source_type =
+// 'partnership' instead of 'donation' so it's distinguishable in the ledger.
+async function saveDonation({
+  name, email, phone, state, amount, currency, program, frequency, gateway, paymentId, orderId,
+  chargeId, paymentMethod, cardBrand, cardLast4, receiptUrl, gatewayResponse,
+}) {
   try {
     let donationId;
+    const sourceType = program === "Partnership" ? "partnership" : "donation";
     await withTransaction(async (conn) => {
       const [result] = await conn.execute(
         `INSERT INTO donations
@@ -48,7 +54,7 @@ async function saveDonation({ name, email, phone, state, amount, currency, progr
       );
       donationId = result.insertId;
       await transactionService.insertTransaction(conn, {
-        source_type: SOURCE_TYPE,
+        source_type: sourceType,
         source_id: donationId,
         type: "payment",
         status: "succeeded",
@@ -57,6 +63,12 @@ async function saveDonation({ name, email, phone, state, amount, currency, progr
         gateway,
         gateway_payment_id: paymentId,
         gateway_order_id: orderId || null,
+        charge_id: chargeId || null,
+        payment_method: paymentMethod || null,
+        card_brand: cardBrand || null,
+        card_last4: cardLast4 || null,
+        receipt_url: receiptUrl || null,
+        gateway_response: gatewayResponse ? JSON.stringify(gatewayResponse) : null,
         processed_at: new Date(),
       });
     });

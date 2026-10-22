@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS gala_booking_seats (
 -- since it targets a different table depending on source_type.
 CREATE TABLE IF NOT EXISTS transactions (
     id                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    source_type         ENUM('gala_booking','donation') NOT NULL,
+    source_type         ENUM('gala_booking','donation','partnership') NOT NULL,
     source_id           BIGINT UNSIGNED NOT NULL,
     type                ENUM('payment','refund','dispute') NOT NULL DEFAULT 'payment',
     status              ENUM('initiated','succeeded','failed','cancelled','pending') NOT NULL DEFAULT 'initiated',

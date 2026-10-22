@@ -45,9 +45,12 @@ exports.confirmStripePayment = async (req, res) => {
     const { paymentIntentId, name, email, phone, state, amount, program, frequency } = req.body;
     if (!paymentIntentId) return res.status(400).json({ error: "Missing paymentIntentId." });
 
-    const intent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    const intent = await stripe.paymentIntents.retrieve(paymentIntentId, { expand: ["latest_charge"] });
     if (intent.status !== "succeeded")
       return res.status(400).json({ error: `Payment not succeeded. Status: ${intent.status}` });
+
+    const charge = intent.latest_charge && typeof intent.latest_charge === "object" ? intent.latest_charge : null;
+    const card = charge && charge.payment_method_details && charge.payment_method_details.card;
 
     const donationId = await donationService.saveDonation({
       name, email, phone, state,
@@ -57,6 +60,12 @@ exports.confirmStripePayment = async (req, res) => {
       gateway:   "stripe",
       paymentId: paymentIntentId,
       orderId:   null,
+      chargeId:       charge ? charge.id : null,
+      paymentMethod:  charge && charge.payment_method_details ? charge.payment_method_details.type : null,
+      cardBrand:      card ? card.brand : null,
+      cardLast4:      card ? card.last4 : null,
+      receiptUrl:     charge ? charge.receipt_url : null,
+      gatewayResponse: charge || intent,
     });
 
     await donationService.sendReceipt({ donationId, name, email, amount, currency: "USD", program, frequency, gateway: "stripe", paymentId: paymentIntentId });
@@ -134,6 +143,15 @@ exports.verifyRazorpayPayment = async (req, res) => {
     if (expected !== razorpay_signature)
       return res.status(400).json({ error: "Signature mismatch. Payment not verified." });
 
+    // Best-effort enrichment — a failed lookup here shouldn't block recording
+    // the already-verified payment.
+    let payment = null;
+    try {
+      payment = await razorpay.payments.fetch(razorpay_payment_id, { expand: ["card"] });
+    } catch (err) {
+      console.error("[Razorpay] Could not fetch payment details for enrichment:", err.message);
+    }
+
     const donationId = await donationService.saveDonation({
       name, email, phone, state,
       amount:    Number(amount),
@@ -142,6 +160,10 @@ exports.verifyRazorpayPayment = async (req, res) => {
       gateway:   "razorpay",
       paymentId: razorpay_payment_id,
       orderId:   razorpay_order_id,
+      paymentMethod:   payment ? payment.method : null,
+      cardBrand:       payment && payment.card ? payment.card.network : null,
+      cardLast4:       payment && payment.card ? payment.card.last4 : null,
+      gatewayResponse: payment,
     });
 
     await donationService.sendReceipt({ donationId, name, email, amount, currency: "INR", program, frequency, gateway: "razorpay", paymentId: razorpay_payment_id });
