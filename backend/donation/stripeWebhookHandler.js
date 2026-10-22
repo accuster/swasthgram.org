@@ -7,6 +7,7 @@
 const stripe = require("../stripeClient");
 const { pool } = require("../db");
 const donationService = require("./donationService");
+const transactionService = require("../transactionService");
 
 async function alreadyRecorded(paymentIntentId) {
   const [[row]] = await pool.query(
@@ -63,4 +64,44 @@ async function handlePaymentIntentSucceeded(event) {
   }
 }
 
-module.exports = { handlePaymentIntentSucceeded };
+// A Stripe refund (automatic or manual, from the dashboard or API) — only
+// acts if this payment belongs to a donation/partnership transaction; gala
+// booking refunds are handled separately by gala/paymentService.js.
+async function handleChargeRefunded(event) {
+  const charge = event.data.object;
+  const paymentIntentId = charge.payment_intent;
+  if (!paymentIntentId) return;
+
+  if (await transactionService.alreadyProcessed(pool, event.id)) return;
+
+  const [[existing]] = await pool.query(
+    `SELECT source_type, source_id FROM transactions
+      WHERE gateway_payment_id = ? AND gateway = 'stripe' AND type = 'payment' AND status = 'succeeded'
+      ORDER BY id DESC LIMIT 1`,
+    [paymentIntentId]
+  );
+  if (!existing || !["donation", "partnership"].includes(existing.source_type)) return; // not ours
+
+  const refunded = await transactionService.sumRefunded(existing.source_type, existing.source_id, pool);
+  const newRefund = Math.max(0, charge.amount_refunded / 100 - refunded);
+  if (newRefund <= 0) return;
+
+  await transactionService.insertTransaction(pool, {
+    source_type: existing.source_type,
+    source_id: existing.source_id,
+    type: "refund",
+    status: "succeeded",
+    amount: newRefund,
+    currency: charge.currency.toUpperCase(),
+    gateway: "stripe",
+    gateway_payment_id: paymentIntentId,
+    charge_id: charge.id,
+    gateway_event_id: event.id,
+    receipt_url: charge.receipt_url,
+    gateway_response: JSON.stringify(charge),
+    processed_at: new Date(),
+  });
+  console.log(`[Stripe webhook] Recorded refund of ${newRefund} for ${existing.source_type} #${existing.source_id}`);
+}
+
+module.exports = { handlePaymentIntentSucceeded, handleChargeRefunded };

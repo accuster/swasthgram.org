@@ -8,7 +8,7 @@
 const express = require("express");
 const stripe = require("./stripeClient");
 const galaPaymentService = require("./gala/paymentService");
-const { handlePaymentIntentSucceeded } = require("./donation/stripeWebhookHandler");
+const { handlePaymentIntentSucceeded, handleChargeRefunded } = require("./donation/stripeWebhookHandler");
 const { handleRazorpayWebhook } = require("./donation/razorpayWebhookHandler");
 
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
@@ -24,8 +24,14 @@ router.post("/stripe", express.raw({ type: "application/json" }), async (req, re
   }
 
   try {
-    if (event.type.startsWith("checkout.session.") || event.type === "charge.refunded") {
+    if (event.type.startsWith("checkout.session.")) {
       await galaPaymentService.processEvent(event);
+    } else if (event.type === "charge.refunded") {
+      // A refund could belong to either a gala booking or a donation/
+      // partnership payment — try both, each independently no-ops if it's
+      // not theirs.
+      await galaPaymentService.processEvent(event);
+      await handleChargeRefunded(event);
     } else if (event.type === "payment_intent.succeeded") {
       await handlePaymentIntentSucceeded(event);
     }
