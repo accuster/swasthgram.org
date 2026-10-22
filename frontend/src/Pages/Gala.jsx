@@ -293,8 +293,6 @@ export default function GalaPage() {
         .gala-seat.free:hover circle { fill: ${C.greenSoft}; stroke: ${C.green}; stroke-width: 2.5; }
         .gala-btn:hover:not(:disabled) { background: ${C.greenDark}; }
         .gala-gcard:hover { border-color: #bcd0c2; transform: translateY(-2px); }
-        .gala-mbar { position: fixed; left: 0; right: 0; bottom: 0; display: none; align-items: center; justify-content: space-between; gap: 12px; background: #fff; border-top: 1px solid ${C.line}; box-shadow: 0 -4px 24px #17293710; padding: 12px 20px calc(12px + env(safe-area-inset-bottom,0px)); z-index: 10; }
-        .gala-mbar.show { display: flex; }
         @media (max-width: 1050px) {
           .gala-wrap { padding: 90px 24px 70px; }
           .gala-grid, .gala-about { grid-template-columns: minmax(0,1fr) 280px !important; }
@@ -304,7 +302,6 @@ export default function GalaPage() {
           .gala-grid, .gala-about { grid-template-columns: 1fr !important; }
           .gala-panel { position: static !important; }
           .gala-wrap { padding-bottom: 110px; }
-          .gala-mbar.show { display: flex; }
         }
         @media (max-width: 600px) {
           .gala-wrap { padding: 84px 16px 110px; }
@@ -611,14 +608,6 @@ export default function GalaPage() {
 
       </div>
       <Footer />
-
-      <div className={`gala-mbar${idsSorted.length > 0 && !done ? " show" : ""}`}>
-        <p style={{ margin: 0, fontSize: 11, color: C.muted }}>
-          <span>{idsSorted.length} seat{idsSorted.length !== 1 ? "s" : ""} selected</span>
-          <strong style={{ display: "block", fontSize: 20, color: C.ink }}>{fmt(total)}</strong>
-        </p>
-        <button className="gala-btn" type="button" onClick={scrollToPanel} style={{ width: "auto", minWidth: 130, border: 0, borderRadius: 8, background: C.green, color: "#fff", fontSize: 12, fontWeight: 600, padding: "12px 18px", cursor: "pointer" }}>Continue</button>
-      </div>
     </div>
   );
 }
