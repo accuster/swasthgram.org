@@ -83,13 +83,22 @@ export default function Header() {
           position: relative;
         }
         .nav-link-active {
-          color: ${COLORS.text} !important;
-          background: ${COLORS.gold};
+          color: ${COLORS.forest} !important;
+          background: transparent;
           border-radius: 0;
           font-weight: 600;
         }
+        .nav-link-active::after {
+          content: '';
+          position: absolute;
+          left: 16px;
+          right: 16px;
+          bottom: 0;
+          height: 2px;
+          background: ${COLORS.forest};
+        }
         .nav-link-active:hover {
-          background: ${COLORS.goldDark};
+          background: transparent;
         }
         .programs-wrapper {
           position: relative;
