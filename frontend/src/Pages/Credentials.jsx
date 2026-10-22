@@ -676,7 +676,7 @@ function CTA() {
         <h2 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(22px,4vw,34px)", fontWeight: 700, color: "#fff", marginBottom: 12 }}>67,660 Camps. 57 Lakh+ Lives. Still Going.</h2>
         <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,0.74)", maxWidth: 460, margin: "0 auto 28px", lineHeight: 1.7 }}>Registered in India and the United States. Every rupee and every dollar goes directly to community care.</p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <a href="https://swasthgram.org/donate" style={{ display: "inline-block", background: cc.gold, color: "#fff", borderRadius: 8, padding: "12px 26px", fontFamily: "'Inter',sans-serif", fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Donate Now</a>
+          <a href="/donate" style={{ display: "inline-block", background: cc.gold, color: "#fff", borderRadius: 8, padding: "12px 26px", fontFamily: "'Inter',sans-serif", fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Donate Now</a>
           <a href="/about" style={{ display: "inline-block", background: "transparent", border: "1.5px solid rgba(255,255,255,0.45)", color: "#fff", borderRadius: 8, padding: "12px 26px", fontFamily: "'Inter',sans-serif", fontSize: 14, fontWeight: 600, textDecoration: "none" }}>Learn About Us</a>
         </div>
       </FadeIn>
