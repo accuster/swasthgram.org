@@ -30,9 +30,3 @@ exports.createCheckout = wrap(async (req, res) => {
 exports.getPaymentStatus = wrap(async (req, res) => {
   res.json(await paymentService.getPaymentStatus(req.params.ref.toUpperCase()));
 });
-
-// POST /api/gala/webhook/stripe  (raw body, called by Stripe only)
-exports.stripeWebhook = wrap(async (req, res) => {
-  const result = await paymentService.handleWebhook(req.body, req.headers["stripe-signature"]);
-  res.json(result);
-});

@@ -24,7 +24,7 @@ New-Item -ItemType Directory -Force (Join-Path $Staging "backend\migrations") | 
 Push-Location $RepoRoot
 try {
     Copy-Item package.json, package-lock.json $Staging
-    Copy-Item backend\server.js, backend\db.js, backend\stripeClient.js, backend\mailer.js, backend\transactionService.js, backend\package.json, backend\package-lock.json, backend\schema.sql, backend\.env.example (Join-Path $Staging "backend")
+    Copy-Item backend\server.js, backend\db.js, backend\stripeClient.js, backend\mailer.js, backend\webhookRouter.js, backend\transactionService.js, backend\package.json, backend\package-lock.json, backend\schema.sql, backend\.env.example (Join-Path $Staging "backend")
     Copy-Item backend\gala\*.js (Join-Path $Staging "backend\gala")
     Copy-Item backend\donation\*.js (Join-Path $Staging "backend\donation")
     Copy-Item backend\migrations\*.sql (Join-Path $Staging "backend\migrations")

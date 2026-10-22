@@ -11,7 +11,7 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 const express = require("express");
 const cors    = require("cors");
 
-const REQUIRED_ENV = ["DB_USER", "DB_PASSWORD", "DB_NAME", "STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET", "RAZORPAY_KEY_ID", "RAZORPAY_KEY_SECRET"];
+const REQUIRED_ENV = ["DB_USER", "DB_PASSWORD", "DB_NAME", "STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET", "RAZORPAY_KEY_ID", "RAZORPAY_KEY_SECRET", "RAZORPAY_WEBHOOK_SECRET"];
 const missingEnv = REQUIRED_ENV.filter((k) => !process.env[k]);
 if (missingEnv.length) {
   console.error(`[Startup] Missing required environment variable(s): ${missingEnv.join(", ")}. Check .env (see .env.example).`);
@@ -19,9 +19,10 @@ if (missingEnv.length) {
 }
 
 const { pool: db } = require("./db");
-const { router: galaRouter, webhookRouter: galaWebhookRouter } = require("./gala/routes");
+const { router: galaRouter } = require("./gala/routes");
 const { startReleaseHoldsJob } = require("./gala/releaseHoldsJob");
 const donationRouter = require("./donation/routes");
+const webhookRouter = require("./webhookRouter");
 const mailer = require("./mailer");
 
 const app      = express();
@@ -29,8 +30,10 @@ const PORT     = process.env.PORT    || 3002;
 const APP_URL  = process.env.APP_URL || "https://swasthgram.org";
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
-// Stripe webhook needs the raw, unparsed body, so it's mounted before express.json().
-app.use("/api/gala/webhook", galaWebhookRouter);
+// Stripe/Razorpay webhooks need the raw, unparsed body, so this is mounted
+// before express.json(). One shared endpoint per gateway for the whole site
+// (gala + donation + partnership) — see webhookRouter.js.
+app.use("/api/webhook", webhookRouter);
 
 app.use(express.json());
 app.use(cors({

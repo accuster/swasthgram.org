@@ -8,7 +8,6 @@ const { sendTicketEmail } = require("./ticketEmail");
 const SOURCE_TYPE = "gala_booking";
 
 const APP_URL = (process.env.APP_URL || "https://swasthgram.org").replace(/\/$/, "");
-const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
 const toCents = (usd) => Math.round(Number(usd) * 100);
 const fromCents = (cents) => Number(cents || 0) / 100;
@@ -89,14 +88,6 @@ async function createCheckoutSession(ref) {
 // ---------------------------------------------------------------------------
 // Webhooks
 // ---------------------------------------------------------------------------
-
-function constructEvent(rawBody, signature) {
-  try {
-    return stripe.webhooks.constructEvent(rawBody, signature, STRIPE_WEBHOOK_SECRET);
-  } catch (err) {
-    throw new AppError(400, `Webhook signature check failed: ${err.message}`);
-  }
-}
 
 async function bookingFromSession(conn, session) {
   const id = Number(session.metadata && session.metadata.booking_id);
@@ -226,9 +217,10 @@ async function handleChargeRefunded(event) {
   });
 }
 
-async function handleWebhook(rawBody, signature) {
-  const event = constructEvent(rawBody, signature);
-
+// Takes an ALREADY-VERIFIED Stripe event (signature checked by the caller —
+// see ../webhookRouter.js, which is the single Stripe webhook endpoint for
+// the whole site and dispatches here for gala-shaped events) and applies it.
+async function processEvent(event) {
   switch (event.type) {
     case "checkout.session.completed":
     case "checkout.session.async_payment_succeeded":
@@ -244,10 +236,9 @@ async function handleWebhook(rawBody, signature) {
       await handleChargeRefunded(event);
       break;
     default:
-      // Not used by the gala. Acknowledge so Stripe stops retrying.
+      // Not used by the gala.
       break;
   }
-  return { received: true, type: event.type };
 }
 
 // Used by the success page to show "Payment received" right away,
@@ -272,4 +263,4 @@ async function getPaymentStatus(ref) {
   };
 }
 
-module.exports = { createCheckoutSession, handleWebhook, getPaymentStatus };
+module.exports = { createCheckoutSession, processEvent, getPaymentStatus };

@@ -10,9 +10,7 @@ router.get("/bookings/:ref", ctrl.getBooking);
 router.post("/bookings/:ref/checkout", ctrl.createCheckout);
 router.get("/bookings/:ref/payment-status", ctrl.getPaymentStatus);
 
-// Stripe webhook needs the raw body to verify the signature, so it has its
-// own router that is mounted BEFORE express.json() in server.js.
-const webhookRouter = express.Router();
-webhookRouter.post("/stripe", express.raw({ type: "application/json" }), ctrl.stripeWebhook);
+// Stripe webhook events for gala bookings arrive through the site's single
+// shared webhook endpoint — see ../webhookRouter.js — not through here.
 
-module.exports = { router, webhookRouter };
+module.exports = { router };
