@@ -75,7 +75,16 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SBX_DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "$SERVER_HOST" >> ~/.ssh/known_hosts
+          # ssh-keyscan occasionally fails on a transient network blip between
+          # the runner and the VPS — retry a few times before giving up.
+          for i in 1 2 3 4 5; do
+            if ssh-keyscan -H "$SERVER_HOST" >> ~/.ssh/known_hosts 2>/dev/null; then
+              break
+            fi
+            echo "ssh-keyscan attempt $i failed, retrying in 5s..."
+            sleep 5
+          done
+          grep -q "$SERVER_HOST" ~/.ssh/known_hosts || { echo "ssh-keyscan failed after 5 attempts"; exit 1; }
 
       - name: Upload and deploy
         run: |
