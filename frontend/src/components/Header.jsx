@@ -92,9 +92,9 @@ export default function Header() {
           content: '';
           position: absolute;
           left: 50%;
-          top: calc(50% + 10px);
+          top: calc(50% + 13px);
           transform: translateX(-50%);
-          width: 60%;
+          width: 45%;
           height: 2px;
           background: ${COLORS.forest};
         }
