@@ -91,9 +91,8 @@ export default function Header() {
         .nav-link-active::after {
           content: '';
           position: absolute;
-          left: 50%;
+          left: 16px;
           top: calc(50% + 13px);
-          transform: translateX(-50%);
           width: 45%;
           height: 2px;
           background: ${COLORS.forest};
