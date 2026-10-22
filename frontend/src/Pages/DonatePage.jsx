@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import { useState, useEffect, useRef } from "react";
-import { Heart, Lock, CheckCircle, AlertCircle, Loader, HeartHandshake, Shield, Users, Tent, Microscope } from "lucide-react";
+import { Heart, Lock, CheckCircle, AlertCircle, Loader, HeartHandshake, Shield, ShieldCheck, Users, Tent, Microscope } from "lucide-react";
 
 const C = {
   forest: "#1B6B3A", forestDark: "#145A2F", forestDeep: "#0E4422",
@@ -403,43 +403,47 @@ export default function DonatePage() {
               {/* ── Region toggle ── */}
               <div style={{ background: C.white, borderRadius: 16, padding: "20px 24px", border: `1px solid ${C.border}`, marginBottom: 16 }}>
                 <div style={{ ...label, marginBottom: 12 }}>I am donating from</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                  {[{ key: "domestic", flag: "🇮🇳", label: "India" }, { key: "us", flag: "🇺🇸", label: "USA" }].map(opt => (
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+                  {[{ key: "domestic", flag: "🇮🇳", label: "India" }, { key: "us", flag: "🇺🇸", label: "USA" }, { key: "intl", flag: "🌍", label: "Rest of World" }].map(opt => (
                     <button key={opt.key} type="button"
                       onClick={() => { setRegion(opt.key); setCustomAmt(""); setErrors({}); }}
-                      style={{ padding: "12px 16px", borderRadius: 10, border: `2px solid ${region === opt.key ? C.forest : C.border}`, background: region === opt.key ? "#f0fdf4" : "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: region === opt.key ? C.forest : C.text, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all 0.2s" }}>
-                      <span style={{ fontSize: 20 }}>{opt.flag}</span> {opt.label}
+                      style={{ padding: "12px 10px", borderRadius: 10, border: `2px solid ${region === opt.key ? C.forest : C.border}`, background: region === opt.key ? "#f0fdf4" : "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: region === opt.key ? C.forest : C.text, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, transition: "all 0.2s" }}>
+                      <span style={{ fontSize: 18 }}>{opt.flag}</span> {opt.label}
                     </button>
                   ))}
                 </div>
                 <div style={{ marginTop: 12, fontFamily: "'Inter',sans-serif", fontSize: 12, color: C.textLight }}>
-                  {isDomestic
+                  {region === "domestic"
                     ? <span>Tax benefits under <strong style={{ color: C.text }}>Section 80G & 12A</strong> (India)</span>
-                    : <span>Tax-deductible via <strong style={{ color: C.text }}>IRS 501(c)(3)</strong> (USA)</span>}
+                    : region === "us"
+                    ? <span>Tax-deductible via <strong style={{ color: C.text }}>IRS 501(c)(3)</strong> (USA)</span>
+                    : <span>Secured by Stripe · tax deductibility varies by country of residence</span>}
                 </div>
               </div>
 
-              {/* ── Program ── */}
+              {/* ── Program + Frequency ── */}
               <div style={{ background: C.white, borderRadius: 16, padding: "20px 24px", border: `1px solid ${C.border}`, marginBottom: 16 }}>
-                <div style={{ ...label, marginBottom: 12 }}>Choose a program</div>
-                <select value={program} onChange={e => setProgram(e.target.value)} style={{ ...inp(false), cursor: "pointer" }}>
-                  {PROGRAMS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
-                </select>
-                <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: C.textLight, marginTop: 8 }}>
-                  {PROGRAMS.find(p => p.value === program)?.sub}
-                </div>
-              </div>
-
-              {/* ── Frequency ── */}
-              <div style={{ background: C.white, borderRadius: 16, padding: "20px 24px", border: `1px solid ${C.border}`, marginBottom: 16 }}>
-                <div style={{ ...label, marginBottom: 12 }}>Frequency</div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
-                  {[{ v: "once", l: "One-time" }, { v: "monthly", l: "Monthly" }, { v: "quarterly", l: "Quarterly" }, { v: "yearly", l: "Yearly" }].map(f => (
-                    <button key={f.v} type="button" onClick={() => setFrequency(f.v)}
-                      style={{ padding: "11px 8px", borderRadius: 10, border: `2px solid ${frequency === f.v ? C.forest : C.border}`, background: frequency === f.v ? C.forest : "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 12, color: frequency === f.v ? "#fff" : C.text, cursor: "pointer", transition: "all 0.2s" }}>
-                      {f.l}
-                    </button>
-                  ))}
+                <div className="form-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                  <div>
+                    <div style={{ ...label, marginBottom: 12 }}>Choose a program</div>
+                    <select value={program} onChange={e => setProgram(e.target.value)} style={{ ...inp(false), cursor: "pointer" }}>
+                      {PROGRAMS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+                    </select>
+                    <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: C.textLight, marginTop: 8 }}>
+                      {PROGRAMS.find(p => p.value === program)?.sub}
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ ...label, marginBottom: 12 }}>Frequency</div>
+                    <select value={frequency} onChange={e => setFrequency(e.target.value)} style={{ ...inp(false), cursor: "pointer" }}>
+                      {[{ v: "once", l: "One-time" }, { v: "monthly", l: "Monthly" }, { v: "quarterly", l: "Quarterly" }, { v: "yearly", l: "Yearly" }].map(f => (
+                        <option key={f.v} value={f.v}>{f.l}</option>
+                      ))}
+                    </select>
+                    <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: C.textLight, marginTop: 8 }}>
+                      {frequency === "once" ? "One-time contribution" : `Billed ${frequency}`}
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -513,7 +517,7 @@ export default function DonatePage() {
                     : "Donate"}
                 </button>
                 <div style={{ marginTop: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 5, fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
-                  <Lock size={11} /> Secure & tax-deductible as per applicable laws
+                  <ShieldCheck size={13} /> Your donation is secured with {isDomestic ? "Razorpay" : "Stripe"}
                 </div>
               </div>
 
