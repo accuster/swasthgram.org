@@ -52,15 +52,16 @@ function EventCountdown({ target }) {
   const h = Math.floor((diff % 86400000) / 3600000);
   const m = Math.floor((diff % 3600000) / 60000);
   const s = Math.floor((diff % 60000) / 1000);
+  const items = [["Days", d], ["Hrs", h], ["Min", m], ["Sec", s]];
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", rowGap: 8, gap: 8, marginTop: 2 }} aria-label="Countdown to the gala">
-      {[["Days", d], ["Hrs", h], ["Min", m], ["Sec", s]].map(([label, val], i) => (
-        <div key={label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ textAlign: "center", background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", borderRadius: 8, padding: "7px 11px", minWidth: 46 }}>
-            <div style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 19, color: "#fff", lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{String(val).padStart(2, "0")}</div>
-            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 8, letterSpacing: ".08em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginTop: 3 }}>{label}</div>
+    <div className="gala-countdown" style={{ display: "flex", flexWrap: "nowrap", alignItems: "center", gap: 8, marginTop: 2 }} aria-label="Countdown to the gala">
+      {items.map(([label, val], i) => (
+        <div key={label} style={{ display: "contents" }}>
+          <div className="countdown-chip" style={{ textAlign: "center", background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", borderRadius: 8, padding: "7px 11px", minWidth: 46 }}>
+            <div className="cd-num" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 19, color: "#fff", lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{String(val).padStart(2, "0")}</div>
+            <div className="cd-label" style={{ fontFamily: "'Inter',sans-serif", fontSize: 8, letterSpacing: ".08em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginTop: 3 }}>{label}</div>
           </div>
-          {i < 3 && <span style={{ color: "rgba(255,255,255,0.3)", fontWeight: 700, fontSize: 16 }}>:</span>}
+          {i < items.length - 1 && <span className="countdown-colon" style={{ color: "rgba(255,255,255,0.3)", fontWeight: 700, fontSize: 16 }}>:</span>}
         </div>
       ))}
     </div>
@@ -102,12 +103,19 @@ export default function EventsPage() {
         @media (max-width: 900px) {
           .grid-3 { grid-template-columns: 1fr !important; }
           .ticket-card { flex-direction: column !important; }
+          .ticket-card::before { top: -11px !important; left: 50% !important; transform: translateX(-50%) !important; }
+          .ticket-card::after { bottom: -11px !important; top: auto !important; left: 50% !important; transform: translateX(-50%) !important; }
           .ticket-stub-divider { width: 100% !important; height: 0 !important; border-left: none !important; border-top: 2px dashed rgba(255,255,255,0.3) !important; margin: 4px 0 !important; }
           .ticket-stub-divider::before { top: -9px !important; left: 50% !important; transform: translateX(-50%) !important; }
           .ticket-stub-divider::after { bottom: -9px !important; top: auto !important; left: 50% !important; transform: translateX(-50%) !important; }
         }
         @media (max-width: 480px) {
           .addr-line { white-space: normal !important; }
+          .gala-countdown { gap: 4px !important; }
+          .countdown-chip { padding: 5px 6px !important; min-width: 0 !important; }
+          .countdown-chip .cd-num { font-size: 14px !important; }
+          .countdown-chip .cd-label { font-size: 6.5px !important; }
+          .countdown-colon { font-size: 12px !important; }
         }
         .ticket-card {
           position: relative;
