@@ -53,7 +53,7 @@ function EventCountdown({ target }) {
   const m = Math.floor((diff % 3600000) / 60000);
   const s = Math.floor((diff % 60000) / 1000);
   return (
-    <div style={{ display: "flex", gap: 8, marginTop: 2 }} aria-label="Countdown to the gala">
+    <div style={{ display: "flex", flexWrap: "wrap", rowGap: 8, gap: 8, marginTop: 2 }} aria-label="Countdown to the gala">
       {[["Days", d], ["Hrs", h], ["Min", m], ["Sec", s]].map(([label, val], i) => (
         <div key={label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ textAlign: "center", background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", borderRadius: 8, padding: "7px 11px", minWidth: 46 }}>
@@ -105,6 +105,9 @@ export default function EventsPage() {
           .ticket-stub-divider { width: 100% !important; height: 0 !important; border-left: none !important; border-top: 2px dashed rgba(255,255,255,0.3) !important; margin: 4px 0 !important; }
           .ticket-stub-divider::before { top: -9px !important; left: 50% !important; transform: translateX(-50%) !important; }
           .ticket-stub-divider::after { bottom: -9px !important; top: auto !important; left: 50% !important; transform: translateX(-50%) !important; }
+        }
+        @media (max-width: 480px) {
+          .addr-line { white-space: normal !important; }
         }
         .ticket-card {
           position: relative;
@@ -181,7 +184,7 @@ export default function EventsPage() {
                   <Calendar size={15} color={cc.gold} /> November 18, 2026
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <MapPin size={15} color={cc.gold} style={{ flexShrink: 0 }} /> <span style={{ whiteSpace: "nowrap" }}>India Community Center, Milpitas, California, USA</span>
+                  <MapPin size={15} color={cc.gold} style={{ flexShrink: 0 }} /> <span className="addr-line" style={{ whiteSpace: "nowrap" }}>India Community Center, Milpitas, California, USA</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <Clock size={15} color={cc.gold} /> 6:00 PM – 9:00 PM PST
@@ -201,13 +204,15 @@ export default function EventsPage() {
 
           <div style={{ background: "#fff", border: `1px solid ${cc.border}`, borderRadius: 13, padding: "4px 22px", marginBottom: 40 }}>
             {activityTypes.map((item, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 16, padding: "18px 0", borderBottom: i < activityTypes.length - 1 ? `1px solid ${cc.border}` : "none" }}>
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 16, padding: "18px 0", borderBottom: i < activityTypes.length - 1 ? `1px solid ${cc.border}` : "none" }}>
                 <div style={{ width: 40, height: 40, borderRadius: 10, background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{item.icon}</div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: cc.text, marginBottom: 4 }}>{item.title}</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 4 }}>
+                    <div style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: cc.text }}>{item.title}</div>
+                    <span style={{ flexShrink: 0, fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 600, letterSpacing: ".04em", color: cc.gold, background: "#fbf3e6", border: `1px solid #f0ddb8`, borderRadius: 20, padding: "5px 12px", whiteSpace: "nowrap" }}>Announced soon</span>
+                  </div>
                   <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: cc.textMid, lineHeight: 1.6, margin: 0 }}>{item.desc}</p>
                 </div>
-                <span style={{ flexShrink: 0, fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 600, letterSpacing: ".04em", color: cc.gold, background: "#fbf3e6", border: `1px solid #f0ddb8`, borderRadius: 20, padding: "5px 12px", whiteSpace: "nowrap" }}>Announced soon</span>
               </div>
             ))}
           </div>

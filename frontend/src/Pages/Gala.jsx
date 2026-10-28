@@ -4,13 +4,13 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 
-const COLS = 5;
+const COLS = 4;
 // Visual sponsorship categories only — every seat is still charged EVENT.seatPrice
 // flat for now. The price labels are category badges, not live pricing yet.
 const TIERS = [
-  { name: "State Champion", labelColor: "#145a2f", rows: ["$250K–500K", "$100K–250K", "$50K–100K"] },
-  { name: "Village Champion", labelColor: "#7a2347", rows: ["$25K–50K", "$10K–25K", "$5K–10K"] },
-  { name: "Community", labelColor: "#1f3a5c", rows: ["$5K", "$5K"] },
+  { name: "State Champion", labelColor: "#145a2f", rows: ["$250K–500K", "$100K–250K"] },
+  { name: "Village Champion", labelColor: "#7a2347", rows: ["$25K–50K", "$10K–25K"] },
+  { name: "Community", labelColor: "#1f3a5c", rows: ["$5K"] },
 ];
 
 const EVENT = {
@@ -19,7 +19,7 @@ const EVENT = {
   seatPrice: 300,
   currency: "$",
   checkoutUrl: "",
-  tables: 40,
+  tables: 20,
   seatsPerTable: 10,
 };
 const TOTAL = EVENT.tables * EVENT.seatsPerTable;
@@ -338,7 +338,7 @@ export default function GalaPage() {
         .gala-fund-fill { animation: galaBarFill 1.8s ease-out forwards; }
         .gala-fund-bike { animation: galaBikeMove 1.8s ease-out forwards; }
         @media (max-width: 1050px) {
-          .gala-wrap { padding: 90px 24px 70px; }
+          .gala-wrap { padding: 116px 24px 70px; }
           .gala-grid, .gala-about { grid-template-columns: minmax(0,1fr) 280px !important; }
           .gala-att-list { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
         }
@@ -348,13 +348,15 @@ export default function GalaPage() {
           .gala-wrap { padding-bottom: 110px; }
         }
         @media (max-width: 600px) {
-          .gala-wrap { padding: 84px 16px 110px; }
+          .gala-wrap { padding: 116px 16px 110px; }
           .ticket-card { flex-direction: column !important; }
           .ticket-stub-divider { width: 100% !important; height: 0 !important; border-left: none !important; border-top: 2px dashed rgba(255,255,255,0.3) !important; margin: 4px 0 !important; }
           .ticket-stub-divider::before { top: -9px !important; left: 50% !important; transform: translateX(-50%) !important; }
           .ticket-stub-divider::after { bottom: -9px !important; top: auto !important; left: 50% !important; transform: translateX(-50%) !important; }
           .gala-att-list { grid-template-columns: 1fr !important; }
           .gala-pillars { grid-template-columns: 1fr !important; }
+          .gala-highlights { grid-template-columns: 1fr !important; }
+          .gala-event-mini + .gala-event-mini { border-left: none !important; padding-left: 0 !important; border-top: 1px solid ${C.line}; padding-top: 13px; margin-top: 2px; }
         }
       `}</style>
 
@@ -393,7 +395,7 @@ export default function GalaPage() {
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", border: `1px solid ${C.line}`, background: "#fff", borderRadius: 13, padding: "20px 24px", marginBottom: 30, gap: 22 }} aria-label="Event highlights">
+        <div className="gala-highlights" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", border: `1px solid ${C.line}`, background: "#fff", borderRadius: 13, padding: "20px 24px", marginBottom: 30, gap: 22 }} aria-label="Event highlights">
           {[
             { Icon: Calendar, k: "Save the date", v: "November 18, 2026" },
             { Icon: Clock, k: "The evening begins", v: "6:00 PM – 9:00 PM PST" },
@@ -409,12 +411,13 @@ export default function GalaPage() {
           ))}
         </div>
 
-        <div id="booking" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20, marginBottom: 17 }}>
+        {!(done && result?.paymentStatus === "paid") && (
+        <div id="booking" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 20, marginBottom: 17 }}>
           <div>
             <p style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: ".15em", color: C.green, fontWeight: 600, margin: "0 0 7px" }}>Make an impact</p>
             <h2 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontWeight: 400, fontSize: 25, letterSpacing: "-.025em", margin: 0 }}>Take your seat at the table</h2>
           </div>
-          <ol style={{ listStyle: "none", display: "flex", alignItems: "center", gap: 18, padding: 0, margin: 0, color: C.muted, fontSize: 11 }} aria-label="Booking steps">
+          <ol style={{ listStyle: "none", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 18, padding: 0, margin: 0, color: C.muted, fontSize: 11 }} aria-label="Booking steps">
             {["Choose seats", "Your details", "Reservation"].map((s, i) => (
               <li key={s} style={{ display: "flex", alignItems: "center", gap: 7, color: currentStep === i ? C.green : C.muted, fontWeight: currentStep === i ? 600 : 400 }}>
                 <b style={{ fontSize: 10, fontWeight: 600, display: "grid", placeItems: "center", width: 23, height: 23, borderRadius: "50%", background: currentStep === i ? C.green : "#e6ecf3", color: currentStep === i ? "#fff" : "#576b83" }}>{i + 1}</b>
@@ -423,7 +426,34 @@ export default function GalaPage() {
             ))}
           </ol>
         </div>
+        )}
 
+        {done && result?.paymentStatus === "paid" ? (
+          <div id="success-ticket" style={{ maxWidth: 420, margin: "40px auto 60px", textAlign: "center", padding: "10px 0" }}>
+            <div style={{ width: 60, height: 60, borderRadius: "50%", background: C.greenSoft, display: "grid", placeItems: "center", margin: "0 auto 20px" }}>
+              <CheckCircle2 size={30} color={C.green} strokeWidth={1.7} aria-hidden="true" />
+            </div>
+            <h2 style={{ font: "400 27px/1.3 'Libre Baskerville',Georgia,serif", margin: "0 0 10px" }}>Thank you{name.trim() ? `, ${name.trim().split(" ")[0]}` : ""}!</h2>
+            <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.7, margin: "0 0 26px" }}>
+              Your {(result?.ids || []).length > 1 ? "seats are" : "seat is"} reserved, and a ticket has been emailed to you. Every seat funds Swasthgram's work in the field.
+            </p>
+            <div style={{ background: "#fff", border: `1px solid ${C.line}`, borderRadius: 13, padding: "4px 20px", textAlign: "left", marginBottom: 24 }}>
+              {[
+                ["Booking reference", result?.ref],
+                ["Seats", (result?.ids || []).join(", ")],
+                ["Amount paid", `${fmt(result?.amount || 0)} USD`],
+              ].map(([k, v], i) => (
+                <div key={k} style={{ display: "flex", justifyContent: "space-between", gap: 10, padding: "13px 0", borderBottom: i < 2 ? `1px solid ${C.line}` : "none" }}>
+                  <span style={{ fontSize: 11, color: C.muted }}>{k}</span>
+                  <strong style={{ fontSize: 13 }}>{v}</strong>
+                </div>
+              ))}
+            </div>
+            <button type="button" onClick={bookMore} className="gala-btn" style={{ background: C.green, color: "#fff", border: 0, borderRadius: 8, padding: "13px 28px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+              Book more seats
+            </button>
+          </div>
+        ) : (
         <div className="gala-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) 300px", alignItems: "start", gap: 22 }}>
           <section ref={planRef} style={{ border: `1px solid ${C.line}`, borderRadius: 16, background: "#fff", overflow: "hidden", padding: "0 20px 20px" }} aria-label="Hall floor plan">
             <div style={{ margin: "0 -20px 0", padding: "20px 24px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, borderBottom: `1px solid ${C.line}` }}>
@@ -614,6 +644,7 @@ export default function GalaPage() {
             )}
           </aside>
         </div>
+        )}
 
         <section className="gala-about" style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) 355px", gap: 45, marginTop: 48, padding: "38px 0 0", borderTop: `1px solid ${C.line}` }} aria-labelledby="aboutTitle">
           <div>
