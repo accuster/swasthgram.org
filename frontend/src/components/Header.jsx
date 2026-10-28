@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ChevronDown, Heart } from "lucide-react";
+import { ChevronDown, Heart, X } from "lucide-react";
 import logoColor from "../assets/SwasthgramLogo.png";
 
 const COLORS = {
@@ -26,6 +26,11 @@ export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const isHome = location.pathname === "/";
+
+  useEffect(() => {
+    document.body.style.overflow = mobileMenu ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileMenu]);
 
   const handleNavClick = (e, section) => {
     e.preventDefault();
@@ -119,7 +124,9 @@ export default function Header() {
           left: 50%;
           transform: translateX(-50%);
           display: flex;
+          flex-direction: column;
           align-items: stretch;
+          min-width: 190px;
           background: #fff;
           border: 1px solid ${COLORS.border};
           border-radius: 10px;
@@ -134,13 +141,13 @@ export default function Header() {
         }
         .programs-dropdown-col {
           display: block;
-          padding: 10px 20px;
+          padding: 10px 16px;
           border-radius: 7px;
           font-family: 'Inter', sans-serif;
           font-size: 13px;
           font-weight: 600;
           color: ${COLORS.text};
-          text-align: center;
+          text-align: left;
           transition: background 0.15s, color 0.15s;
           white-space: nowrap;
         }
@@ -198,7 +205,70 @@ export default function Header() {
         }
         @media (min-width: 901px) {
           .mobile-toggle { display: none !important; }
-          .mobile-dropdown { display: none !important; }
+          .mobile-drawer { display: none !important; }
+        }
+        .mobile-drawer {
+          position: fixed;
+          inset: 0;
+          z-index: 1200;
+          background: #FDFBF7;
+          display: flex;
+          flex-direction: column;
+        }
+        .mobile-drawer-header {
+          height: 64px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 24px;
+          border-bottom: 1px solid ${COLORS.border};
+        }
+        .mobile-drawer-close {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #F1EFE8;
+          border: none;
+          cursor: pointer;
+        }
+        .mobile-drawer-links {
+          flex: 1;
+          overflow-y: auto;
+          padding: 8px 24px 0;
+          display: flex;
+          flex-direction: column;
+        }
+        .mobile-nav-link {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          padding: 18px 0;
+          font-family: 'Inter', sans-serif;
+          font-size: 18px;
+          font-weight: 600;
+          border: none;
+          border-bottom: 1px solid #F1EFE8;
+          background: none;
+          cursor: pointer;
+          text-align: left;
+        }
+        .mobile-drawer-actions {
+          flex-shrink: 0;
+          display: flex;
+          gap: 10px;
+          padding: 16px 24px 28px;
+        }
+        .mobile-drawer-actions .btn-partner,
+        .mobile-drawer-actions .btn-donate {
+          flex: 1;
+          justify-content: center;
+          padding: 16px 10px;
+          font-size: 14px;
         }
       `}</style>
 
@@ -325,36 +395,50 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile menu */}
-        {mobileMenu && (
-          <div className="mobile-dropdown" style={{
-            background: "rgba(253,251,247,0.98)", padding: "16px 24px",
-            display: "flex", flexDirection: "column", gap: 14,
-            alignItems: "flex-start", borderTop: `1px solid ${COLORS.border}`
-          }}>
+      </nav>
+
+      {/* Full-screen mobile drawer */}
+      {mobileMenu && (
+        <div className="mobile-drawer">
+          <div className="mobile-drawer-header">
+            <a href="/" onClick={(e) => { handleLogoClick(e); setMobileMenu(false); }} style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
+              <img src={logoColor} alt="Swasthgram" style={{ height: 32, width: "auto", display: "block" }} />
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 700, color: COLORS.text }}>
+                Swasth<span style={{ color: COLORS.forest }}>gram</span>
+              </span>
+            </a>
+            <button className="mobile-drawer-close" onClick={() => setMobileMenu(false)} aria-label="Close menu">
+              <X size={20} color={COLORS.text} />
+            </button>
+          </div>
+
+          <div className="mobile-drawer-links">
             {navLinks.map((link) =>
               link.label === "Home" ? (
                 <a
                   key={link.label}
                   href="/"
                   onClick={(e) => { handleLogoClick(e); setMobileMenu(false); }}
-                  className={`nav-link${isActive(link) ? " nav-link-active" : ""}`}
+                  className="mobile-nav-link"
                   style={{ color: isActive(link) ? COLORS.forest : COLORS.text }}
                 >
                   {link.label}
                 </a>
               ) : link.dropdown ? (
-                <div key={link.label} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6, width: "100%" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 4, cursor: "pointer" }}
-                    onClick={() => setMobilePrograms(!mobilePrograms)}>
-                    <span className={`nav-link${isActive(link) ? " nav-link-active" : ""}`} style={{ color: isActive(link) ? COLORS.forest : COLORS.text }}>{link.label}</span>
-                    <ChevronDown size={15} color={COLORS.text} style={{ opacity: 0.6, transition: "transform 0.2s", transform: mobilePrograms ? "rotate(180deg)" : "none" }} />
-                  </div>
+                <div key={link.label}>
+                  <button
+                    className="mobile-nav-link"
+                    style={{ color: isActive(link) ? COLORS.forest : COLORS.text }}
+                    onClick={() => setMobilePrograms(!mobilePrograms)}
+                  >
+                    {link.label}
+                    <ChevronDown size={18} color={COLORS.text} style={{ opacity: 0.6, transition: "transform 0.2s", transform: mobilePrograms ? "rotate(180deg)" : "none" }} />
+                  </button>
                   {mobilePrograms && (
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+                    <div style={{ display: "flex", flexDirection: "column", paddingLeft: 8, paddingBottom: 14 }}>
                       {link.dropdown.map((sub) => (
-                        <a key={sub.label} href={sub.href} className="nav-link"
-                          style={{ color: COLORS.forest, fontSize: 12 }}
+                        <a key={sub.label} href={sub.href}
+                          style={{ padding: "12px 0", fontFamily: "'Inter', sans-serif", fontSize: 15, fontWeight: 500, color: COLORS.forest }}
                           onClick={() => { setMobileMenu(false); setMobilePrograms(false); }}>
                           {sub.label}
                         </a>
@@ -364,35 +448,34 @@ export default function Header() {
                 </div>
               ) : link.href ? (
                 <a key={link.label} href={link.href}
-                  className={`nav-link${isActive(link) ? " nav-link-active" : ""}`}
+                  className="mobile-nav-link"
                   style={{ color: isActive(link) ? COLORS.forest : COLORS.text }}
                   onClick={() => setMobileMenu(false)}>
                   {link.label}
                 </a>
               ) : (
                 <button key={link.label}
-                  className={`nav-link${isActive(link) ? " nav-link-active" : ""}`}
+                  className="mobile-nav-link"
                   style={{ color: isActive(link) ? COLORS.forest : COLORS.text }}
                   onClick={(e) => handleNavClick(e, link.section)}>
                   {link.label}
                 </button>
               )
             )}
-            <div style={{ display: "flex", gap: 8 }}>
-              <a href="/partner-with-us" style={{ textDecoration: "none" }} onClick={() => setMobileMenu(false)}>
-                <button className="btn-partner" style={{ justifyContent: "center", padding: "12px 16px", fontSize: 13 }}>
-                  Partner With Us
-                </button>
-              </a>
-              <a href="/donate" style={{ textDecoration: "none" }}>
-                <button className="btn-donate" style={{ justifyContent: "center", padding: "13px 16px", fontSize: 13 }}>
-                  <Heart size={14} fill="#fff" />Donate Now
-                </button>
-              </a>
-            </div>
           </div>
-        )}
-      </nav>
+
+          <div className="mobile-drawer-actions">
+            <a href="/partner-with-us" style={{ textDecoration: "none", flex: 1 }} onClick={() => setMobileMenu(false)}>
+              <button className="btn-partner" style={{ width: "100%" }}>Partner With Us</button>
+            </a>
+            <a href="/donate" style={{ textDecoration: "none", flex: 1 }} onClick={() => setMobileMenu(false)}>
+              <button className="btn-donate" style={{ width: "100%" }}>
+                <Heart size={14} fill="#fff" />Donate Now
+              </button>
+            </a>
+          </div>
+        </div>
+      )}
     </>
   );
 }
