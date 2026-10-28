@@ -7,7 +7,7 @@ import { useRef, useState, useEffect } from "react";
 const COLORS = {
   forest: "#1B6B3A", forestDark: "#145A2F",
   gold: "#C8963E",
-  warmBg: "#FDFBF7", cream: "#F8F5EE", white: "#FFFFFF",
+  warmBg: "#FDFBF7", cream: "#F8F5EE", white: "#FFFFFF", heroBg: "#EDF3EF",
   text: "#1F2937", textMid: "#4B5563", textLight: "#6B7280", border: "#E8E4DC",
 };
 const cc = COLORS;
@@ -68,9 +68,9 @@ function EventCountdown({ target }) {
   );
 }
 
-function Section({ children, bg = cc.warmBg, id, padTop = 64 }) {
+function Section({ children, bg = cc.warmBg, id, padTop = 64, padBottom = 64 }) {
   return (
-    <section id={id} style={{ background: bg, padding: `${padTop}px 24px 64px`, position: "relative" }}>
+    <section id={id} style={{ background: bg, padding: `${padTop}px 24px ${padBottom}px`, position: "relative" }}>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         {children}
       </div>
@@ -156,19 +156,22 @@ export default function EventsPage() {
 
       <Header />
 
-      <FadeIn>
-        <Section id="events" bg={cc.white} padTop={110}>
-          <Breadcrumb items={[{ label: "Events" }]} theme="light" />
-          <div style={{ marginBottom: 36 }}>
-            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: 1.5, textTransform: "uppercase", color: cc.gold, marginBottom: 8 }}>Events</div>
-            <h1 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(26px,4vw,36px)", fontWeight: 700, color: cc.text, lineHeight: 1.2, marginBottom: 8 }}>
-              Upcoming camps & activities
-            </h1>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: cc.textMid, lineHeight: 1.7 }}>
-              Health camps, skilling batches, and clean-air deployments run on a rolling basis across the year. Specific dates and locations are announced as they're confirmed — follow our social channels or get in touch to find the next one near you.
-            </p>
-          </div>
+      <Section id="events" bg={cc.heroBg} padTop={110} padBottom={48}>
+        <Breadcrumb items={[{ label: "Events" }]} theme="light" />
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+          <span style={{ width: 6, height: 6, borderRadius: "50%", background: cc.gold, flexShrink: 0 }} />
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: cc.gold }}>Events</span>
+        </div>
+        <h1 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(30px,4.5vw,44px)", fontWeight: 700, color: cc.text, lineHeight: 1.12, marginBottom: 14 }}>
+          Upcoming camps & activities
+        </h1>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: cc.textMid, lineHeight: 1.7, maxWidth: 640 }}>
+          Health camps, skilling batches, and clean-air deployments run on a rolling basis across the year. Specific dates and locations are announced as they're confirmed — follow our social channels or get in touch to find the next one near you.
+        </p>
+      </Section>
 
+      <FadeIn>
+        <Section bg={cc.white} padTop={40}>
           <div className="ticket-card" style={{ background: `linear-gradient(135deg, ${cc.forestDark} 0%, ${cc.forest} 100%)`, borderRadius: 14, marginBottom: 32, display: "flex", alignItems: "stretch", overflow: "visible" }}>
             <div style={{ padding: "28px", display: "flex", gap: 16, alignItems: "flex-start", flex: "1 1 62%" }}>
               <div style={{ width: 52, height: 52, borderRadius: 12, background: "rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
