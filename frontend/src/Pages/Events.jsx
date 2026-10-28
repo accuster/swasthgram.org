@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
-import { Bike, GraduationCap, Wind, Bell, Share2, PartyPopper, MapPin, Ticket, Clock, Calendar } from "lucide-react";
+import { Bike, GraduationCap, Wind, Bell, Share2, PartyPopper, MapPin, Ticket, Clock, Calendar, ArrowRight } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 
 const COLORS = {
@@ -33,6 +33,36 @@ function FadeIn({ children }) {
   return (
     <div ref={ref} style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(20px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}>
       {children}
+    </div>
+  );
+}
+
+const GALA_DATE = new Date("2026-11-18T18:00:00-08:00").getTime();
+const GALA_SEATS_TOTAL = 400;
+const GALA_SEATS_BOOKED = 0;
+
+function EventCountdown({ target }) {
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const diff = Math.max(0, target - now);
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  return (
+    <div style={{ display: "flex", gap: 8, marginTop: 2 }} aria-label="Countdown to the gala">
+      {[["Days", d], ["Hrs", h], ["Min", m], ["Sec", s]].map(([label, val], i) => (
+        <div key={label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ textAlign: "center", background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", borderRadius: 8, padding: "7px 11px", minWidth: 46 }}>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 19, color: "#fff", lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{String(val).padStart(2, "0")}</div>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 8, letterSpacing: ".08em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginTop: 3 }}>{label}</div>
+          </div>
+          {i < 3 && <span style={{ color: "rgba(255,255,255,0.3)", fontWeight: 700, fontSize: 16 }}>:</span>}
+        </div>
+      ))}
     </div>
   );
 }
@@ -129,45 +159,55 @@ export default function EventsPage() {
           </div>
 
           <div className="ticket-card" style={{ background: `linear-gradient(135deg, ${cc.forestDark} 0%, ${cc.forest} 100%)`, borderRadius: 14, marginBottom: 32, display: "flex", alignItems: "stretch", overflow: "visible" }}>
-            <div style={{ padding: "28px", display: "flex", gap: 16, alignItems: "flex-start", flex: "1 1 70%" }}>
+            <div style={{ padding: "28px", display: "flex", gap: 16, alignItems: "flex-start", flex: "1 1 62%" }}>
               <div style={{ width: 52, height: 52, borderRadius: 12, background: "rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <PartyPopper size={26} color={cc.gold} />
               </div>
               <div>
                 <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: cc.gold, marginBottom: 6 }}>Save the Date · USA</div>
                 <h2 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(20px,2.5vw,26px)", fontWeight: 700, color: "#fff", marginBottom: 8, lineHeight: 1.25 }}>
-                  Swasthgram Fundraising Gala
+                  An Evening for Swasthgram
                 </h2>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,0.8)", lineHeight: 1.7 }}>
-                  Celebrating our first year in the United States. Registration details coming soon.
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,0.8)", lineHeight: 1.7, marginBottom: 18 }}>
+                  An evening of connection. A lasting impact on communities. Join us in bringing healthcare closer to those who need it most.
                 </p>
+                <EventCountdown target={GALA_DATE} />
               </div>
             </div>
             <div className="ticket-stub-divider" />
-            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 16, padding: "24px 28px", flex: "1 1 30%" }}>
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 14, padding: "22px 28px", flex: "1 1 38%" }}>
               <div style={{ display: "flex", flexDirection: "column", gap: 8, fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,0.8)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <Calendar size={15} color={cc.gold} /> November 12, 2026
+                  <Calendar size={15} color={cc.gold} /> November 18, 2026
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <MapPin size={15} color={cc.gold} /> India Community Center, Milpitas, CA
+                  <MapPin size={15} color={cc.gold} style={{ flexShrink: 0 }} /> <span style={{ whiteSpace: "nowrap" }}>India Community Center, Milpitas, California, USA</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <Clock size={15} color={cc.gold} /> 3:00 PM – 10:00 PM
+                  <Clock size={15} color={cc.gold} /> 6:00 PM – 9:00 PM PST
                 </div>
               </div>
-              <a href="/events/gala26" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: cc.gold, color: "#1a1a1a", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, padding: "12px 20px", borderRadius: 0, whiteSpace: "nowrap", alignSelf: "flex-start" }}>
-                <Ticket size={15} /> Get Ticket
+              <div>
+                <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,0.65)", marginBottom: 6 }}><strong style={{ color: "#fff", fontSize: 15 }}>{GALA_SEATS_BOOKED}</strong> of {GALA_SEATS_TOTAL} seats booked</div>
+                <div style={{ height: 5, borderRadius: 20, background: "rgba(255,255,255,0.15)", overflow: "hidden" }}>
+                  <div style={{ height: "100%", borderRadius: 20, background: cc.gold, width: `${(GALA_SEATS_BOOKED / GALA_SEATS_TOTAL) * 100}%` }} />
+                </div>
+              </div>
+              <a href="/events/gala26" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: cc.gold, color: "#1a1a1a", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, padding: "12px 20px", borderRadius: 8, whiteSpace: "nowrap", alignSelf: "flex-start" }}>
+                <Ticket size={15} /> Book Now <ArrowRight size={15} />
               </a>
             </div>
           </div>
 
-          <div className="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20, marginBottom: 40 }}>
+          <div style={{ background: "#fff", border: `1px solid ${cc.border}`, borderRadius: 13, padding: "4px 22px", marginBottom: 40 }}>
             {activityTypes.map((item, i) => (
-              <div key={i} style={{ background: cc.cream, borderRadius: 12, padding: "20px 20px", border: `1px solid ${cc.border}` }}>
-                <div style={{ width: 44, height: 44, borderRadius: 10, background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>{item.icon}</div>
-                <div style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: cc.text, marginBottom: 6 }}>{item.title}</div>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: cc.textMid, lineHeight: 1.6 }}>{item.desc}</p>
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 16, padding: "18px 0", borderBottom: i < activityTypes.length - 1 ? `1px solid ${cc.border}` : "none" }}>
+                <div style={{ width: 40, height: 40, borderRadius: 10, background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{item.icon}</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: cc.text, marginBottom: 4 }}>{item.title}</div>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: cc.textMid, lineHeight: 1.6, margin: 0 }}>{item.desc}</p>
+                </div>
+                <span style={{ flexShrink: 0, fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 600, letterSpacing: ".04em", color: cc.gold, background: "#fbf3e6", border: `1px solid #f0ddb8`, borderRadius: 20, padding: "5px 12px", whiteSpace: "nowrap" }}>Announced soon</span>
               </div>
             ))}
           </div>

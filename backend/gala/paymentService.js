@@ -27,8 +27,8 @@ async function createCheckoutSession(ref) {
   }
 
   const [seatRows] = await pool.query(
-    `SELECT CONCAT(table_label, seat_number) AS seat FROM gala_booking_seats
-      WHERE booking_id = ? ORDER BY table_label, seat_number`,
+    `SELECT CONCAT(table_label, '-', seat_number) AS seat FROM gala_booking_seats
+      WHERE booking_id = ? ORDER BY (table_label + 0), seat_number`,
     [booking.id]
   );
   const seatList = seatRows.map((r) => r.seat).join(", ");

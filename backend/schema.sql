@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS gala_bookings (
     phone_code         VARCHAR(5)      NOT NULL,              -- e.g. 1, 44, 91 (no +)
     phone_number       VARCHAR(20)     NOT NULL,
     seat_count         TINYINT UNSIGNED NOT NULL,
-    price_per_seat     DECIMAL(10,2)   NOT NULL DEFAULT 5000.00,
+    price_per_seat     DECIMAL(10,2)   NOT NULL DEFAULT 300.00,
     total_amount       DECIMAL(12,2)   NOT NULL,
     currency           CHAR(3)         NOT NULL DEFAULT 'USD',
     payment_status     ENUM('pending','paid','failed','refunded','cancelled') NOT NULL DEFAULT 'pending',
@@ -70,8 +70,8 @@ CREATE TABLE IF NOT EXISTS gala_bookings (
 CREATE TABLE IF NOT EXISTS gala_booking_seats (
     id           BIGINT UNSIGNED  NOT NULL AUTO_INCREMENT,
     booking_id   BIGINT UNSIGNED  NOT NULL,                  -- FK to gala_bookings.id
-    table_label  CHAR(1)          NOT NULL,                  -- A to L
-    seat_number  TINYINT UNSIGNED NOT NULL,                  -- 1 to 6
+    table_label  VARCHAR(2)       NOT NULL,                  -- table number, "1" to "40"
+    seat_number  TINYINT UNSIGNED NOT NULL,                  -- 1 to 10
     created_at   TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY (id),
@@ -80,8 +80,7 @@ CREATE TABLE IF NOT EXISTS gala_booking_seats (
     CONSTRAINT fk_gala_seats_booking
         FOREIGN KEY (booking_id) REFERENCES gala_bookings (id)
         ON DELETE CASCADE,
-    CONSTRAINT chk_gala_table CHECK (table_label BETWEEN 'A' AND 'L'),
-    CONSTRAINT chk_gala_seat  CHECK (seat_number BETWEEN 1 AND 6)
+    CONSTRAINT chk_gala_seat  CHECK (seat_number BETWEEN 1 AND 10)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- One row per money movement across the whole site: gala booking payments,

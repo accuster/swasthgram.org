@@ -15,7 +15,7 @@ const TIERS = [
 
 const EVENT = {
   name: "An Evening for Swasthgram",
-  meta: "November 12, 2026 · 3:00 PM – 10:00 PM. India Community Center, Milpitas, California, USA.",
+  meta: "November 18, 2026 · 6:00 PM – 9:00 PM PST. India Community Center, Milpitas, California, USA.",
   seatPrice: 300,
   currency: "$",
   checkoutUrl: "",
@@ -80,7 +80,7 @@ function layout(width) {
   const colPitch = (W - leftGutter - rightPad) / COLS;
   const x0 = leftGutter + colPitch / 2;
   const rowPitch = narrow ? 102 : 124;
-  const stageH = 360;
+  const stageH = 300;
 
   const pos = [];
   const tierMeta = [];
@@ -234,7 +234,6 @@ export default function GalaPage() {
 
   const { W, H, pos, tierMeta, entranceY, leftGutter } = useMemo(() => layout(width), [width]);
   const narrow = width < 640;
-  const bookedCount = Object.keys(taken).length;
   const idsSorted = [...selected].sort((a, b) => { const x = parseId(a), y = parseId(b); return x.t - y.t || x.s - y.s; });
   const total = idsSorted.length * EVENT.seatPrice;
   const currentStep = done ? 2 : idsSorted.length ? 1 : 0;
@@ -362,33 +361,6 @@ export default function GalaPage() {
       <Header />
       <div className="gala-wrap" style={{ position: "relative" }}>
         <Breadcrumb items={[{ label: "Events", href: "/events" }, { label: "Gala 2026" }]} theme="light" />
-        <div className="ticket-card" style={{ background: `linear-gradient(135deg, ${C.greenDeep} 0%, ${C.green} 100%)`, borderRadius: 14, marginBottom: 30, display: "flex", alignItems: "stretch", overflow: "visible" }}>
-          <div style={{ padding: 28, display: "flex", gap: 16, alignItems: "flex-start", flex: "1 1 62%" }}>
-            <div style={{ width: 52, height: 52, borderRadius: 12, background: "rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <Calendar size={26} color={C.gold} strokeWidth={1.7} aria-hidden="true" />
-            </div>
-            <div>
-              <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: C.gold, marginBottom: 8 }}>Save the Date · USA</div>
-              <h1 style={{ font: "700 clamp(22px,3vw,30px)/1.25 'Libre Baskerville',Georgia,serif", color: "#fff", margin: "0 0 8px" }}>{EVENT.name}</h1>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,0.8)", lineHeight: 1.7, margin: 0, maxWidth: "60ch" }}>An evening of connection. A lasting impact on communities. Join us in bringing healthcare closer to those who need it most.</p>
-            </div>
-          </div>
-          <div className="ticket-stub-divider" />
-          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 14, padding: "22px 28px", flex: "1 1 38%" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,0.8)" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}><Calendar size={15} color={C.gold} strokeWidth={1.7} aria-hidden="true" />November 12, 2026</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}><MapPin size={15} color={C.gold} strokeWidth={1.7} aria-hidden="true" />India Community Center, Milpitas, California, USA</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}><Clock size={15} color={C.gold} strokeWidth={1.7} aria-hidden="true" />3:00 PM – 10:00 PM</div>
-            </div>
-            <div aria-live="polite">
-              <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,0.65)", marginBottom: 6 }}><strong style={{ color: "#fff", fontSize: 15 }}>{bookedCount}</strong> of {TOTAL} seats booked</div>
-              <div className="bar-track">
-                <div className="bar-fill" style={{ width: `${(bookedCount / TOTAL) * 100}%` }} />
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div style={{ background: "linear-gradient(135deg,#0f1f2b 0%,#16303d 100%)", borderRadius: 14, marginBottom: 30, padding: "28px 32px" }} aria-label="Fundraising progress">
           <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: 12 }}>
             <span style={{ fontFamily: "'Poppins',sans-serif", fontWeight: 700, fontSize: "clamp(28px,4vw,40px)", lineHeight: 1, color: C.gold }}>{fmt(FUNDRAISING.raised)}</span>
@@ -421,6 +393,22 @@ export default function GalaPage() {
           </div>
         </div>
 
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", border: `1px solid ${C.line}`, background: "#fff", borderRadius: 13, padding: "20px 24px", marginBottom: 30, gap: 22 }} aria-label="Event highlights">
+          {[
+            { Icon: Calendar, k: "Save the date", v: "November 18, 2026" },
+            { Icon: Clock, k: "The evening begins", v: "6:00 PM – 9:00 PM PST" },
+            { Icon: MapPin, k: "Join us in Milpitas, California, USA", v: "India Community Center" },
+          ].map((m, i) => (
+            <div key={i} className="gala-event-mini" style={{ display: "flex", alignItems: "center", gap: 13 }}>
+              <m.Icon size={22} color={C.green} strokeWidth={1.7} aria-hidden="true" />
+              <div style={{ minWidth: 0 }}>
+                <span style={{ display: "block", color: C.muted, textTransform: "uppercase", letterSpacing: ".12em", fontSize: 9, fontWeight: 600 }}>{m.k}</span>
+                <strong style={{ display: "block", fontWeight: 600, fontSize: 12, marginTop: 3 }}>{m.v}</strong>
+              </div>
+            </div>
+          ))}
+        </div>
+
         <div id="booking" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20, marginBottom: 17 }}>
           <div>
             <p style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: ".15em", color: C.green, fontWeight: 600, margin: "0 0 7px" }}>Make an impact</p>
@@ -442,14 +430,13 @@ export default function GalaPage() {
               <div><h3 style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>Choose your seats</h3><p style={{ fontSize: 11, color: C.muted, margin: "3px 0 0" }}>Select a seat, or a table to sit together.</p></div>
               <span style={{ color: C.green, background: C.greenSoft, padding: "5px 9px", borderRadius: 6, fontSize: 10, whiteSpace: "nowrap", fontWeight: 500 }}>{EVENT.tables} tables · {TOTAL} seats</span>
             </div>
-            <div style={{ background: "radial-gradient(circle,#b5c6d433 .75px,transparent .75px)", backgroundSize: "15px 15px", borderRadius: 10, padding: "22px 5px 10px", marginTop: 14 }}>
+            <div style={{ background: "radial-gradient(circle,#b5c6d433 .75px,transparent .75px)", backgroundSize: "15px 15px", borderRadius: 10, padding: "12px 5px 10px", marginTop: 14 }}>
               <svg viewBox={`0 0 ${W} ${H}`} role="group" aria-label={`${EVENT.tables} tables with ${EVENT.seatsPerTable} seats each, in three sponsorship tiers`} style={{ display: "block", width: "100%", height: "auto" }}>
                 <path
                   d={`M ${W / 2 - Math.min(320, (W - 40) / 2)} 16 L ${W / 2 + Math.min(320, (W - 40) / 2)} 16 L ${W / 2 + Math.min(320, (W - 40) / 2)} 90 Q ${W / 2} 180 ${W / 2 - Math.min(320, (W - 40) / 2)} 90 Z`}
-                  fill="#0e7490"
+                  fill="#16303d"
                 />
-                <line x1={W / 2 - Math.min(320, (W - 40) / 2) + 24} x2={W / 2 + Math.min(320, (W - 40) / 2) - 24} y1={36} y2={36} stroke="#7dd8d0" strokeWidth={4} strokeLinecap="round" />
-                <text x={W / 2} y={64} textAnchor="middle" style={{ font: "700 22px Inter,sans-serif", fill: "#fff" }}>Stage</text>
+                <text x={W / 2} y={102} textAnchor="middle" style={{ font: "700 22px Inter,sans-serif", fill: "#fff" }}>Stage</text>
                 {SPEAKERS.map((sp, i) => {
                   const rw = Math.min(600, W - 60);
                   const u = SPEAKERS.length === 1 ? 0 : (i / (SPEAKERS.length - 1)) * 2 - 1;
@@ -457,8 +444,8 @@ export default function GalaPage() {
                   return (
                     <g key={i} aria-label={`${sp.name}, ${sp.role}`}>
                       <title>{sp.name} – {sp.role}</title>
-                      <rect x={x - 9} y={y - 10} width={18} height={11} rx={5.5} fill={C.green} />
-                      <rect x={x - 14} y={y - 3} width={28} height={13} rx={6.5} fill={C.green} />
+                      <rect x={x - 9} y={y - 10} width={18} height={11} rx={5.5} fill="#9CA3AF" />
+                      <rect x={x - 14} y={y - 3} width={28} height={13} rx={6.5} fill="#9CA3AF" />
                     </g>
                   );
                 })}
@@ -546,7 +533,7 @@ export default function GalaPage() {
           </section>
 
           <aside ref={panelRef} className="gala-panel" style={{ background: "#fff", border: `1px solid ${C.line}`, borderRadius: 16, padding: 24, boxShadow: "0 9px 25px #172b4408", position: "sticky", top: 20, overflow: "hidden" }}>
-            <div style={{ content: '""', height: 4, background: `linear-gradient(90deg,${C.greenDark} 70%,${C.gold} 70%)`, position: "absolute", top: 0, left: 0, right: 0 }} />
+            <div style={{ content: '""', height: 4, background: C.gold, position: "absolute", top: 0, left: 0, right: 0 }} />
             {!done ? (
               <div>
                 <p style={{ margin: "0 0 14px", letterSpacing: ".15em", textTransform: "uppercase", fontSize: 9, fontWeight: 600, color: C.muted }}>Your reservation</p>
@@ -653,7 +640,7 @@ export default function GalaPage() {
                 ["Sumit Ganguly", "American Political Scientist"],
               ].map(([name, title], i) => (
                 <div key={name} style={{ display: "flex", alignItems: "center", gap: 12, paddingBottom: i === 0 ? 14 : 0, borderBottom: i === 0 ? `1px solid ${C.line}` : "none" }}>
-                  <span style={{ width: 38, height: 38, borderRadius: "50%", display: "grid", placeItems: "center", color: C.green, background: C.greenSoft, fontWeight: 700, fontSize: 13, flexShrink: 0 }}>{initialsOf(name)}</span>
+                  <span style={{ width: 38, height: 38, borderRadius: "50%", display: "grid", placeItems: "center", color: "#4B5563", background: "#EDEEF0", fontWeight: 700, fontSize: 13, flexShrink: 0 }}>{initialsOf(name)}</span>
                   <div>
                     <strong style={{ display: "block", fontSize: 12, fontWeight: 600 }}>{name}</strong>
                     <span style={{ fontSize: 10.5, color: C.muted }}>{title}</span>

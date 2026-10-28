@@ -3,13 +3,17 @@ const gala = require("./galaConfig");
 const AppError = require("./AppError");
 const { makeBookingRef } = require("./ref");
 
-const SEAT_RE = new RegExp(`^([${gala.tables}])([1-${gala.seatsPerTable}])$`);
+const SEAT_RE = /^(\d{1,2})-(\d{1,2})$/;
 
-// "a3" -> { table: 'A', seat: 3, label: 'A3' }
+// "3-5" -> { table: '3', seat: 5, label: '3-5' }
 function parseSeat(raw) {
-  const m = String(raw || "").trim().toUpperCase().match(SEAT_RE);
+  const m = String(raw || "").trim().match(SEAT_RE);
   if (!m) return null;
-  return { table: m[1], seat: Number(m[2]), label: m[1] + m[2] };
+  const table = Number(m[1]);
+  const seat = Number(m[2]);
+  if (table < 1 || table > gala.tableCount) return null;
+  if (seat < 1 || seat > gala.seatsPerTable) return null;
+  return { table: String(table), seat, label: `${table}-${seat}` };
 }
 
 function validateBookingInput(body) {
@@ -29,7 +33,7 @@ function validateBookingInput(body) {
   const seen = new Set();
   for (const raw of rawSeats) {
     const s = parseSeat(raw);
-    if (!s) { errors.seats = `"${raw}" is not a valid seat. Use a table letter and seat number, like A3.`; break; }
+    if (!s) { errors.seats = `"${raw}" is not a valid seat. Use a table and seat number, like 3-5.`; break; }
     if (!seen.has(s.label)) { seen.add(s.label); seats.push(s); }
   }
   if (!errors.seats && seats.length === 0) errors.seats = "Pick at least one seat.";
@@ -45,15 +49,15 @@ async function getSeatMap() {
     `SELECT s.table_label, s.seat_number, b.payment_status
        FROM gala_booking_seats s
        JOIN gala_bookings b ON b.id = s.booking_id
-      ORDER BY s.table_label, s.seat_number`
+      ORDER BY (s.table_label + 0), s.seat_number`
   );
   const taken = rows.map((r) => ({
-    seat: r.table_label + r.seat_number,
+    seat: `${r.table_label}-${r.seat_number}`,
     status: r.payment_status === "paid" ? "booked" : "held",
   }));
-  const total = gala.tables.length * gala.seatsPerTable;
+  const total = gala.tableCount * gala.seatsPerTable;
   return {
-    tables: gala.tables.split(""),
+    tables: gala.tableCount,
     seatsPerTable: gala.seatsPerTable,
     seatPriceUsd: gala.seatPriceUsd,
     totalSeats: total,
@@ -100,7 +104,7 @@ async function createBooking(body) {
     } catch (err) {
       if (err.code !== "ER_DUP_ENTRY") throw err;
       const [taken] = await pool.query(
-        `SELECT CONCAT(table_label, seat_number) AS seat FROM gala_booking_seats
+        `SELECT CONCAT(table_label, '-', seat_number) AS seat FROM gala_booking_seats
           WHERE (table_label, seat_number) IN (?)`,
         [input.seats.map((s) => [s.table, s.seat])]
       );
@@ -141,8 +145,8 @@ function shapeBooking(b, seats) {
 async function seatsFor(bookingIds) {
   if (!bookingIds.length) return {};
   const [rows] = await pool.query(
-    `SELECT booking_id, CONCAT(table_label, seat_number) AS seat
-       FROM gala_booking_seats WHERE booking_id IN (?) ORDER BY table_label, seat_number`,
+    `SELECT booking_id, CONCAT(table_label, '-', seat_number) AS seat
+       FROM gala_booking_seats WHERE booking_id IN (?) ORDER BY (table_label + 0), seat_number`,
     [bookingIds]
   );
   return rows.reduce((acc, r) => ((acc[r.booking_id] ||= []).push(r.seat), acc), {});
