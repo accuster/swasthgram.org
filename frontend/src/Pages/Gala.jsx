@@ -1,19 +1,46 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Calendar, Clock, MapPin, Info, Lock, CheckCircle2, Armchair, Music } from "lucide-react";
+import { Calendar, Clock, MapPin, Info, Lock, CheckCircle2 } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 
+const COLS = 5;
+// Visual sponsorship categories only — every seat is still charged EVENT.seatPrice
+// flat for now. The price labels are category badges, not live pricing yet.
+const TIERS = [
+  { name: "State Champion", labelColor: "#145a2f", rows: ["$250K–500K", "$100K–250K", "$50K–100K"] },
+  { name: "Village Champion", labelColor: "#7a2347", rows: ["$25K–50K", "$10K–25K", "$5K–10K"] },
+  { name: "Community", labelColor: "#1f3a5c", rows: ["$5K", "$5K"] },
+];
+
 const EVENT = {
   name: "An Evening for Swasthgram",
-  meta: "November 12, 2026 · 3:00 PM – 10:00 PM. India Community Center, Milpitas, CA.",
-  seatPrice: 5000,
+  meta: "November 12, 2026 · 3:00 PM – 10:00 PM. India Community Center, Milpitas, California, USA.",
+  seatPrice: 300,
   currency: "$",
   checkoutUrl: "",
-  tables: 12,
-  seatsPerTable: 6,
+  tables: 40,
+  seatsPerTable: 10,
 };
 const TOTAL = EVENT.tables * EVENT.seatsPerTable;
+
+const FUNDRAISING = { raised: 625000, goal: 2000000 };
+const fundPct = Math.round((FUNDRAISING.raised / FUNDRAISING.goal) * 100);
+const fundRemaining = FUNDRAISING.goal - FUNDRAISING.raised;
+
+function BikeRiderIcon({ size = 46 }) {
+  return (
+    <svg width={size} height={(size * 34) / 46} viewBox="0 0 46 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx={10} cy={26} r={6} stroke="#fff" strokeWidth={2} />
+      <circle cx={34} cy={26} r={6} stroke="#fff" strokeWidth={2} />
+      <path d="M10 26 L22 12 L34 26 M22 12 L18 26 M22 12 L28 18" stroke="#fff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx={24} cy={5} r={3.2} fill="#fff" />
+      <path d="M24 8 L21 16 M21 16 L28 15" stroke="#fff" strokeWidth={2} strokeLinecap="round" />
+      <rect x={4} y={10} width={13} height={9} rx={2} fill="#0f1f2b" stroke={C.gold} strokeWidth={1.4} />
+      <path d="M8.5 14.5 H14.5 M11.5 11.5 V17.5" stroke={C.gold} strokeWidth={1.6} strokeLinecap="round" />
+    </svg>
+  );
+}
 
 const SPEAKERS = [
   { name: "Dr. Sanjay Mehta", role: "Keynote, community health" },
@@ -32,9 +59,8 @@ const COUNTRY_CODES = [...new Set(COUNTRY_CODES_RAW.split(";").map((r) => r.spli
 const fmt = (n) => EVENT.currency + n.toLocaleString("en-US");
 const seatId = (t, s) => `T${t}-S${s}`;
 const parseId = (id) => { const m = id.match(/^T(\d+)-S(\d+)$/); return { t: +m[1], s: +m[2] }; };
-const L = (t) => String.fromCharCode(64 + t);
-const label = (id) => { const p = parseId(id); return `Table ${L(p.t)}, seat ${p.s}`; };
-const short = (id) => { const p = parseId(id); return L(p.t) + p.s; };
+const label = (id) => { const p = parseId(id); return `Table ${p.t}, seat ${p.s}`; };
+const short = (id) => { const p = parseId(id); return `${p.t}-${p.s}`; };
 const initialsOf = (n) => String(n).split(/\s+/).filter((w) => /^[A-Za-z]/.test(w) && !/^(and|dr\.?)$/i.test(w)).slice(0, 2).map((w) => w[0].toUpperCase()).join("") || "?";
 const makeRef = () => {
   const c = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -43,20 +69,39 @@ const makeRef = () => {
   return r;
 };
 
+// Tiered sponsorship floor plan: each tier is a colored band with its own
+// rows. Tables number sequentially 1..N, top-to-bottom, left-to-right. The
+// last row may be a partial row (fewer than COLS tables), centered.
 function layout(width) {
   const narrow = width < 640;
-  const cols = narrow ? 2 : 4;
-  const rows = Math.ceil(EVENT.tables / cols);
-  const W = narrow ? 520 : 1000;
-  const top = 210, rowGap = 210;
-  const H = top + rows * rowGap - 20;
-  const span = 190;
-  const x0 = (W - span * (cols - 1)) / 2;
+  const W = narrow ? 460 : 1000;
+  const leftGutter = narrow ? 36 : 44;
+  const rightPad = 20;
+  const colPitch = (W - leftGutter - rightPad) / COLS;
+  const x0 = leftGutter + colPitch / 2;
+  const rowPitch = narrow ? 102 : 124;
+  const stageH = 360;
+
   const pos = [];
-  for (let i = 0; i < EVENT.tables; i++) {
-    pos.push({ t: i + 1, x: x0 + (i % cols) * span, y: top + 70 + Math.floor(i / cols) * rowGap });
-  }
-  return { W, H, pos };
+  const tierMeta = [];
+  let tableNum = 1;
+  let y = stageH;
+  TIERS.forEach((tier) => {
+    const top = y;
+    const rows = tier.rows.map((priceLabel) => {
+      const rowY = y + rowPitch / 2;
+      const remaining = EVENT.tables - tableNum + 1;
+      const rowCount = Math.min(COLS, Math.max(0, remaining));
+      const rowX0 = x0 + ((COLS - rowCount) / 2) * colPitch;
+      for (let c = 0; c < rowCount; c++) pos.push({ t: tableNum++, x: rowX0 + c * colPitch, y: rowY });
+      y += rowPitch;
+      return { priceLabel, y: rowY };
+    });
+    tierMeta.push({ name: tier.name, labelColor: tier.labelColor, top, bottom: y, rows });
+  });
+  const entranceY = y + 30;
+  const H = entranceY + 30;
+  return { W, H, pos, tierMeta, entranceY, leftGutter };
 }
 
 const C = {
@@ -187,16 +232,12 @@ export default function GalaPage() {
     setMsg({ text: "", err: false });
   };
 
-  const { W, H, pos } = useMemo(() => layout(width), [width]);
+  const { W, H, pos, tierMeta, entranceY, leftGutter } = useMemo(() => layout(width), [width]);
+  const narrow = width < 640;
   const bookedCount = Object.keys(taken).length;
   const idsSorted = [...selected].sort((a, b) => { const x = parseId(a), y = parseId(b); return x.t - y.t || x.s - y.s; });
   const total = idsSorted.length * EVENT.seatPrice;
   const currentStep = done ? 2 : idsSorted.length ? 1 : 0;
-
-  const scrollToPanel = () => {
-    panelRef.current?.scrollIntoView({ behavior: "smooth" });
-    setTimeout(() => nameRef.current?.focus({ preventScroll: true }), 400);
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -293,6 +334,10 @@ export default function GalaPage() {
         .gala-seat.free:hover circle { fill: ${C.greenSoft}; stroke: ${C.green}; stroke-width: 2.5; }
         .gala-btn:hover:not(:disabled) { background: ${C.greenDark}; }
         .gala-gcard:hover { border-color: #bcd0c2; transform: translateY(-2px); }
+        @keyframes galaBarFill { from { width: 0%; } to { width: ${fundPct}%; } }
+        @keyframes galaBikeMove { from { left: 0%; } to { left: ${fundPct}%; } }
+        .gala-fund-fill { animation: galaBarFill 1.8s ease-out forwards; }
+        .gala-fund-bike { animation: galaBikeMove 1.8s ease-out forwards; }
         @media (max-width: 1050px) {
           .gala-wrap { padding: 90px 24px 70px; }
           .gala-grid, .gala-about { grid-template-columns: minmax(0,1fr) 280px !important; }
@@ -332,7 +377,7 @@ export default function GalaPage() {
           <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 14, padding: "22px 28px", flex: "1 1 38%" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,0.8)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}><Calendar size={15} color={C.gold} strokeWidth={1.7} aria-hidden="true" />November 12, 2026</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}><MapPin size={15} color={C.gold} strokeWidth={1.7} aria-hidden="true" />India Community Center, Milpitas, CA</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}><MapPin size={15} color={C.gold} strokeWidth={1.7} aria-hidden="true" />India Community Center, Milpitas, California, USA</div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}><Clock size={15} color={C.gold} strokeWidth={1.7} aria-hidden="true" />3:00 PM – 10:00 PM</div>
             </div>
             <div aria-live="polite">
@@ -341,26 +386,39 @@ export default function GalaPage() {
                 <div className="bar-fill" style={{ width: `${(bookedCount / TOTAL) * 100}%` }} />
               </div>
             </div>
-            <button type="button" onClick={scrollToPanel} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, background: C.gold, color: "#1a1a1a", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, padding: "12px 20px", borderRadius: 8, border: "none", cursor: "pointer" }}>
-              Reserve your place <span aria-hidden="true">↓</span>
-            </button>
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", border: `1px solid ${C.line}`, background: "#fff", borderRadius: 13, padding: "20px 24px", marginBottom: 30, gap: 22 }} aria-label="Event highlights">
-          {[
-            { Icon: Calendar, k: "Save the date", v: "November 12, 2026" },
-            { Icon: Clock, k: "The evening begins", v: "3:00 PM – 10:00 PM" },
-            { Icon: MapPin, k: "Join us in Milpitas, CA", v: "India Community Center" },
-          ].map((m, i) => (
-            <div key={i} className="gala-event-mini" style={{ display: "flex", alignItems: "center", gap: 13 }}>
-              <m.Icon size={22} color={C.green} strokeWidth={1.7} aria-hidden="true" />
-              <div style={{ minWidth: 0 }}>
-                <span style={{ display: "block", color: C.muted, textTransform: "uppercase", letterSpacing: ".12em", fontSize: 9, fontWeight: 600 }}>{m.k}</span>
-                <strong style={{ display: "block", fontWeight: 600, fontSize: 12, marginTop: 3 }}>{m.v}</strong>
-              </div>
+        <div style={{ background: "linear-gradient(135deg,#0f1f2b 0%,#16303d 100%)", borderRadius: 14, marginBottom: 30, padding: "28px 32px" }} aria-label="Fundraising progress">
+          <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: 12 }}>
+            <span style={{ fontFamily: "'Poppins',sans-serif", fontWeight: 700, fontSize: "clamp(28px,4vw,40px)", lineHeight: 1, color: C.gold }}>{fmt(FUNDRAISING.raised)}</span>
+            <span style={{ fontFamily: "'Poppins',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>raised toward {fmt(FUNDRAISING.goal)}</span>
+          </div>
+          <p style={{ fontFamily: "'Poppins',sans-serif", fontSize: 13, color: "rgba(255,255,255,0.6)", margin: "8px 0 30px" }}>{fundPct}% of the goal. {fmt(fundRemaining)} still to go.</p>
+          <div style={{ position: "relative", height: 22, margin: "0 6px 14px" }}>
+            <div style={{ position: "absolute", inset: 0, borderRadius: 11, background: "#1c2e38" }} />
+            <div className="gala-fund-fill" style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 0, borderRadius: 11, background: C.gold }} />
+            <div style={{ position: "absolute", left: 10, right: 10, top: "50%", borderTop: "3px dashed rgba(255,255,255,0.55)" }} />
+            {[25, 50, 75].map((p) => (
+              <div key={p} style={{ position: "absolute", left: `${p}%`, top: -4, bottom: -4, width: 2, background: "rgba(255,255,255,0.3)" }} />
+            ))}
+            <div className="gala-fund-bike" style={{ position: "absolute", left: 0, top: "50%", transform: "translate(-50%,-68%)" }}>
+              <BikeRiderIcon size={78} />
             </div>
-          ))}
+            <div style={{ position: "absolute", right: -2, top: "50%", transform: "translate(0,-70%)" }} aria-hidden="true">
+              <svg width={18} height={22} viewBox="0 0 18 22" fill="none">
+                <line x1={2} y1={0} x2={2} y2={22} stroke="#fff" strokeWidth={2} />
+                <rect x={2} y={1} width={14} height={9} fill="#fff" />
+                <rect x={2} y={1} width={3.5} height={3.5} fill="#16303d" />
+                <rect x={9} y={1} width={3.5} height={3.5} fill="#16303d" />
+                <rect x={5.5} y={4.5} width={3.5} height={3.5} fill="#16303d" />
+                <rect x={12.5} y={4.5} width={3.5} height={3.5} fill="#16303d" />
+              </svg>
+            </div>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "'Poppins',sans-serif", fontSize: 11, color: "rgba(255,255,255,0.5)" }}>
+            <span>$0</span><span>$500K</span><span>$1M</span><span>$1.5M</span><span style={{ color: "#fff", fontWeight: 600 }}>{fmt(FUNDRAISING.goal)}</span>
+          </div>
         </div>
 
         <div id="booking" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20, marginBottom: 17 }}>
@@ -382,58 +440,71 @@ export default function GalaPage() {
           <section ref={planRef} style={{ border: `1px solid ${C.line}`, borderRadius: 16, background: "#fff", overflow: "hidden", padding: "0 20px 20px" }} aria-label="Hall floor plan">
             <div style={{ margin: "0 -20px 0", padding: "20px 24px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, borderBottom: `1px solid ${C.line}` }}>
               <div><h3 style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>Choose your seats</h3><p style={{ fontSize: 11, color: C.muted, margin: "3px 0 0" }}>Select a seat, or a table to sit together.</p></div>
-              <span style={{ color: C.green, background: C.greenSoft, padding: "5px 9px", borderRadius: 6, fontSize: 10, whiteSpace: "nowrap", fontWeight: 500 }}>12 tables · 72 seats</span>
+              <span style={{ color: C.green, background: C.greenSoft, padding: "5px 9px", borderRadius: 6, fontSize: 10, whiteSpace: "nowrap", fontWeight: 500 }}>{EVENT.tables} tables · {TOTAL} seats</span>
             </div>
             <div style={{ background: "radial-gradient(circle,#b5c6d433 .75px,transparent .75px)", backgroundSize: "15px 15px", borderRadius: 10, padding: "22px 5px 10px", marginTop: 14 }}>
-              <svg viewBox={`0 0 ${W} ${H}`} role="group" aria-label="Twelve tables with six seats each" style={{ display: "block", width: "100%", height: "auto" }}>
+              <svg viewBox={`0 0 ${W} ${H}`} role="group" aria-label={`${EVENT.tables} tables with ${EVENT.seatsPerTable} seats each, in three sponsorship tiers`} style={{ display: "block", width: "100%", height: "auto" }}>
                 <path
-                  d={`M ${W / 2 - Math.min(300, (W - 60) / 2)} 60 Q ${W / 2} 16 ${W / 2 + Math.min(300, (W - 60) / 2)} 60 Q ${W / 2} 44 ${W / 2 - Math.min(300, (W - 60) / 2)} 60 Z`}
-                  fill={C.greenSoft} stroke={C.green} strokeWidth={2}
+                  d={`M ${W / 2 - Math.min(320, (W - 40) / 2)} 16 L ${W / 2 + Math.min(320, (W - 40) / 2)} 16 L ${W / 2 + Math.min(320, (W - 40) / 2)} 90 Q ${W / 2} 180 ${W / 2 - Math.min(320, (W - 40) / 2)} 90 Z`}
+                  fill="#0e7490"
                 />
-                <text x={W / 2} y={92} textAnchor="middle" style={{ font: "600 11px Inter,sans-serif", fill: C.muted, letterSpacing: ".12em", textTransform: "uppercase" }}>Stage</text>
+                <line x1={W / 2 - Math.min(320, (W - 40) / 2) + 24} x2={W / 2 + Math.min(320, (W - 40) / 2) - 24} y1={36} y2={36} stroke="#7dd8d0" strokeWidth={4} strokeLinecap="round" />
+                <text x={W / 2} y={64} textAnchor="middle" style={{ font: "700 22px Inter,sans-serif", fill: "#fff" }}>Stage</text>
                 {SPEAKERS.map((sp, i) => {
                   const rw = Math.min(600, W - 60);
                   const u = SPEAKERS.length === 1 ? 0 : (i / (SPEAKERS.length - 1)) * 2 - 1;
-                  const x = W / 2 + (u * rw) / 2, y = 142;
+                  const x = W / 2 + (u * rw) / 2, y = 215;
                   return (
                     <g key={i} aria-label={`${sp.name}, ${sp.role}`}>
                       <title>{sp.name} – {sp.role}</title>
-                      <circle cx={x} cy={y} r={19} fill={C.greenSoft} stroke={C.green} strokeWidth={1.5} />
-                      <text x={x} y={y + 4} textAnchor="middle" style={{ font: "600 11px Inter,sans-serif", fill: C.green }}>{initialsOf(sp.name)}</text>
+                      <rect x={x - 9} y={y - 10} width={18} height={11} rx={5.5} fill={C.green} />
+                      <rect x={x - 14} y={y - 3} width={28} height={13} rx={6.5} fill={C.green} />
                     </g>
                   );
                 })}
-                <text x={W / 2} y={184} textAnchor="middle" style={{ font: "500 13px Inter,sans-serif", fill: C.muted }}>Guest speakers&rsquo; row</text>
+                <text x={W / 2} y={257} textAnchor="middle" style={{ font: "500 13px Inter,sans-serif", fill: C.muted }}>Guest speakers&rsquo; row</text>
+
+                {tierMeta.map((tier, ti) => (
+                  <g key={tier.name}>
+                    {ti > 0 && <line x1={10} x2={W - 10} y1={tier.top} y2={tier.top} stroke={C.line} strokeWidth={1.5} strokeDasharray="2 4" />}
+                    <text
+                      x={22} y={(tier.top + tier.bottom) / 2} textAnchor="middle"
+                      transform={`rotate(-90 22 ${(tier.top + tier.bottom) / 2})`}
+                      style={{ font: "700 12px Inter,sans-serif", fill: tier.labelColor, letterSpacing: ".1em", textTransform: "uppercase" }}
+                    >{tier.name}</text>
+                  </g>
+                ))}
+
                 {pos.map((p) => {
                   let free = 0;
                   for (let s = 1; s <= EVENT.seatsPerTable; s++) {
                     const st = status(seatId(p.t, s));
                     if (st !== "booked" && st !== "mine") free++;
                   }
+                  const tableR = narrow ? 22 : 30;
+                  const seatRadius = narrow ? 32 : 46;
                   return (
                     <g key={p.t}>
                       <g
                         className={`gala-tbl${free === 0 ? " full" : ""}`}
                         role="button" tabIndex={free === 0 ? -1 : 0}
-                        aria-label={`Table ${L(p.t)}, ${free} free seats. Select all free seats`}
+                        aria-label={`Table ${p.t}, ${free} free seats. Select all free seats`}
                         onClick={() => toggleTable(p.t)}
                         onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleTable(p.t); } }}
                       >
-                        <circle className="tbl-top" cx={p.x} cy={p.y} r={46} fill="#f7f9fc" stroke="#c7d4e2" strokeWidth={1.5} style={{ transition: "stroke .15s" }} />
-                        <text x={p.x} y={p.y - 1} textAnchor="middle" style={{ font: "600 16px Inter,sans-serif", fill: C.ink }}>Table {L(p.t)}</text>
-                        <text x={p.x} y={p.y + 17} textAnchor="middle" style={{ font: "500 12px Inter,sans-serif", fill: C.muted }}>{free === 0 ? "Full" : `${free} free`}</text>
+                        <circle className="tbl-top" cx={p.x} cy={p.y} r={tableR} fill="#ece3d1" stroke="#b9a37d" strokeWidth={2} style={{ transition: "stroke .15s" }} />
+                        <text x={p.x} y={p.y + 5} textAnchor="middle" style={{ font: "700 13px Inter,sans-serif", fill: C.ink }}>{p.t}</text>
                       </g>
                       {Array.from({ length: EVENT.seatsPerTable }).map((_, si) => {
                         const s = si + 1;
                         const aDeg = -90 + (s - 1) * (360 / EVENT.seatsPerTable);
                         const a = (aDeg * Math.PI) / 180;
-                        const seatRadius = 60;
                         const cx = p.x + Math.cos(a) * seatRadius, cy = p.y + Math.sin(a) * seatRadius;
                         const id = seatId(p.t, s), st = status(id);
                         const words = { free: "available", sel: "selected", booked: "booked", mine: "booked by you" }[st];
-                        const fill = st === "free" ? "#fff" : st === "sel" ? C.green : st === "booked" ? C.booked : C.gold;
-                        const stroke = st === "free" ? C.seatLine : st === "sel" ? C.green : st === "booked" ? "#c1cbd7" : C.gold;
-                        const textFill = st === "free" ? "#365572" : st === "booked" ? C.bookedInk : "#fff";
+                        const fill = st === "free" ? "#f3eee1" : st === "sel" ? C.green : st === "booked" ? C.booked : C.gold;
+                        const stroke = st === "free" ? "#c9b896" : st === "sel" ? C.green : st === "booked" ? "#c1cbd7" : C.gold;
+                        const textFill = st === "free" ? "#5c5236" : st === "booked" ? C.bookedInk : "#fff";
                         return (
                           <g
                             key={id}
@@ -445,21 +516,24 @@ export default function GalaPage() {
                             transform={`translate(${cx} ${cy}) rotate(${aDeg + 90})`}
                           >
                             <rect
-                              x={-10} y={-11} width={20} height={22} rx={4} ry={4}
-                              fill={fill} stroke={stroke} strokeWidth={1.6}
+                              x={-9} y={-10} width={18} height={20} rx={4} ry={4}
+                              fill={fill} stroke={stroke} strokeWidth={2}
                               style={{ transition: "fill .15s,stroke .15s" }}
                             />
-                            <text x={0} y={4} textAnchor="middle" transform={`rotate(${-(aDeg + 90)})`} style={{ font: "600 10px Inter,sans-serif", fill: textFill, pointerEvents: "none" }}>{s}</text>
+                            <text x={0} y={4} textAnchor="middle" transform={`rotate(${-(aDeg + 90)})`} style={{ font: "700 10px Inter,sans-serif", fill: textFill, pointerEvents: "none" }}>{s}</text>
                           </g>
                         );
                       })}
                     </g>
                   );
                 })}
+
+                <rect x={W / 2 - 35} y={entranceY - 16} width={70} height={6} rx={3} fill="#64748b" />
+                <text x={W / 2} y={entranceY} textAnchor="middle" style={{ font: "600 10px Inter,sans-serif", fill: "#94a3b8", letterSpacing: ".1em", textTransform: "uppercase" }}>Main entrance</text>
               </svg>
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "9px 16px", padding: "15px 0 12px", borderTop: `1px solid ${C.line}`, fontSize: 10, color: C.muted }}>
-              {[["#fff", "Available", C.seatLine], [C.green, "Selected"], [C.booked, "Booked", "#b8c2cf"], [C.gold, "Your seats"], [C.greenSoft, "Speakers (not bookable)", C.green]].map(([bg, t, bd], i) => (
+              {[["#f3eee1", "Available", "#c9b896"], [C.green, "Selected"], [C.booked, "Booked", "#b8c2cf"], [C.gold, "Your seats"], [C.greenSoft, "Speakers (not bookable)", C.green]].map(([bg, t, bd], i) => (
                 <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
                   <i style={{ width: 11, height: 11, borderRadius: "50%", display: "inline-block", background: bg, border: bd ? `1.5px solid ${bd}` : "none" }} />{t}
                 </span>
@@ -570,24 +644,28 @@ export default function GalaPage() {
             </div>
             <p style={{ fontSize: 10, lineHeight: 1.8, color: C.muted }}>Swasthgram Global Foundation is a US 501(c)(3) nonprofit. Contributions are tax-deductible to the extent allowed by law.</p>
           </div>
-          <dl style={{ margin: 0, background: "#fff", border: `1px solid ${C.line}`, borderRadius: 13, padding: "5px 18px" }}>
-            {[
-              ["Date", "November 12, 2026", Calendar],
-              ["Time", "3:00 PM – 10:00 PM", Clock],
-              ["Venue", <>India Community Center<br />Milpitas, CA</>, MapPin],
-              ["Seating", "12 tables of 6, $5,000 per seat", Armchair],
-              ["Evening program", "Welcome reception, dinner, impact stories, live music, closing remarks", Music],
-            ].map(([dt, dd, RowIcon], i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "13px 0", borderBottom: i < 4 ? `1px solid ${C.line}` : "none" }}>
-                <span style={{ width: 32, height: 32, borderRadius: 8, display: "grid", placeItems: "center", color: C.green, background: C.greenSoft, flexShrink: 0 }}>
-                  <RowIcon size={16} strokeWidth={1.7} aria-hidden="true" />
-                </span>
-                <div><dt style={{ fontSize: 10, color: C.muted, marginBottom: 2 }}>{dt}</dt><dd style={{ margin: 0, fontSize: 11, fontWeight: 500, lineHeight: 1.7 }}>{dd}</dd></div>
-              </div>
-            ))}
-          </dl>
+          <div style={{ background: "#fff", border: `1px solid ${C.line}`, borderRadius: 13, padding: "22px 20px" }}>
+            <p style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: ".15em", color: C.green, fontWeight: 600, margin: "0 0 7px" }}>Meet the voices behind the impact</p>
+            <h3 style={{ font: "400 16px/1.4 'Libre Baskerville',Georgia,serif", margin: "0 0 16px" }}>Guest speakers</h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              {[
+                ["Manoj Goes", "IIT Startup President"],
+                ["Sumit Ganguly", "American Political Scientist"],
+              ].map(([name, title], i) => (
+                <div key={name} style={{ display: "flex", alignItems: "center", gap: 12, paddingBottom: i === 0 ? 14 : 0, borderBottom: i === 0 ? `1px solid ${C.line}` : "none" }}>
+                  <span style={{ width: 38, height: 38, borderRadius: "50%", display: "grid", placeItems: "center", color: C.green, background: C.greenSoft, fontWeight: 700, fontSize: 13, flexShrink: 0 }}>{initialsOf(name)}</span>
+                  <div>
+                    <strong style={{ display: "block", fontSize: 12, fontWeight: 600 }}>{name}</strong>
+                    <span style={{ fontSize: 10.5, color: C.muted }}>{title}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p style={{ fontSize: 10.5, color: C.muted, margin: "14px 0 0" }}>More speakers to be announced soon.</p>
+          </div>
         </section>
 
+        {/* Bottom speaker grid — disabled for now, this displays on the portal instead.
         <section style={{ marginTop: 38, borderTop: `1px solid ${C.line}`, paddingTop: 32 }} aria-labelledby="spkTitle">
           <p style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: ".15em", color: C.green, fontWeight: 600, margin: "0 0 7px" }}>Meet the voices behind the impact</p>
           <h2 id="spkTitle" style={{ display: "flex", alignItems: "center", gap: 10, font: "400 25px/1.4 'Libre Baskerville',Georgia,serif", margin: "0 0 18px" }}>Guest speakers</h2>
@@ -605,6 +683,7 @@ export default function GalaPage() {
             ))}
           </ul>
         </section>
+        */}
 
       </div>
       <Footer />
