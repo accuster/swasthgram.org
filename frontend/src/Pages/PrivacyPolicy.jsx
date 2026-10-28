@@ -193,7 +193,7 @@ export default function PrivacyPolicy() {
       {/* HERO */}
       <section style={{
         background: `linear-gradient(160deg, ${cc.forestDeep} 0%, ${cc.forest} 100%)`,
-        padding: "80px 24px 56px", paddingTop: 72, position: "relative",
+        padding: "116px 24px 56px", position: "relative",
       }}>
         <Breadcrumb items={[{ label: "Privacy Policy" }]} />
         <div style={{ maxWidth: 860, margin: "0 auto" }}>

@@ -14,7 +14,7 @@ import imgShudhvayu     from "../assets/programs/Shudhvayu.webp";
 const COLORS = {
   forest: "#1B6B3A", forestDark: "#145A2F", forestDeep: "#0E4422",
   leaf: "#2E8B4F", gold: "#C8963E", goldSoft: "#D4A854", goldLight: "#E8C76A",
-  warmBg: "#FDFBF7", cream: "#F8F5EE", white: "#FFFFFF",
+  warmBg: "#FDFBF7", cream: "#F8F5EE", white: "#FFFFFF", heroBg: "#EDF3EF",
   text: "#1F2937", textMid: "#4B5563", textLight: "#6B7280", border: "#E8E4DC",
 };
 const cc = COLORS;
@@ -44,9 +44,9 @@ function FadeIn({ children, delay = 0 }) {
   );
 }
 
-function Section({ children, bg = cc.warmBg, id, padTop = 64 }) {
+function Section({ children, bg = cc.warmBg, id, padTop = 64, padBottom = 64 }) {
   return (
-    <section id={id} style={{ background: bg, padding: `${padTop}px 24px 64px`, position: "relative" }}>
+    <section id={id} style={{ background: bg, padding: `${padTop}px 24px ${padBottom}px`, position: "relative" }}>
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         {children}
       </div>
@@ -94,19 +94,22 @@ export default function AboutNGOPage() {
       <Header />
 
       {/* ── WHO WE ARE ── */}
-      <FadeIn>
-        <Section id="who-we-are" bg={cc.white} padTop={110}>
-          <Breadcrumb items={[{ label: "About Us" }]} theme="light" />
-          <div style={{ marginBottom: 36 }}>
-            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: 1.5, textTransform: "uppercase", color: cc.gold, marginBottom: 8 }}>Who We Are</div>
-            <h1 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(26px,4vw,36px)", fontWeight: 700, color: cc.text, lineHeight: 1.2, marginBottom: 8 }}>
-              Swasthgram Global Foundation
-            </h1>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: cc.textMid, lineHeight: 1.7 }}>
-              <span style={{ fontWeight: 600, color: cc.text }}>Swasthgram Global Foundation is a registered non-profit NGO</span> — a Public Charitable Trust registered under the Income Tax Act with 12A and 80G certification in India, and affiliated with a 501(c)(3) organisation in the USA for tax-deductible donations. Since 2011, we have empowered underserved communities through community wellness programs, scientific skilling, and environmental solutions. Every rupee we receive goes directly toward our field programs, health camps, and community outreach — we are not a commercial organisation of any kind.
-            </p>
-          </div>
+      <Section id="who-we-are" bg={cc.heroBg} padTop={110} padBottom={48}>
+        <Breadcrumb items={[{ label: "About Us" }]} theme="light" />
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+          <span style={{ width: 6, height: 6, borderRadius: "50%", background: cc.gold, flexShrink: 0 }} />
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: cc.gold }}>Who We Are</span>
+        </div>
+        <h1 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(30px,4.5vw,44px)", fontWeight: 700, color: cc.text, lineHeight: 1.12, marginBottom: 14 }}>
+          Swasthgram Global Foundation
+        </h1>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: cc.textMid, lineHeight: 1.7, maxWidth: 720 }}>
+          <span style={{ fontWeight: 600, color: cc.text }}>Swasthgram Global Foundation is a registered non-profit NGO</span> — a Public Charitable Trust registered under the Income Tax Act with 12A and 80G certification in India, and affiliated with a 501(c)(3) organisation in the USA for tax-deductible donations. Since 2011, we have empowered underserved communities through community wellness programs, scientific skilling, and environmental solutions. Every rupee we receive goes directly toward our field programs, health camps, and community outreach — we are not a commercial organisation of any kind.
+        </p>
+      </Section>
 
+      <FadeIn>
+        <Section bg={cc.white} padTop={40}>
           <div className="grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
             <InfoRow
               icon={<FileText size={16} color={cc.forest} />}
