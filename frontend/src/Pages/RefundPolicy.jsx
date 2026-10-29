@@ -274,7 +274,7 @@ export default function RefundPolicy() {
                     { icon: <Phone size={15} color={cc.goldLight} />, text: "+91 85278-95900 (India)" },
                     { icon: <MapPin size={15} color={cc.goldLight} />, text: "Ground Floor, 424-CMR Building, Ghitorni, New Delhi — 110030" },
                     { icon: <Phone size={15} color={cc.goldLight} />, text: "+1 202-471-8287 (USA)" },
-                    { icon: <MapPin size={15} color={cc.goldLight} />, text: "78 Union Avenue, Edison, NJ-08821, USA" },
+                    { icon: <MapPin size={15} color={cc.goldLight} />, text: "110 Fieldcrest Avenue, 3rd Floor, Edison, NJ-08837, USA" },
                   ].map((item, i) => (
                     <div key={i} className="sans" style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, color: "rgba(255,255,255,0.85)" }}>
                       {item.icon}{item.text}

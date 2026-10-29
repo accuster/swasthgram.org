@@ -355,7 +355,7 @@ export default function AboutNGOPage() {
                   { icon: <Phone size={16} color={cc.forest} />,  label: "India",          value: "+91 85278-95900" },
                   { icon: <Phone size={16} color={cc.forest} />,  label: "USA",            value: "+1-202-471-8287" },
                   { icon: <MapPin size={16} color={cc.forest} />, label: "India Office",   value: "G/F, 424-CMR Building, Ghitorni, New Delhi—110030, India" },
-                  { icon: <MapPin size={16} color={cc.forest} />, label: "USA Office",     value: "78 Union Avenue, Edison, NJ-08821, USA" },
+                  { icon: <MapPin size={16} color={cc.forest} />, label: "USA Office",     value: "110 Fieldcrest Avenue, 3rd Floor, Edison, NJ-08837, USA" },
                 ].map((item, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
                     <div style={{ width: 32, height: 32, borderRadius: 8, background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2 }}>{item.icon}</div>

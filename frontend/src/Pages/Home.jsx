@@ -558,7 +558,7 @@ export default function SwasthgramHome() {
                 { icon: <Phone size={16} color={cc.forest} />, text: "+91 85278-95900 (India)" },
                 { icon: <Phone size={16} color={cc.forest} />, text: "+1-202-471-8287 (US)" },
                 { icon: <MapPin size={16} color={cc.forest} />,text: "G/F, 424-CMR Building, Ghitorni, New Delhi-110030, India" },
-                { icon: <MapPin size={16} color={cc.forest} />,text: "78 Union Avenue, Edison, NJ-08821, USA" },
+                { icon: <MapPin size={16} color={cc.forest} />,text: "110 Fieldcrest Avenue, 3rd Floor, Edison, NJ-08837, USA" },
 
               ].map((item, i) => (
                 <div key={i} className="sans" style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, color: cc.textMid }}>{item.icon}{item.text}</div>

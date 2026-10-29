@@ -183,7 +183,7 @@ export default function Footer() {
               Ground Floor, 424-CMR Building, Ghitorni, New Delhi
             </p>
             <p className="sans" style={{ fontSize: 12, lineHeight: 1.5 }}>
-              78 - Union Avenue, Edison, NJ-08821, USA
+              110 Fieldcrest Avenue, 3rd Floor, Edison, NJ-08837, USA
             </p>
           </div>
 
