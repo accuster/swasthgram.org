@@ -107,7 +107,7 @@ function layout(width) {
 const C = {
   bg: "#FDFBF7", surface: "#F8F5EE", ink: "#1F2937", muted: "#6B7280", line: "#E8E4DC",
   card: "#fff", green: "#1B6B3A", greenDark: "#145A2F", greenDeep: "#0E4422", greenSoft: "#f0fdf4", gold: "#C8963E",
-  seatLine: "#B4C7B9", booked: "#E8E4DC", bookedInk: "#6B7280", danger: "#dc2626", okBg: "#f0fdf4",
+  seatLine: "#B4C7B9", booked: "#9CC9A8", bookedInk: "#1F4D2B", danger: "#dc2626", okBg: "#f0fdf4",
 };
 
 const API_BASE = "/api/gala";
@@ -509,8 +509,8 @@ export default function GalaPage() {
                         onClick={() => toggleTable(p.t)}
                         onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleTable(p.t); } }}
                       >
-                        <circle className="tbl-top" cx={p.x} cy={p.y} r={tableR} fill="#ece3d1" stroke="#b9a37d" strokeWidth={2} style={{ transition: "stroke .15s" }} />
-                        <text x={p.x} y={p.y + 5} textAnchor="middle" style={{ font: "700 13px Inter,sans-serif", fill: C.ink }}>{p.t}</text>
+                        <circle className="tbl-top" cx={p.x} cy={p.y} r={tableR} fill={free === 0 ? C.booked : "#ece3d1"} stroke={free === 0 ? "#6FA87E" : "#b9a37d"} strokeWidth={2} style={{ transition: "fill .15s,stroke .15s" }} />
+                        <text x={p.x} y={p.y + 5} textAnchor="middle" style={{ font: "700 13px Inter,sans-serif", fill: free === 0 ? C.bookedInk : C.ink }}>{p.t}</text>
                       </g>
                       {Array.from({ length: EVENT.seatsPerTable }).map((_, si) => {
                         const s = si + 1;
@@ -520,7 +520,7 @@ export default function GalaPage() {
                         const id = seatId(p.t, s), st = status(id);
                         const words = { free: "available", sel: "selected", booked: "booked", mine: "booked by you" }[st];
                         const fill = st === "free" ? "#f3eee1" : st === "sel" ? C.green : st === "booked" ? C.booked : C.gold;
-                        const stroke = st === "free" ? "#c9b896" : st === "sel" ? C.green : st === "booked" ? "#c1cbd7" : C.gold;
+                        const stroke = st === "free" ? "#c9b896" : st === "sel" ? C.green : st === "booked" ? "#6FA87E" : C.gold;
                         const textFill = st === "free" ? "#5c5236" : st === "booked" ? C.bookedInk : "#fff";
                         return (
                           <g
@@ -550,7 +550,7 @@ export default function GalaPage() {
               </svg>
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "9px 16px", padding: "15px 0 12px", borderTop: `1px solid ${C.line}`, fontSize: 10, color: C.muted }}>
-              {[["#f3eee1", "Available", "#c9b896"], [C.green, "Selected"], [C.booked, "Booked", "#b8c2cf"], [C.gold, "Your seats"], [C.greenSoft, "Speakers (not bookable)", C.green]].map(([bg, t, bd], i) => (
+              {[["#f3eee1", "Available", "#c9b896"], [C.green, "Selected"], [C.booked, "Booked", "#6FA87E"], [C.gold, "Your seats"], [C.greenSoft, "Speakers (not bookable)", C.green]].map(([bg, t, bd], i) => (
                 <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
                   <i style={{ width: 11, height: 11, borderRadius: "50%", display: "inline-block", background: bg, border: bd ? `1.5px solid ${bd}` : "none" }} />{t}
                 </span>
