@@ -1,5 +1,6 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import NewsletterSignup from "../components/NewsletterSignup";
 import CarouselBanner from "../components/CarouselBanner";
 import HomeGallery from "../components/HomeGallery";
 import { Users, Tent, Microscope, Briefcase, GraduationCap, Baby, Bike, Leaf, Heart, Building2, BarChart3, Sprout, Globe, Star, HeartHandshake, ClipboardList, SmartphoneNfc, Mail, Phone, MapPin, Smartphone, Apple, Dna, Package } from "lucide-react";
@@ -563,6 +564,21 @@ export default function SwasthgramHome() {
               ].map((item, i) => (
                 <div key={i} className="sans" style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, color: cc.textMid }}>{item.icon}{item.text}</div>
               ))}
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      <FadeIn>
+        <section style={{ background: cc.cream, padding: "72px 24px", textAlign: "center" }}>
+          <div style={{ maxWidth: 640, margin: "0 auto" }}>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: cc.gold, marginBottom: 10 }}>Stay Connected</div>
+            <h2 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(22px,3vw,30px)", fontWeight: 700, color: cc.text, marginBottom: 12 }}>Get updates from the field</h2>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: cc.textMid, lineHeight: 1.7, maxWidth: 480, margin: "0 auto 28px" }}>
+              Camp schedules, new health-unit deployments, and stories from the communities we reach — straight to your inbox.
+            </p>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <NewsletterSignup />
             </div>
           </div>
         </section>

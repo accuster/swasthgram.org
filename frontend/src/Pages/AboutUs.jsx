@@ -1,6 +1,7 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
+import NewsletterSignup from "../components/NewsletterSignup";
 import {
   Heart, Bike, Package, GraduationCap, Sprout, Wind, Microscope,
   MapPin, Mail, Phone, Shield, FileText, Users, Building2,
@@ -384,6 +385,21 @@ export default function AboutNGOPage() {
                   Swasthgram Global Foundation does not sell pharmaceutical products, medical devices, or clinical services. All activities are charitable in nature, focused exclusively on community wellness access, youth empowerment, and environmental solutions.
                 </p>
               </div>
+            </div>
+          </div>
+        </Section>
+      </FadeIn>
+
+      <FadeIn>
+        <Section bg={cc.cream} padTop={56} padBottom={56}>
+          <div style={{ maxWidth: 640, margin: "0 auto", textAlign: "center" }}>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: cc.gold, marginBottom: 10 }}>Stay Connected</div>
+            <h2 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(22px,3vw,30px)", fontWeight: 700, color: cc.text, marginBottom: 12 }}>Get updates from the field</h2>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: cc.textMid, lineHeight: 1.7, maxWidth: 480, margin: "0 auto 28px" }}>
+              Camp schedules, new health-unit deployments, and stories from the communities we reach — straight to your inbox.
+            </p>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <NewsletterSignup />
             </div>
           </div>
         </Section>
