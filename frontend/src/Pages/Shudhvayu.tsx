@@ -165,7 +165,7 @@ export default function ShudhvayuPage() {
                 Shudhvayu is a patented, vehicle-mounted air purification system that cleans the air as you drive. No electricity. No infrastructure. No cost to you.
               </p>
               <div className="hero-cta" style={{ display: "flex", gap: 12, marginTop: 4, flexWrap: "wrap" }}>
-                <a href="/donate?program=Shudhvayu" className="btn-primary" style={{ background: C.skyLight, color: "#0C4A6E", padding: "14px 32px", fontSize: 15 }}>Support Clean Air</a>
+                <a href="/donate?program=Shudhvayu" className="btn-primary" style={{ background: C.skyLight, color: "#0C4A6E", padding: "14px 32px", fontSize: 15 }}><HandHeart size={16} /> Support Clean Air</a>
                 <a href="#how" className="btn-outline" style={{ color: "#fff", borderColor: "rgba(255,255,255,0.35)" }}>How It Works →</a>
               </div>
               <div style={{ display: "flex", gap: 14, marginTop: 12, flexWrap: "wrap" }}>
@@ -452,7 +452,7 @@ export default function ShudhvayuPage() {
           <h2 style={{ fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 700, marginBottom: 12 }}>Every vehicle is a chance to clean the air.</h2>
           <p className="sans" style={{ fontSize: 15, color: C.textMid, marginBottom: 24 }}>Donate to put more filters on more vehicles. Or get one installed on yours — for free.</p>
           <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="/donate?program=Shudhvayu" className="btn-primary" style={{ padding: "14px 36px", fontSize: 15 }}>Donate for Clean Air</a>
+            <a href="/donate?program=Shudhvayu" className="btn-primary" style={{ padding: "14px 36px", fontSize: 15 }}><HandHeart size={16} /> Donate for Clean Air</a>
             <a href="#install" className="btn-outline" style={{ padding: "12px 28px", fontSize: 14 }}>Get Free Installation</a>
           </div>
         </section>

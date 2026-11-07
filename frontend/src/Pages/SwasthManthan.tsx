@@ -37,7 +37,7 @@ import Footer from "../components/Footer";
 import NewsletterSignup from "../components/NewsletterSignup";
 import newsletterIllustration from "../assets/newsletterIllustration.svg";
 import Breadcrumb from "../components/Breadcrumb";
-import { Users, Microscope, Tent, Baby, Megaphone, Droplets, Ribbon, HeartPulse, FlaskConical, Star, Bike, BarChart3, Pill, ClipboardList, Sun, Thermometer, Mountain, Leaf, Globe, HeartHandshake, Building2, Zap, Dna } from "lucide-react";
+import { Users, Microscope, Tent, Baby, Megaphone, Droplets, Ribbon, HeartPulse, FlaskConical, Star, Bike, BarChart3, Pill, ClipboardList, Sun, Thermometer, Mountain, Leaf, Globe, HandHeart, Building2, Zap, Dna } from "lucide-react";
 import partnerGoogle from "../assets/partners/google.jpg";
 import partnerPwC from "../assets/partners/pwc.png";
 import partnerICMR from "../assets/partners/icmr.png";
@@ -216,7 +216,7 @@ export default function SwasthmanthanPage() {
                 Cancer. Diabetes. Kidney failure. All detected at the doorstep — in jungles, mountains, and tribal villages — by the world's only Health Unit on Bike. Solar-powered. 100+  health checks Zero electricity needed.
               </p>
               <div className="hero-cta" style={{ display: "flex", gap: 12, marginTop: 4, flexWrap: "wrap" }}>
-                <a href="/donate?program=Swasthmanthan" className="btn-primary" style={{ background: C.gold, color: "#1a1a1a", padding: "14px 32px", fontSize: 15 }}>Fund a Health Camp</a>
+                <a href="/donate?program=Swasthmanthan" className="btn-primary" style={{ background: C.gold, color: "#1a1a1a", padding: "14px 32px", fontSize: 15 }}><HandHeart size={16} /> Fund a Health Camp</a>
                 <a href="#how" className="btn-outline" style={{ color: "#fff", borderColor: "rgba(255,255,255,0.35)" }}>How It Works →</a>
               </div>
               <div style={{ display: "flex", gap: 14, marginTop: 12, flexWrap: "wrap" }}>
@@ -486,7 +486,7 @@ export default function SwasthmanthanPage() {
         <p className="sans" style={{ fontSize: 15, color: C.textLight, maxWidth: 560, margin: "0 auto 28px" }}>
           One bike. One village. Hundreds of lives screened for the first time.
         </p>
-        <a href={`/donate?program=${LOCKED_PROGRAM}`} className="btn-primary" style={{ background: C.gold, color: "#1a1a1a", padding: "16px 40px", fontSize: 16 }}>Fund a Health Camp Now</a>
+        <a href={`/donate?program=${LOCKED_PROGRAM}`} className="btn-primary" style={{ background: C.gold, color: "#1a1a1a", padding: "16px 40px", fontSize: 16 }}><HandHeart size={17} /> Fund a Health Camp Now</a>
       </section>
 
       {/* FAQ */}
@@ -513,7 +513,7 @@ export default function SwasthmanthanPage() {
         <section style={{ background: C.cream, padding: "60px 24px", textAlign: "center" }}>
           <h2 style={{ fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 700, marginBottom: 12 }}>Every donation deploys a Health Unit on Bike.</h2>
           <p className="sans" style={{ fontSize: 15, color: C.textMid, marginBottom: 24 }}>One bike. One village. Hundreds of lives screened for the first time.</p>
-          <a href="/donate?program=Swasthmanthan" className="btn-primary" style={{ background: C.gold, color: "#1a1a1a", padding: "16px 40px", fontSize: 16 }}>Fund a Health Camp Now</a>
+          <a href="/donate?program=Swasthmanthan" className="btn-primary" style={{ background: C.gold, color: "#1a1a1a", padding: "16px 40px", fontSize: 16 }}><HandHeart size={17} /> Fund a Health Camp Now</a>
         </section>
       </FadeIn>
 

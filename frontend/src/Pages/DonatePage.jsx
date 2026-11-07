@@ -234,8 +234,8 @@ export default function DonatePage() {
           Your donation to <strong>{program}</strong> has been received. A receipt will be sent to {email}.
         </p>
         <button onClick={() => { setStep("form"); setCustomAmt(""); setName(""); setEmail(""); setPhone(""); setState(""); setAgreed(false); }}
-          style={{ fontFamily: "'Inter',sans-serif", background: C.forest, color: "#fff", fontWeight: 700, border: "none", padding: "13px 32px", borderRadius: 10, cursor: "pointer", fontSize: 15 }}>
-          Donate Again
+          style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "'Inter',sans-serif", background: C.forest, color: "#fff", fontWeight: 700, border: "none", padding: "13px 32px", borderRadius: 10, cursor: "pointer", fontSize: 15 }}>
+          <HandHeart size={16} /> Donate Again
         </button>
       </div>
       <Footer />
