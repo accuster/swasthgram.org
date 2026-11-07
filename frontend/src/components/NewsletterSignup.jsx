@@ -12,9 +12,9 @@ const SCRIPT_SRC = "https://rozfeu-zinc.maillist-manage.com/js/optin.min.js";
 const FORM_HTML = `
 <div id="${FORM_ID}" data-type="signupform" style="opacity: 1;">
 	<div id="customForm">
-		<div class="quick_form_8_css" style="background-color: #FFFFFF; width: 350px; z-index: 2; font-family: 'Inter', sans-serif; border-width: 1px; border-style: solid; border-color: #E8E4DC; border-radius: 10px; overflow: hidden" name="SIGNUP_BODY">
+		<div class="quick_form_8_css" style="background-color: transparent; width: 100%; max-width: 420px; z-index: 2; font-family: 'Inter', sans-serif; border-width: 0; border-style: solid; border-color: #E8E4DC; border-radius: 0; overflow: visible" name="SIGNUP_BODY">
 			<div>
-				<div style="font-size: 14px; font-family: 'Inter', sans-serif; font-weight: 700; color: #4B5563; text-align: left; padding: 16px 20px 6px; width: 100%; display: block" id="SIGNUP_HEADING">Join Our Newsletter</div>
+				<div style="display:none" id="SIGNUP_HEADING">Join Our Newsletter</div>
 				<div style="position:relative;">
 					<div id="Zc_SignupSuccess" style="display:none;position:absolute;margin-left:4%;width:90%;background-color: white; padding: 3px; border: 3px solid rgb(194, 225, 154);  margin-top: 10px;margin-bottom:10px;word-break:break-all">
 						<table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -32,12 +32,13 @@ const FORM_HTML = `
 					</div>
 				</div>
 				<form method="POST" id="zcampaignOptinForm" style="margin: 0px; width: 100%" action="https://rozfeu-zinc.maillist-manage.com/weboptin.zc" target="_zcSignup" siq_id="autopick_fy4ryk31u8">
-					<div style="background-color: rgb(255, 235, 232); padding: 10px; color: rgb(210, 0, 0); font-size: 11px; margin: 20px 10px 0px; border: 1px solid rgb(255, 217, 211); opacity: 1; display: none" id="errorMsgDiv">Please correct the marked field(s) below.</div>
-					<div style="position: relative; margin: 10px 10px 10px; width: 200px; height: 34px; display: inline-block" class="SIGNUP_FLD">
-						<input type="text" style="font-size: 14px; border: 1px solid #E8E4DC; border-radius: 6px; width: 100%; height: 100%; z-index: 4; outline: none; padding: 5px 10px; color: #1F2937; text-align: left; font-family: 'Inter', sans-serif; background-color: #FFFFFF; box-sizing: border-box" placeholder="Email" changeitem="SIGNUP_FORM_FIELD" name="CONTACT_EMAIL" id="EMBED_FORM_EMAIL_LABEL">
+					<div style="background-color: rgb(255, 235, 232); padding: 10px; color: rgb(210, 0, 0); font-size: 11px; margin: 0 0 10px; border: 1px solid rgb(255, 217, 211); opacity: 1; display: none" id="errorMsgDiv">Please correct the marked field(s) below.</div>
+					<div style="position: relative; margin: 0 0 12px; width: 100%; height: 48px; display: block" class="SIGNUP_FLD">
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);z-index:5;pointer-events:none"><path d="M4 4h16v16H4z" stroke="none"/><path d="M22 6l-10 7L2 6"/><path d="M2 6h20v12H2z"/></svg>
+						<input type="text" style="font-size: 14px; border: 1.5px solid #E8E4DC; border-radius: 10px; width: 100%; height: 100%; z-index: 4; outline: none; padding: 5px 16px 5px 42px; color: #1F2937; text-align: left; font-family: 'Inter', sans-serif; background-color: #FFFFFF; box-sizing: border-box" placeholder="Your email address" changeitem="SIGNUP_FORM_FIELD" name="CONTACT_EMAIL" id="EMBED_FORM_EMAIL_LABEL">
 					</div>
-					<div style="position: relative; margin: 10px; width: 100px; height: 34px; text-align: left; display: inline-block" class="SIGNUP_FLD">
-						<input type="button" style="text-align: center; border-radius: 7px; width: 100%; height: 100%; z-index: 5; border: 0px; color: rgb(255, 255, 255); cursor: pointer; outline: medium; font-size: 14px; font-family: 'Inter', sans-serif; font-weight: 600; background-color: #1B6B3A; margin: 0px 0px 0px -5px" name="SIGNUP_SUBMIT_BUTTON" id="zcWebOptin" value="Join Now">
+					<div style="position: relative; margin: 0; width: 100%; height: 50px; text-align: left; display: block" class="SIGNUP_FLD">
+						<input type="button" style="text-align: center; border-radius: 10px; width: 100%; height: 100%; z-index: 5; border: 0px; color: rgb(255, 255, 255); cursor: pointer; outline: medium; font-size: 15px; font-family: 'Inter', sans-serif; font-weight: 700; background-color: #1B6B3A; margin: 0" name="SIGNUP_SUBMIT_BUTTON" id="zcWebOptin" value="Subscribe">
 					</div>
 					<input type="hidden" id="fieldBorder" value="">
 					<input type="hidden" id="submitType" name="submitType" value="optinCustomView">
@@ -101,11 +102,7 @@ export default function NewsletterSignup() {
     <>
       <style>{`
         .quick_form_8_css * { -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important; overflow-wrap: break-word }
-        @media only screen and (max-width: 600px) {
-          .quick_form_8_css[name="SIGNUP_BODY"] { width: 100% !important; min-width: 100% !important; margin: 0px auto !important; padding: 0px !important }
-          .SIGNUP_FLD { width: 90% !important; margin: 10px 5% !important; padding: 0px !important }
-          .SIGNUP_FLD input { margin: 0 !important; border-radius: 10px !important }
-        }
+        .quick_form_8_css input[type="button"]:hover { background-color: #145A2F !important; }
       `}</style>
       <div dangerouslySetInnerHTML={{ __html: FORM_HTML }} />
     </>

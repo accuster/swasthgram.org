@@ -1,6 +1,7 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import NewsletterSignup from "../components/NewsletterSignup";
+import newsletterIllustration from "../assets/newsletterIllustration.svg";
 import CarouselBanner from "../components/CarouselBanner";
 import HomeGallery from "../components/HomeGallery";
 import { Users, Tent, Microscope, Briefcase, GraduationCap, Baby, Bike, Leaf, Heart, Building2, BarChart3, Sprout, Globe, Star, HeartHandshake, ClipboardList, SmartphoneNfc, Mail, Phone, MapPin, Smartphone, Apple, Dna, Package } from "lucide-react";
@@ -570,15 +571,20 @@ export default function SwasthgramHome() {
       </FadeIn>
 
       <FadeIn>
-        <section style={{ background: cc.cream, padding: "72px 24px", textAlign: "center" }}>
-          <div style={{ maxWidth: 640, margin: "0 auto" }}>
-            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: cc.gold, marginBottom: 10 }}>Stay Connected</div>
-            <h2 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(22px,3vw,30px)", fontWeight: 700, color: cc.text, marginBottom: 12 }}>Get updates from the field</h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: cc.textMid, lineHeight: 1.7, maxWidth: 480, margin: "0 auto 28px" }}>
-              Camp schedules, new health-unit deployments, and stories from the communities we reach — straight to your inbox.
-            </p>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <NewsletterSignup />
+        <section style={{ background: cc.warmBg, padding: "64px 24px" }}>
+          <div style={{ maxWidth: 920, margin: "0 auto", background: cc.white, border: `1px solid ${cc.border}`, borderRadius: 20, overflow: "hidden", display: "flex", flexWrap: "wrap", boxShadow: "0 12px 32px rgba(31,41,55,0.06)" }}>
+            <div style={{ flex: "0 0 280px", minWidth: 240, background: cc.cream, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+              <img src={newsletterIllustration} alt="" style={{ width: "100%", maxWidth: 280 }} />
+            </div>
+            <div style={{ flex: "1 1 320px", minWidth: 280, padding: "40px 36px" }}>
+              <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: cc.gold, marginBottom: 10 }}>Stay Connected</div>
+              <h2 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(22px,3vw,28px)", fontWeight: 700, color: cc.text, marginBottom: 10 }}>Subscribe to our newsletter</h2>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: cc.textMid, lineHeight: 1.7, marginBottom: 24, maxWidth: 420 }}>
+                Camp schedules, new health-unit deployments, and stories from the communities we reach — straight to your inbox.
+              </p>
+              <div style={{ maxWidth: 360 }}>
+                <NewsletterSignup />
+              </div>
             </div>
           </div>
         </section>
