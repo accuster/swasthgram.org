@@ -33,7 +33,7 @@ const FORM_HTML = `
 						</table>
 					</div>
 				</div>
-				<form method="POST" id="zcampaignOptinForm" style="margin: 0px; width: 100%" action="https://rozfeu-zinc.maillist-manage.com/weboptin.zc" target="_zcSignup" siq_id="autopick_fy4ryk31u8">
+				<form method="POST" id="zcampaignOptinForm" style="margin: 0px; width: 100%" action="https://rozfeu-zinc.maillist-manage.com/weboptin.zc" target="_zcSignup" siq_id="autopick_3um6rph4us">
 					<div style="background-color: rgb(255, 235, 232); padding: 10px; color: rgb(210, 0, 0); font-size: 11px; margin: 0 0 10px; border: 1px solid rgb(255, 217, 211); opacity: 1; display: none" id="errorMsgDiv">Please correct the marked field(s) below.</div>
 					<div style="position: relative; margin: 0 0 12px; width: 100%; height: 48px; display: block" class="SIGNUP_FLD">
 						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);z-index:5;pointer-events:none"><path d="M4 4h16v16H4z" stroke="none"/><path d="M22 6l-10 7L2 6"/><path d="M2 6h20v12H2z"/></svg>
@@ -84,7 +84,7 @@ export default function NewsletterSignup() {
 
     function initForm() {
       if (window.setupSF) {
-        window.setupSF(FORM_ID, "ZCFORMVIEW", false, "acc", false, "2");
+        window.setupSF(FORM_ID, "ZCFORMVIEW", false, "light", false, "0");
       }
       // Only assign the tracking pixel's src once optin.min.js has fully
       // executed (and defined window.referenceSetter) — this image is part
