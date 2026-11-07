@@ -82,6 +82,13 @@ export default function NewsletterSignup() {
       /* Before submit hook, kept for parity with Zoho's embed. */
     };
 
+    // Placeholder so the tracking pixel's inline onload never throws if it
+    // fires before optin.min.js has defined its own referenceSetter — Zoho's
+    // script sets this up asynchronously, after its own script.onload event.
+    if (typeof window.referenceSetter !== "function") {
+      window.referenceSetter = function () {};
+    }
+
     function initForm() {
       if (window.setupSF) {
         window.setupSF(FORM_ID, "ZCFORMVIEW", false, "light", false, "0");
