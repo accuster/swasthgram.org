@@ -8,6 +8,7 @@ import TermsOfService from "./Pages/TermsOfService";
 import FAQs from "./Pages/FAQs";
 import RefundPolicy from "./Pages/RefundPolicy";
 import ThankYouPage from "./Pages/ThankYou";
+import NewsletterThankYouPage from "./Pages/NewsletterThankYou";
 import DownloadPage from "./Pages/Download";
 import AboutPage from "./Pages/AboutUs";
 import CredentialsPage from "./Pages/Credentials";
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/refund-policy"          element={<RefundPolicy />} />
         <Route path="/faqs"                   element={<FAQs />} />
         <Route path="/thank-you"              element={<ThankYouPage />} />
+        <Route path="/newsletter-confirmed"   element={<NewsletterThankYouPage />} />
         <Route path="/download"               element={<DownloadPage />} />
         <Route path="/credentials"            element={<CredentialsPage />} />
         <Route path="/social"                 element={<SocialPage />} />
