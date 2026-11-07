@@ -4,7 +4,7 @@ import NewsletterSignup from "../components/NewsletterSignup";
 import newsletterIllustration from "../assets/newsletterIllustration.svg";
 import CarouselBanner from "../components/CarouselBanner";
 import HomeGallery from "../components/HomeGallery";
-import { Users, Tent, Microscope, Briefcase, GraduationCap, Baby, Bike, Leaf, Heart, Building2, BarChart3, Sprout, Globe, Star, HeartHandshake, ClipboardList, SmartphoneNfc, Mail, Phone, MapPin, Smartphone, Apple, Dna, Package } from "lucide-react";
+import { Users, Tent, Microscope, Briefcase, GraduationCap, Baby, Bike, Leaf, HandHeart, Building2, BarChart3, Sprout, Globe, Star, HeartHandshake, ClipboardList, SmartphoneNfc, Mail, Phone, MapPin, Smartphone, Apple, Dna, Package } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import appStoreImg  from "../assets/app_store.png";
 import playStoreImg from "../assets/play_store.png";
@@ -130,7 +130,7 @@ export default function SwasthgramHome() {
     { name: "Shudhvayu",     tagline: "Clean Air. Right to Life.",          img: imgShudhvayu,     color: cc.goldSoft, desc: "Patented vehicle-mounted air filter. Cleans air as cars drive. No electricity. The most democratic solution.", stats: [{ n: "Since 2018", l: "On Roads" }, { n: "Patented", l: "Innovation" }, { n: "Delhi NCR", l: "& Beyond" }] },
   ];
   const steps = [
-    { step: "01", title: "You Donate",             desc: "Via app or website. Pick your cause.",                                        icon: <Heart size={22} color="#fff" />,      highlight: "Your generosity starts the chain." },
+    { step: "01", title: "You Donate",             desc: "Via app or website. Pick your cause.",                                        icon: <HandHeart size={22} color="#fff" />,      highlight: "Your generosity starts the chain." },
     { step: "02", title: "We Deploy in Your Name", desc: "Your donation activates a Health Unit on Bike. We publicize your name — you're the hero.", icon: <Bike size={22} color="#fff" />,  highlight: "We are the engine. You are the hero." },
     { step: "03", title: "We Screen & Assess",   desc: "Free cancer screening, blood work, oral exams — first-ever access for thousands.",  icon: <Microscope size={22} color="#fff" />, highlight: "First-ever community care access." },
     { step: "04", title: "We Refer & Treat",       desc: "Critical community members → partner hospitals for subsidized treatment.",             icon: <Building2 size={22} color="#fff" />,   highlight: "No one left behind." },
@@ -226,7 +226,7 @@ export default function SwasthgramHome() {
                 The world's only health unit on a motorbike — solar-powered, 100+ health screenings, built for jungles and mountains. Used by the Indian Army. Validated by PwC.
               </p>
               <div className="hero-cta" style={{ display: "flex", gap: 12, marginTop: 4, flexWrap: "wrap" }}>
-                <a href="/donate" className="btn-primary" style={{ background: cc.gold, color: "#1a1a1a", padding: "13px 30px", display: "inline-flex", alignItems: "center", gap: 8 }}><Heart size={15} color="#1a1a1a" /> Donate Now</a>
+                <a href="/donate" className="btn-primary" style={{ background: cc.gold, color: "#1a1a1a", padding: "13px 30px", display: "inline-flex", alignItems: "center", gap: 8 }}><HandHeart size={15} color="#1a1a1a" /> Donate Now</a>
                 <a href="#about" className="btn-outline" style={{ color: cc.forest, borderColor: cc.forest, padding: "11px 22px" }}>Our Story →</a>
               </div>
               <div className="trust-row" style={{ display: "flex", gap: 16, marginTop: 16, flexWrap: "wrap" }}>
@@ -415,7 +415,7 @@ export default function SwasthgramHome() {
                 { icon: <MapPin size={15} color={cc.forest} />,        text: "Live map of camps & cities" },
                 { icon: <BarChart3 size={15} color={cc.forest} />,     text: "Track your money" },
                 { icon: <ClipboardList size={15} color={cc.forest} />, text: "Real-time health reports" },
-                { icon: <Heart size={15} color={cc.forest} />,         text: "Donate from the app" },
+                { icon: <HandHeart size={15} color={cc.forest} />,         text: "Donate from the app" },
                 { icon: <SmartphoneNfc size={15} color={cc.forest} />, text: "Notifications when camp goes live" },
               ].map((feat, i) => (
                 <div key={i} className="sans" style={{ fontSize: 14, color: cc.textMid, marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}>{feat.icon}{feat.text}</div>
@@ -523,7 +523,7 @@ export default function SwasthgramHome() {
           Choose a program or let us allocate it where it's needed most — every gift funds screenings, training, and clean-air work.
         </p>
         <a href="/donate" style={{ display: "inline-flex", alignItems: "center", gap: 10, background: cc.gold, color: "#1a1a1a", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 16, padding: "16px 40px", borderRadius: 12, textDecoration: "none" }}>
-          <HeartHandshake size={18} /> Donate Now
+          <HandHeart size={18} /> Donate Now
         </a>
       </section>
 

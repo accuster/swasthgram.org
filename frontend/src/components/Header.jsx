@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ChevronDown, Heart, X } from "lucide-react";
+import { ChevronDown, HandHeart, X } from "lucide-react";
 import logoColor from "../assets/SwasthgramLogo.png";
 
 const COLORS = {
@@ -379,7 +379,7 @@ export default function Header() {
               <button className="btn-partner">Partner With Us</button>
             </a>
             <a href="/donate" style={{ textDecoration: "none" }}>
-              <button className="btn-donate"><Heart size={13} fill="#fff" />Donate Now</button>
+              <button className="btn-donate"><HandHeart size={13} fill="#fff" />Donate Now</button>
             </a>
           </div>
 
@@ -470,7 +470,7 @@ export default function Header() {
             </a>
             <a href="/donate" style={{ textDecoration: "none", flex: 1 }} onClick={() => setMobileMenu(false)}>
               <button className="btn-donate" style={{ width: "100%" }}>
-                <Heart size={14} fill="#fff" />Donate Now
+                <HandHeart size={14} fill="#fff" />Donate Now
               </button>
             </a>
           </div>

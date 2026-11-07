@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import {
-  CheckCircle, Heart, Share2, Loader, AlertCircle,
+  CheckCircle, HandHeart, Share2, Loader, AlertCircle,
   Copy, ArrowRight, ExternalLink, MessageCircle,
   Stethoscope, Wind, GraduationCap, Globe,
   Smartphone, Landmark, Building2
@@ -119,7 +119,7 @@ export default function ThankYouPage() {
         </p>
         <a href="/#donate"
           style={{ fontFamily:"Inter,sans-serif", fontWeight:700, fontSize:14, background: cc.forest, color:"#fff", padding:"13px 28px", borderRadius:8, textDecoration:"none", display:"inline-flex", alignItems:"center", gap:8 }}>
-          <Heart size={15} color="#fff" /> Donate Now
+          <HandHeart size={15} color="#fff" /> Donate Now
         </a>
       </div>
       <Footer />
