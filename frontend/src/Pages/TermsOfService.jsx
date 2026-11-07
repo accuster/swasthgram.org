@@ -1,6 +1,8 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
+import NewsletterSignup from "../components/NewsletterSignup";
+import newsletterIllustration from "../assets/newsletterIllustration.svg";
 import { ScrollText, Mail, Phone, MapPin, ChevronRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
@@ -288,6 +290,26 @@ export default function TermsOfService() {
           </div>
         </div>
       </div>
+
+      <FadeIn>
+        <section style={{ background: cc.warmBg, padding: "64px 24px" }}>
+          <div style={{ maxWidth: 920, margin: "0 auto", background: cc.white, border: `1px solid ${cc.border}`, borderRadius: 20, overflow: "hidden", display: "flex", flexWrap: "wrap", boxShadow: "0 12px 32px rgba(31,41,55,0.06)" }}>
+            <div style={{ flex: "0 0 280px", minWidth: 240, background: cc.cream, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+              <img src={newsletterIllustration} alt="" style={{ width: "100%", maxWidth: 280 }} />
+            </div>
+            <div style={{ flex: "1 1 320px", minWidth: 280, padding: "40px 36px" }}>
+              <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: cc.gold, marginBottom: 10 }}>Stay Connected</div>
+              <h2 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(22px,3vw,28px)", fontWeight: 700, color: cc.text, marginBottom: 10 }}>Subscribe to our newsletter</h2>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: cc.textMid, lineHeight: 1.7, marginBottom: 24, maxWidth: 420 }}>
+                Camp schedules, new health-unit deployments, and stories from the communities we reach — straight to your inbox.
+              </p>
+              <div style={{ maxWidth: 360 }}>
+                <NewsletterSignup />
+              </div>
+            </div>
+          </div>
+        </section>
+      </FadeIn>
 
       <Footer />
     </div>

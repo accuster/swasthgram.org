@@ -16,7 +16,9 @@ import sk9  from "../assets/saksham/saksham (9).jpg";
 import Header from "../components/Header";
 import Breadcrumb from "../components/Breadcrumb";
 import Footer from "../components/Footer";
-import { GraduationCap, Handshake, Briefcase, Hospital, Globe, Microscope, HeartHandshake } from "lucide-react";
+import NewsletterSignup from "../components/NewsletterSignup";
+import newsletterIllustration from "../assets/newsletterIllustration.svg";
+import { GraduationCap, Handshake, Briefcase, Hospital, Globe, Microscope, HandHeart } from "lucide-react";
 
 const C = {
   forest: "#1B6B3A", forestDark: "#145A2F", forestDeep: "#0E4422",
@@ -140,7 +142,7 @@ export default function SakshamPage() {
             Transforming underserved youth into trained community health workers — delivering doorstep health screenings to 95 crore Indians..
           </p>
           <a href="/donate?program=Saksham" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: C.gold, color: "#1a1a1a", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, padding: "14px 32px", borderRadius: 10, textDecoration: "none" }}>
-            <HeartHandshake size={18} /> Support Saksham
+            <HandHeart size={18} /> Support Saksham
           </a>
         </FadeIn>
       </section>
@@ -310,7 +312,7 @@ export default function SakshamPage() {
           One gift. One graduate. Thousands of lives reached at the doorstep.
         </p>
         <a href={`/donate?program=${LOCKED_PROGRAM}`} style={{ display: "inline-flex", alignItems: "center", gap: 10, background: C.gold, color: "#1a1a1a", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 16, padding: "16px 40px", borderRadius: 12, textDecoration: "none" }}>
-          <HeartHandshake size={18} /> Support Saksham
+          <HandHeart size={18} /> Support Saksham
         </a>
       </section>
 
@@ -330,6 +332,26 @@ export default function SakshamPage() {
               {openFaq === i && <p className="sans" style={{ fontSize: 13, lineHeight: 1.65, color: C.textMid, paddingTop: 10 }}>{faq.a}</p>}
             </div>
           ))}
+        </section>
+      </FadeIn>
+
+      <FadeIn>
+        <section style={{ background: C.warmBg, padding: "64px 24px" }}>
+          <div style={{ maxWidth: 920, margin: "0 auto", background: C.white, border: `1px solid ${C.border}`, borderRadius: 20, overflow: "hidden", display: "flex", flexWrap: "wrap", boxShadow: "0 12px 32px rgba(31,41,55,0.06)" }}>
+            <div style={{ flex: "0 0 280px", minWidth: 240, background: C.cream, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+              <img src={newsletterIllustration} alt="" style={{ width: "100%", maxWidth: 280 }} />
+            </div>
+            <div style={{ flex: "1 1 320px", minWidth: 280, padding: "40px 36px" }}>
+              <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: C.gold, marginBottom: 10 }}>Stay Connected</div>
+              <h2 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(22px,3vw,28px)", fontWeight: 700, color: C.text, marginBottom: 10 }}>Subscribe to our newsletter</h2>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: C.textMid, lineHeight: 1.7, marginBottom: 24, maxWidth: 420 }}>
+                Camp schedules, new health-unit deployments, and stories from the communities we reach — straight to your inbox.
+              </p>
+              <div style={{ maxWidth: 360 }}>
+                <NewsletterSignup />
+              </div>
+            </div>
+          </div>
         </section>
       </FadeIn>
 

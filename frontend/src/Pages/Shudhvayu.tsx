@@ -17,7 +17,9 @@ import sv15 from "../assets/shudhvayu/shudhvayu (15).jpeg";
 import Header from "../components/Header";
 import Breadcrumb from "../components/Breadcrumb";
 import Footer from "../components/Footer";
-import { Wind, Car, Wrench, Leaf, Sun, VolumeX, RefreshCw, FileCheck, MapPin, Zap, Gift, Globe, Mail, Phone, HeartHandshake } from "lucide-react";
+import NewsletterSignup from "../components/NewsletterSignup";
+import newsletterIllustration from "../assets/newsletterIllustration.svg";
+import { Wind, Car, Wrench, Leaf, Sun, VolumeX, RefreshCw, FileCheck, MapPin, Zap, Gift, Globe, Mail, Phone, HandHeart } from "lucide-react";
 
 const C = {
   forest: "#1B6B3A", forestDark: "#145A2F",
@@ -421,7 +423,7 @@ export default function ShudhvayuPage() {
           Clean air is a right. Your gift helps us protect it for the communities breathing the worst of it.
         </p>
         <a href={`/donate?program=${LOCKED_PROGRAM}`} style={{ display: "inline-flex", alignItems: "center", gap: 10, background: C.gold, color: "#1a1a1a", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 16, padding: "16px 40px", borderRadius: 12, textDecoration: "none" }}>
-          <HeartHandshake size={18} /> Support Clean Air
+          <HandHeart size={18} /> Support Clean Air
         </a>
       </section>
 
@@ -452,6 +454,26 @@ export default function ShudhvayuPage() {
           <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="/donate?program=Shudhvayu" className="btn-primary" style={{ padding: "14px 36px", fontSize: 15 }}>Donate for Clean Air</a>
             <a href="#install" className="btn-outline" style={{ padding: "12px 28px", fontSize: 14 }}>Get Free Installation</a>
+          </div>
+        </section>
+      </FadeIn>
+
+      <FadeIn>
+        <section style={{ background: C.warmBg, padding: "64px 24px" }}>
+          <div style={{ maxWidth: 920, margin: "0 auto", background: C.white, border: `1px solid ${C.border}`, borderRadius: 20, overflow: "hidden", display: "flex", flexWrap: "wrap", boxShadow: "0 12px 32px rgba(31,41,55,0.06)" }}>
+            <div style={{ flex: "0 0 280px", minWidth: 240, background: C.cream, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+              <img src={newsletterIllustration} alt="" style={{ width: "100%", maxWidth: 280 }} />
+            </div>
+            <div style={{ flex: "1 1 320px", minWidth: 280, padding: "40px 36px" }}>
+              <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: C.gold, marginBottom: 10 }}>Stay Connected</div>
+              <h2 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(22px,3vw,28px)", fontWeight: 700, color: C.text, marginBottom: 10 }}>Subscribe to our newsletter</h2>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: C.textMid, lineHeight: 1.7, marginBottom: 24, maxWidth: 420 }}>
+                Camp schedules, new health-unit deployments, and stories from the communities we reach — straight to your inbox.
+              </p>
+              <div style={{ maxWidth: 360 }}>
+                <NewsletterSignup />
+              </div>
+            </div>
           </div>
         </section>
       </FadeIn>

@@ -1,8 +1,10 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
+import NewsletterSignup from "../components/NewsletterSignup";
+import newsletterIllustration from "../assets/newsletterIllustration.svg";
 import { useState, useEffect, useRef } from "react";
-import { Lock, CheckCircle, AlertCircle, Loader, HeartHandshake, Shield, ShieldCheck, Globe, MapPinned, Users, Tent, Microscope } from "lucide-react";
+import { Lock, CheckCircle, AlertCircle, Loader, HandHeart, Shield, ShieldCheck, Globe, MapPinned, Users, Tent, Microscope } from "lucide-react";
 import flagIndia from "../assets/flags/in.svg";
 import flagUSA from "../assets/flags/us.svg";
 import everyOrgLogo from "../assets/gateways/every-org-logo.png";
@@ -383,7 +385,7 @@ export default function DonatePage() {
                 {!stripeReady && <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: C.textLight, marginBottom: 12, textAlign: "center" }}>Loading payment form…</p>}
                 <button onClick={handleStripeConfirm} disabled={!stripeReady || confirming}
                   style={{ width: "100%", padding: "15px", border: "none", borderRadius: 12, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 16, cursor: (stripeReady && !confirming) ? "pointer" : "not-allowed", background: (stripeReady && !confirming) ? C.forest : "#e5e7eb", color: (stripeReady && !confirming) ? "#fff" : C.textLight, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all 0.2s" }}>
-                  <HeartHandshake size={18} />
+                  <HandHeart size={18} />
                   {confirming ? "Processing…" : stripeReady ? `Confirm Donation — $${Number(finalAmount).toLocaleString()} USD` : "Loading…"}
                 </button>
                 <button onClick={() => { setStep("form"); mountedRef.current = false; setStripeReady(false); setConfirming(false); }}
@@ -584,6 +586,24 @@ export default function DonatePage() {
           </div>
         ))}
       </div>
+
+      <section style={{ background: C.warmBg, padding: "64px 24px" }}>
+        <div style={{ maxWidth: 920, margin: "0 auto", background: C.white, border: `1px solid ${C.border}`, borderRadius: 20, overflow: "hidden", display: "flex", flexWrap: "wrap", boxShadow: "0 12px 32px rgba(31,41,55,0.06)" }}>
+          <div style={{ flex: "0 0 280px", minWidth: 240, background: C.cream, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+            <img src={newsletterIllustration} alt="" style={{ width: "100%", maxWidth: 280 }} />
+          </div>
+          <div style={{ flex: "1 1 320px", minWidth: 280, padding: "40px 36px" }}>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: C.gold, marginBottom: 10 }}>Stay Connected</div>
+            <h2 style={{ fontFamily: "'Libre Baskerville',Georgia,serif", fontSize: "clamp(22px,3vw,28px)", fontWeight: 700, color: C.text, marginBottom: 10 }}>Subscribe to our newsletter</h2>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: C.textMid, lineHeight: 1.7, marginBottom: 24, maxWidth: 420 }}>
+              Camp schedules, new health-unit deployments, and stories from the communities we reach — straight to your inbox.
+            </p>
+            <div style={{ maxWidth: 360 }}>
+              <NewsletterSignup />
+            </div>
+          </div>
+        </div>
+      </section>
 
       <Footer />
     </div>
