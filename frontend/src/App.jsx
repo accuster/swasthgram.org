@@ -17,6 +17,7 @@ import SocialPage from "./Pages/Social";
 import PartnerPage from "./Pages/Partner";
 import EventsPage from "./Pages/Events";
 import GalaPage from "./Pages/Gala";
+import BrandPage from "./Pages/Brand";
 
 export default function App() {
   return (
@@ -40,6 +41,7 @@ export default function App() {
         <Route path="/partner-with-us"        element={<PartnerPage />} />
         <Route path="/events"                 element={<EventsPage />} />
         <Route path="/events/gala26"          element={<GalaPage />} />
+        <Route path="/brand-kit"              element={<BrandPage />} />
         <Route path="*"                       element={<SwasthgramHome />} />
       </Routes>
     </BrowserRouter>

@@ -249,6 +249,7 @@ export default function Footer() {
               { label: "Terms of Service", href: "/terms-of-service" },
               { label: "Refund Policy", href: "/refund-policy" },
               { label: "FAQs", href: "/faqs" },
+              { label: "Brand Kit", href: "/brand-kit" },
             ].map((link) => (
               <a
                 key={link.label}
