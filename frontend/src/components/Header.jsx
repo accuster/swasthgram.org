@@ -216,7 +216,7 @@ export default function Header() {
           flex-direction: column;
         }
         .mobile-drawer-header {
-          height: 64px;
+          height: 80px;
           flex-shrink: 0;
           display: flex;
           align-items: center;
@@ -280,7 +280,7 @@ export default function Header() {
         background: "rgba(253, 251, 247, 0.97)",
         backdropFilter: "blur(10px)",
         borderBottom: `1px solid ${COLORS.border}`,
-        height: 64,
+        height: 80,
       }}>
         <div style={{
           position: "relative",
@@ -291,7 +291,7 @@ export default function Header() {
         }}>
           {/* Logo */}
           <a href="/" onClick={handleLogoClick} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", alignSelf: "center" }}>
-            <img src={logoColor} alt="Swasthgram" style={{ height: 36, width: "auto", display: "block" }} />
+            <img src={logoColor} alt="Swasthgram" style={{ height: 56, width: "auto", display: "block" }} />
             <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
               <span style={{
                 fontFamily: "'Inter', sans-serif",
@@ -402,7 +402,7 @@ export default function Header() {
         <div className="mobile-drawer">
           <div className="mobile-drawer-header">
             <a href="/" onClick={(e) => { handleLogoClick(e); setMobileMenu(false); }} style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-              <img src={logoColor} alt="Swasthgram" style={{ height: 32, width: "auto", display: "block" }} />
+              <img src={logoColor} alt="Swasthgram" style={{ height: 48, width: "auto", display: "block" }} />
               <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 700, color: COLORS.text }}>
                 Swasth<span style={{ color: COLORS.forest }}>gram</span>
               </span>
