@@ -3,8 +3,11 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import NewsletterSignup from "../components/NewsletterSignup";
 import newsletterIllustration from "../assets/newsletterIllustration.svg";
-import logoColor from "../assets/SwasthgramLogo.png";
-import logoWhite from "../assets/SwasthgramWhite.png";
+import logoPng from "../assets/brand/Swasthgram.png";
+import logoPngTrans from "../assets/brand/Swasthgram-trans.png";
+import logoJpg from "../assets/brand/Swasthgram.jpg";
+import logoSvg from "../assets/brand/Swasthgram.svg";
+import logoSvgTrans from "../assets/brand/Swasthgram-trans.svg";
 import { Palette, Download, Check, X, Mail } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
@@ -44,6 +47,14 @@ function FadeIn({ children, delay = 0 }) {
     </div>
   );
 }
+
+const LOGO_FILES = [
+  { label: "PNG", sub: "White background", href: logoPng, filename: "Swasthgram.png" },
+  { label: "PNG", sub: "Transparent background", href: logoPngTrans, filename: "Swasthgram-trans.png" },
+  { label: "JPG", sub: "White background", href: logoJpg, filename: "Swasthgram.jpg" },
+  { label: "SVG", sub: "Vector, white background", href: logoSvg, filename: "Swasthgram.svg" },
+  { label: "SVG", sub: "Vector, transparent background", href: logoSvgTrans, filename: "Swasthgram-trans.svg" },
+];
 
 const COLOR_GROUPS = [
   {
@@ -149,56 +160,38 @@ export default function Brand() {
         {/* LOGO */}
         <FadeIn>
           <h2 style={{ fontSize: "clamp(18px, 2.5vw, 22px)", fontWeight: 700, marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${cc.border}` }}>Logo</h2>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 20, marginBottom: 24 }}>
-            {/* On light */}
-            <div style={{ flex: "1 1 320px", background: cc.white, border: `1px solid ${cc.border}`, borderRadius: 14, padding: 28 }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 140 }}>
-                <a href="/" style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <img src={logoColor} alt="Swasthgram" style={{ height: 48, width: "auto" }} />
-                  <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
-                    <span className="sans" style={{ fontSize: 26, fontWeight: 700, letterSpacing: -0.5, color: cc.text }}>
-                      Swasth<span style={{ color: cc.forest }}>gram</span>
-                    </span>
-                    <span className="sans" style={{ fontSize: 13, fontWeight: 600, letterSpacing: 0.6, textTransform: "uppercase", color: cc.textLight }}>
-                      Global Foundation
-                    </span>
-                  </div>
-                </a>
-              </div>
-              <div className="sans" style={{ fontSize: 13, color: cc.textMid, textAlign: "center", marginBottom: 14 }}>For light backgrounds</div>
-              <a href={logoColor} download="Swasthgram-Logo.png" className="dl-btn sans" style={{
-                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                background: cc.forest, color: "#fff", fontWeight: 600, fontSize: 13,
-                padding: "10px 16px", borderRadius: 8, transition: "background 0.2s",
-              }}>
-                <Download size={14} /> Download mark (PNG)
+
+          <div style={{ background: cc.white, border: `1px solid ${cc.border}`, borderRadius: 14, padding: 28, marginBottom: 20 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "12px 0 24px" }}>
+              <a href="/">
+                <img src={logoPngTrans} alt="Swasthgram" style={{ height: 150, width: "auto" }} />
               </a>
             </div>
 
-            {/* On dark */}
-            <div style={{ flex: "1 1 320px", background: cc.forestDeep, borderRadius: 14, padding: 28 }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 140 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <img src={logoWhite} alt="Swasthgram" style={{ height: 48, width: "auto" }} />
-                  <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
-                    <span className="sans" style={{ fontSize: 26, fontWeight: 700, letterSpacing: -0.5, color: "#fff" }}>
-                      Swasth<span style={{ color: cc.goldLight }}>gram</span>
-                    </span>
-                    <span className="sans" style={{ fontSize: 13, fontWeight: 600, letterSpacing: 0.6, textTransform: "uppercase", color: "rgba(255,255,255,0.6)" }}>
-                      Global Foundation
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="sans" style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", textAlign: "center", marginBottom: 14 }}>For dark backgrounds</div>
-              <a href={logoWhite} download="Swasthgram-Logo-White.png" className="sans" style={{
-                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                background: "rgba(255,255,255,0.12)", color: "#fff", fontWeight: 600, fontSize: 13,
-                padding: "10px 16px", borderRadius: 8,
-              }}>
-                <Download size={14} /> Download mark (PNG)
-              </a>
+            <div className="sans" style={{ fontSize: 12, fontWeight: 700, color: cc.textLight, textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>
+              Download individual files
             </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 18 }}>
+              {LOGO_FILES.map((f) => (
+                <a key={f.filename} href={f.href} download={f.filename} className="sans" style={{
+                  display: "flex", alignItems: "center", gap: 8,
+                  background: cc.cream, border: `1px solid ${cc.border}`, color: cc.text,
+                  fontSize: 13, padding: "8px 14px", borderRadius: 8,
+                }}>
+                  <Download size={13} color={cc.forest} />
+                  <span style={{ fontWeight: 600 }}>{f.label}</span>
+                  <span style={{ color: cc.textLight }}>— {f.sub}</span>
+                </a>
+              ))}
+            </div>
+
+            <a href="/downloads/swasthgram-logo-kit.zip" download="Swasthgram-Logo-Kit.zip" className="dl-btn sans" style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
+              background: cc.forest, color: "#fff", fontWeight: 600, fontSize: 13.5,
+              padding: "12px 20px", borderRadius: 8, transition: "background 0.2s",
+            }}>
+              <Download size={15} /> Download All (.zip)
+            </a>
           </div>
 
           {/* Usage rules */}
@@ -208,10 +201,10 @@ export default function Brand() {
                 <Check size={15} color={cc.forest} /> Do
               </h3>
               <ul className="sans" style={{ fontSize: 13.5, lineHeight: 1.9, color: cc.textMid, paddingLeft: 18 }}>
-                <li>Use the full-color mark on light backgrounds</li>
-                <li>Use the white mark on dark or forest-green backgrounds</li>
-                <li>Keep clear space around the mark at least the height of the icon</li>
-                <li>Scale proportionally — keep a minimum height of ~24px</li>
+                <li>Use the transparent version on colored or photo backgrounds</li>
+                <li>Use the white-background version where a solid backdrop is needed</li>
+                <li>Keep clear space around the mark at least the height of the oval</li>
+                <li>Scale proportionally — keep the full lockup (icon, name, tagline) together</li>
               </ul>
             </div>
             <div style={{ flex: "1 1 260px", background: cc.white, border: `1px solid ${cc.border}`, borderRadius: 14, padding: "20px 24px" }}>
@@ -221,7 +214,7 @@ export default function Brand() {
               <ul className="sans" style={{ fontSize: 13.5, lineHeight: 1.9, color: cc.textMid, paddingLeft: 18 }}>
                 <li>Recolor, recreate, or alter the mark</li>
                 <li>Stretch, skew, or distort the proportions</li>
-                <li>Place the color mark on a busy or low-contrast background</li>
+                <li>Place the mark on a busy or low-contrast background</li>
                 <li>Add shadows, outlines, or other effects</li>
               </ul>
             </div>
