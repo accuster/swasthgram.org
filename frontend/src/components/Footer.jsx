@@ -1,4 +1,4 @@
-import swasthgramLogo from "../assets/SwasthgramWhite.png";
+import swasthgramLogo from "../assets/brand/Swasthgram.svg";
 import appStoreBadge from "../assets/app_store.png";
 import playStoreBadge from "../assets/play_store.png";
 
@@ -67,7 +67,7 @@ export default function Footer() {
               <img
                 src={swasthgramLogo}
                 alt="Swasthgram"
-                style={{ height: 44, width: "auto", objectFit: "contain" }}
+                style={{ height: 44, width: "auto", objectFit: "contain", borderRadius: 8 }}
               />
             </div>
             <p

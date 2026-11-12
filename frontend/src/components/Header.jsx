@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronDown, HandHeart, X } from "lucide-react";
-import logoColor from "../assets/SwasthgramLogo.png";
+import logoColor from "../assets/brand/Swasthgram-trans.svg";
 
 const COLORS = {
   forest: "#1B6B3A",
