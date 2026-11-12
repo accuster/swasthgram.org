@@ -216,7 +216,7 @@ export default function Header() {
           flex-direction: column;
         }
         .mobile-drawer-header {
-          height: 80px;
+          height: 64px;
           flex-shrink: 0;
           display: flex;
           align-items: center;
@@ -280,7 +280,7 @@ export default function Header() {
         background: "rgba(253, 251, 247, 0.97)",
         backdropFilter: "blur(10px)",
         borderBottom: `1px solid ${COLORS.border}`,
-        height: 80,
+        height: 64,
       }}>
         <div style={{
           position: "relative",
